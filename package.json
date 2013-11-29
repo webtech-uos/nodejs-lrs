@@ -1,0 +1,30 @@
+{
+  "name": "node-lrs",
+  "version": "0.1.0",
+  "author": "WebTech2-Group-2013 University of Osnabrück",
+  "description": "Implementation of a learning record store using node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webtech-uos/nodejs-lrs.git"
+  },
+  "contributors": [
+    {
+      "name": "Tilo Wiedera",
+      "email": "tilo@wiedera.de"
+    } 
+  ],
+  "dependencies" : {
+    "coffee-script": "~1.6.3",
+    "restify": "~2.6.0",
+    "passport": "~0.1.17",
+    "json-schema": "~0.2.2"
+  },
+  "devDependencies" : {
+    "grunt": "~0.4.2",
+    "mocha": "~1.14.0",
+    "supertest": "~0.8.2"
+  },
+  "engines": {
+    "node": ">=0.10"
+  }
+}
