@@ -12,6 +12,7 @@ This project aims to implement a [Learning Record Store](https://en.wikipedia.or
    * `unit` simple unit tests
    * `functional` test for single controller actions
    * `integration` testing the whole system, typically multiple controller actions
+   * `data` experience api test suite
 
 # Deployment
 * Install `node`, see `package.json` for required version
