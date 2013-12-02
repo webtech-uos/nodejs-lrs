@@ -1,0 +1,48 @@
+{
+    "id": "a2050403-6ac3-424e-8c75-5ff67897f612",
+    "actor": {
+        "mbox": "mailto:bob@nowhere.com",
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/answered",
+        "display": {
+            "und": "http://adlnet.gov/expapi/verbs/answered"
+        }
+    },
+    "result": {
+        "success": true,
+        "response": "USGA and Royal and Ancient"
+    },
+    "context": {
+        "contextActivities": {
+            "parent": [
+                {
+                    "id": "http://tincanapi.com/GolfExample_TCAPI/GolfAssessment.html",
+                    "objectType": "Activity"
+                }
+            ],
+            "grouping": [
+                {
+                    "id": "http://tincanapi.com/GolfExample_TCAPI",
+                    "objectType": "Activity"
+                }
+            ]
+        }
+    },
+    "timestamp": "2013-11-30T21:50:33.332Z",
+    "stored": "2013-11-30T21:50:27.099Z",
+    "authority": {
+        "account": {
+            "homePage": "http://cloud.scorm.com/",
+            "name": "anonymous"
+        },
+        "objectType": "Agent"
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "http://tincanapi.com/GolfExample_TCAPI/GolfAssessment/interactions.playing_1",
+        "objectType": "Activity"
+    }
+}
+

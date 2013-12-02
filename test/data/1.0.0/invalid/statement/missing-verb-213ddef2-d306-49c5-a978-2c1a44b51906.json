@@ -1,0 +1,29 @@
+{
+    "id": "213ddef2-d306-49c5-a978-2c1a44b51906",
+    "actor": {
+        "name": "tomcat",
+        "mbox": "mailto:tomcat@yahoo.ca",
+        "objectType": "Agent"
+    },
+    "context": {},
+    "timestamp": "2013-12-01T02:05:32.949Z",
+    "stored": "2013-12-01T02:05:32.949Z",
+    "authority": {
+        "account": {
+            "homePage": "http://cloud.scorm.com/",
+            "name": "anonymous"
+        },
+        "objectType": "Agent"
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "http://www.cbc.ca/",
+        "definition": {
+            "name": {
+                "en-US": "CBC.ca - Canadian News Sports Entertainment Kids Docs Radio TV"
+            }
+        },
+        "objectType": "Activity"
+    }
+}
+

@@ -1,0 +1,70 @@
+{
+    "id": "67d9c0ed-49e7-4b1b-a4aa-2254d07132f9",
+    "actor": {
+        "mbox": "mailto:maxgammer@gmail.com",
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/attended"
+    },
+    "result": {
+        "extensions": {
+            "http://example.com/result/total_damage": "890",
+            "http://example.com/result/damage_to_the_equipment": "400",
+            "http://example.com/result/deaths": "1",
+            "http://example.com/result/environmental_damage": "30",
+            "http://example.com/result/people_with_minor_injuries": "2",
+            "http://example.com/result/time": "2.1",
+            "http://example.com/result/people_with_serious_injuries": "0"
+        },
+        "score": {
+            "scaled": 0.9,
+            "raw": 90,
+            "min": 0,
+            "max": 100
+        },
+        "success": true,
+        "completion": true,
+        "response": "BKNS runs",
+        "duration": "PT5M2S"
+    },
+    "context": {
+        "extensions": {
+            "http://example.com/weatherConditions": "rainy"
+        },
+        "registration": "550e8400-e29b-41d4-a716-446655440000",
+        "instructor": {
+            "mbox": "mailto:irene@example.com",
+            "objectType": "Agent"
+        },
+        "contextActivities": {
+            "parent": [
+                {
+                    "id": "http://www.professionalgroup.ru/lms1/simulator1",
+                    "objectType": "Activity"
+                }
+            ],
+            "grouping": [
+                {
+                    "id": "http://www.professionalgroup.ru/lms1/simulator1",
+                    "objectType": "Activity"
+                }
+            ]
+        }
+    },
+    "timestamp": "2013-11-30T10:59:41.640Z",
+    "stored": "2013-11-30T10:59:41.640Z",
+    "authority": {
+        "account": {
+            "homePage": "http://cloud.scorm.com/",
+            "name": "anonymous"
+        },
+        "objectType": "Agent"
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "http://www.professionalgroup.ru/lms1/simulator1",
+        "objectType": "Activity"
+    }
+}
+

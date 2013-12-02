@@ -1,0 +1,16 @@
+{
+  "id": "12345678-1234-5678-1234-567812345678",
+  "actor":{
+    "mbox":"mailto:xapi@adlnet.gov"
+  },
+  "verb":{
+    "id":"http://www.example.com/vergrößert",
+    "display":{
+       "en-US":"enlarged"
+    }
+  },
+  "object":{
+    "id":"http://example.adlnet.gov/xapi/example/activity"
+  }
+}
+

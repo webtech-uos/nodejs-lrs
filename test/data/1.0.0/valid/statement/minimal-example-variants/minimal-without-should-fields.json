@@ -1,0 +1,12 @@
+{
+  "actor":{
+    "mbox":"mailto:xapi@adlnet.gov"
+  },
+  "verb":{
+    "id":"http://adlnet.gov/expapi/verbs/created",
+  },
+  "object":{
+    "id":"http://example.adlnet.gov/xapi/example/activity"
+  }
+}
+

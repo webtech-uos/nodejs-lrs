@@ -1,0 +1,30 @@
+{
+    "id": "a88ac43d-0453-4817-a9c6-188234222189",
+    "actor": {
+        "mbox": "mailto:maxgammer@gmail.com",
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/interacted"
+    },
+    "result": {
+        "extensions": {
+            "http://example.com/result/time": "0.4"
+        }
+    },
+    "timestamp": "2013-11-30T10:59:51.142Z",
+    "stored": "2013-11-30T10:59:51.142Z",
+    "authority": {
+        "account": {
+            "homePage": "http://cloud.scorm.com/",
+            "name": "anonymous"
+        },
+        "objectType": "Agent"
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "http://www.professionalgroup.ru/lms1/simulator2",
+        "objectType": "Activity"
+    }
+}
+

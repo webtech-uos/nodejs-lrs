@@ -1,0 +1,17 @@
+{
+  "id": "12345678-1234-5678-1234-567812345678",
+  "actor":{
+    "objectType":"group",
+    "name":"Universität Osnabrück, Participants Web-Technologien II, Wintersemester 2013/2014"
+  },
+  "verb":{
+    "id":"http://adlnet.gov/expapi/verbs/created",
+    "display":{
+       "en-US":"created"
+    }
+  },
+  "object":{
+    "id":"http://example.adlnet.gov/xapi/example/activity"
+  }
+}
+

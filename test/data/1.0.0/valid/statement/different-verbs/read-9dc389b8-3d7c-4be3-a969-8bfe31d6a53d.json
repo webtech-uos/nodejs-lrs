@@ -1,0 +1,29 @@
+{
+    "id": "9dc389b8-3d7c-4be3-a969-8bfe31d6a53d",
+    "actor": {
+        "mbox": "mailto:dummy@example.com",
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "http://www.tincanapi.co.uk/wiki/verbs:read",
+        "display": {
+            "en-GB": "read",
+            "en-US": "read"
+        }
+    },
+    "timestamp": "2013-11-29T06:57:00.344Z",
+    "stored": "2013-11-29T06:57:00.344Z",
+    "authority": {
+        "account": {
+            "homePage": "http://cloud.scorm.com/",
+            "name": "anonymous"
+        },
+        "objectType": "Agent"
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "https://www.googleapis.com/books/v1/volumes/1D5j7MTUQIwC",
+        "objectType": "Activity"
+    }
+}
+

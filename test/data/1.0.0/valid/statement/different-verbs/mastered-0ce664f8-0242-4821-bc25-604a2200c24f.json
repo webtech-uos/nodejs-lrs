@@ -1,0 +1,33 @@
+{
+    "id": "0ce664f8-0242-4821-bc25-604a2200c24f",
+    "actor": {
+        "mbox": "mailto:nadia13@test.test",
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/mastered",
+        "display": {
+            "en-US": "mastered"
+        }
+    },
+    "result": {
+        "score": {
+            "scaled": 0
+        }
+    },
+    "timestamp": "2013-11-28T14:50:47.549Z",
+    "stored": "2013-11-28T14:50:50.343Z",
+    "authority": {
+        "account": {
+            "homePage": "http://cloud.scorm.com/",
+            "name": "anonymous"
+        },
+        "objectType": "Agent"
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "http://ci.easygenerator.com/storage/50a8f70d-524d-48f5-b0f3-e17e7ece97a8/#home?objective_id=bd9c3ec6b3f0486fbbc26a5e4f156f21",
+        "objectType": "Activity"
+    }
+}
+

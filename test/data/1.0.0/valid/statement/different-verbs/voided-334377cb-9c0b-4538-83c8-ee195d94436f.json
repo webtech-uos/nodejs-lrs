@@ -1,0 +1,28 @@
+{
+    "id": "334377cb-9c0b-4538-83c8-ee195d94436f",
+    "actor": {
+        "mbox": "mailto:tincanjs-test-tincan+1385214989461@tincanapi.com",
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/voided",
+        "display": {
+            "en-US": "voided"
+        }
+    },
+    "timestamp": "2013-11-23T13:56:30.241Z",
+    "stored": "2013-11-23T13:56:32.576Z",
+    "authority": {
+        "account": {
+            "homePage": "http://cloud.scorm.com/",
+            "name": "anonymous"
+        },
+        "objectType": "Agent"
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "c1e45cdb-892a-470a-8c80-52a7f698dc89",
+        "objectType": "StatementRef"
+    }
+}
+

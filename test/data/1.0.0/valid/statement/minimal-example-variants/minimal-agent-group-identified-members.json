@@ -1,0 +1,25 @@
+{
+  "id": "12345678-1234-5678-1234-567812345678",
+  "actor":{
+    "objectType":"group",
+    "name":"Universität Osnabrück, Participants Web-Technologien II, Wintersemester 2013/2014",
+    "member":[
+        {"objectType":"agent", "mbox":"test@test.test"},
+        {"name":"Martin", "openid":"http://martin.test/martin"},
+        {"account":{ 
+           "homePage":"demo.studip.de",
+           "name":"test_autor"
+        }}
+    ]
+  },
+  "verb":{
+    "id":"http://adlnet.gov/expapi/verbs/created",
+    "display":{
+       "en-US":"created"
+    }
+  },
+  "object":{
+    "id":"http://example.adlnet.gov/xapi/example/activity"
+  }
+}
+

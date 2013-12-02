@@ -1,0 +1,28 @@
+{
+    "id": "89947510-d376-452f-a481-e662c276586c",
+    "actor": {
+        "mbox": "mailto:mail@com.ua",
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/launched",
+        "display": {
+            "en-US": "started"
+        }
+    },
+    "timestamp": "2013-11-29T07:38:43.745Z",
+    "stored": "2013-11-29T07:38:46.674Z",
+    "authority": {
+        "account": {
+            "homePage": "http://cloud.scorm.com/",
+            "name": "anonymous"
+        },
+        "objectType": "Agent"
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "http://ci.easygenerator.com/storage/2a5e6fa2-7241-4acc-9780-1c54cc86d289/#home",
+        "objectType": "Activity"
+    }
+}
+
