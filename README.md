@@ -15,8 +15,10 @@ This project aims to implement a [Learning Record Store](https://en.wikipedia.or
    * `data` experience api test suite
 
 # Deployment
-* Install `node`, see `package.json` for required version
-* run `npm install -g grunt-cli` if you want to use grunt (highly recommend!)
+* install `node`, see `package.json` for required version
+* install all global dependencies or add the projects `node_modules/.bin` to your `PATH`. This only needs to be done in development mode. Currently the global dependencies are:
+  * `grunt-cli`
+  * `coffee-script`
 * run `npm install` to install all dependencies locally
 * hit `grunt` to launch the application
 * `grunt test` for running all test cases
