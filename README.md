@@ -22,3 +22,7 @@ This project aims to implement a [Learning Record Store](https://en.wikipedia.or
 * run `npm install` to install all dependencies locally
 * hit `grunt` to launch the application
 * `grunt test` for running all test cases
+
+# Related Tools
+* [Experience Report Viewer](https://github.com/jvogtherr/ExperienceReportViewer) 
+
