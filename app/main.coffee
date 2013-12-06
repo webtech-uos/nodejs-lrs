@@ -9,4 +9,4 @@ for url, route of routes
     controller = require "./controllers/#{controllerName}"
     server[method] url, controller[methodName]
 
-server.listen 80
+server.listen 8080
