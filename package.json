@@ -14,14 +14,14 @@
     }
   ],
   "dependencies": {
-    "coffee-script": "~1.6.3",
     "restify": "~2.6.0",
     "passport": "~0.1.17",
-    "json-schema": "~0.2.2"
+    "jayschema": "~0.2.0"
   },
   "devDependencies": {
-    "mocha": "~1.14.0",
+    "coffee-script": "~1.6.3",
     "supertest": "~0.8.2",
+    "grunt-cli": "~0.1.11",
     "grunt": "~0.4.2",
     "grunt-mocha-test": "~0.8.0",
     "grunt-nodemon": "~0.1.2"
