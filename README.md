@@ -3,6 +3,7 @@ This project aims to implement a [Learning Record Store](https://en.wikipedia.or
 
 [![Build Status](https://travis-ci.org/webtech-uos/nodejs-lrs.png)](https://travis-ci.org/webtech-uos/nodejs-lrs)
 
+![Requirements Status](https://gemnasium.com/webtech-uos/nodejs-lrs.png)
 
 # File Structure
  * `app` everything required during runtime
