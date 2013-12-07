@@ -2,8 +2,7 @@
 This project aims to implement a [Learning Record Store](https://en.wikipedia.org/wiki/Learning_Record_Store) based on the specifications of the RESTful [Experience API](http://www.adlnet.gov/tla/experience-api) in [node.js](http://nodejs.org/).
 
 [![Build Status](https://travis-ci.org/webtech-uos/nodejs-lrs.png)](https://travis-ci.org/webtech-uos/nodejs-lrs)
-
-![Requirements Status](https://gemnasium.com/webtech-uos/nodejs-lrs.png)
+[![Dependency Status](https://gemnasium.com/webtech-uos/nodejs-lrs.png)](https://gemnasium.com/webtech-uos/nodejs-lrs)
 
 # File Structure
  * `app` everything required during runtime
