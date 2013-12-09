@@ -4,6 +4,11 @@ This project aims to implement a [Learning Record Store](https://en.wikipedia.or
 [![Build Status](https://travis-ci.org/webtech-uos/nodejs-lrs.png)](https://travis-ci.org/webtech-uos/nodejs-lrs)
 [![Dependency Status](https://gemnasium.com/webtech-uos/nodejs-lrs.png)](https://gemnasium.com/webtech-uos/nodejs-lrs)
 
+Documentation is generated using [Codo](https://github.com/coffeedoc/codo).
+The current Docs can be found [here](http://coffeedoc.info/github/webtech-uos/nodejs-lrs).
+
+A [report viewer](https://github.com/jvogtherr/ExperienceReportViewer) is beeing developed as part of this implementation.
+
 # File Structure
  * `app` everything required during runtime
    * `controllers` controllers for each route
@@ -19,10 +24,8 @@ This project aims to implement a [Learning Record Store](https://en.wikipedia.or
 * install all global dependencies or add the projects `node_modules/.bin` to your `PATH`. This only needs to be done in development mode. Currently the global dependencies are:
   * `grunt-cli`
   * `coffee-script`
+  * `codo`
 * run `npm install` to install all dependencies locally
 * hit `grunt` to launch the application
 * `grunt test` for running all test cases
-
-# Related Tools
-* [Experience Report Viewer](https://github.com/jvogtherr/ExperienceReportViewer) 
-
+* `codo` to generate the latest docs locally in the `doc` folder
