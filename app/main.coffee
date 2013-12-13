@@ -13,7 +13,7 @@ class Main
     @server = restify.createServer()
     @_registerRoutes()
     @_start()
-    
+
   # Used to register all routes contained in the file `routes.coffee`. 
   #
   # @private
@@ -33,3 +33,7 @@ class Main
     @server.listen 8080
 
 main = new Main
+
+# FIXME: find a better way to expose the http server object for testing
+# (this is used now in test/node_modules/setup_server.coffee)
+module.exports = Main

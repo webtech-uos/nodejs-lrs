@@ -1,15 +1,15 @@
 module.exports = (grunt) ->
-    
+
   grunt.loadNpmTasks 'grunt-mocha-test'
   grunt.loadNpmTasks 'grunt-nodemon'
-  
+
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
 
     mochaTest:
       test:
         options:
-          reporter: 'spec'
+          reporter: 'list'
         src: ['test/**/*.coffee']
 
     nodemon:
@@ -18,9 +18,9 @@ module.exports = (grunt) ->
           file: 'app/main.coffee'
 
   grunt.registerTask 'default', 'Launch the server using nodemon', ['nodemon']
-    
+
   grunt.registerTask 'test', 'Run the whole test suite', ['mochaTest']
-    
+
   grunt.registerTask 'doc', 'Generate codo documentation', ->
     require 'codo/lib/codo'
     cmd = require 'codo/lib/command'
