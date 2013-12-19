@@ -1,0 +1,21 @@
+{
+"_id": "_design/find_by",
+"language": "coffeescript",
+"views": {
+"email": {
+"map": "(doc) ->\n  emit doc.actor.mbox, doc"
+},
+"verb": {
+"map": "(doc) ->\n  emit doc.verb, doc"
+},
+"activity_id": {
+"map": "(doc) ->\n  emit doc.object.id, doc"
+},
+"timestamp": {
+"map": "(doc) ->\n  emit doc.timestamp, doc"
+},
+"stored": {
+"map": "(doc) ->\n  emit doc.stored, doc"
+}
+}
+}
