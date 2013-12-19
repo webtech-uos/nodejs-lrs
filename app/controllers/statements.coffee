@@ -16,7 +16,7 @@ class StatementController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   index: (req, res, next) ->
-    res.send 501
+    res.send 501 
   
   # Called whenever the clients requests to modify a specific statement.
   #
@@ -30,6 +30,10 @@ class StatementController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   show: (req, res, next) ->
-    res.send 501
+    BaseController.db.statements().get req.params.id, (err, doc) ->
+      if err
+        res.send 404
+      else
+        res.send doc
 
 module.exports = new StatementController
