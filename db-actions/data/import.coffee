@@ -3,7 +3,7 @@ http = require 'http'
 $ = require 'jquery'
 
 readFile= ->
-  fs.readFileSync 'exampleData.json', 'utf8'
+  fs.readFileSync 'db-actions/data/exampleData.json', 'utf8'
 
 postData= ->
   jsonFile = readFile()

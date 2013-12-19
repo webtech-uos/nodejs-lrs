@@ -1,0 +1,33 @@
+{
+    "id" : "IFI#",
+    "oneOf" : [
+        {
+            "type" : "object",
+            "properties" : {
+                "mbox" : { "type" : "string" }
+            },
+            "required" : ["mbox"]
+        },{
+            "type" : "object",
+            "properties" : {
+                "mbox_sha1sum" : { "type" : "string" }
+            },
+            "required" : ["mbox_sha1sum"] 
+        },{
+            "type" : "object",
+            "properties" : {
+                "openID" : {
+                    "type" : "string",
+                    "format" : "uri"
+                }
+            },
+            "required" : ["openID"]
+        },{
+            "type" : "object",
+            "properties" : { 
+                "account" : { "type" : "object" }
+            },
+            "required" : ["account"]
+        }
+    ]
+}
