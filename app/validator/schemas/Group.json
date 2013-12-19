@@ -1,0 +1,19 @@
+{
+    "id" : "Group#",
+    "type" : "object",
+    "properties" : {
+        "objectType" : {
+            "enum" : ["Group"]
+        },
+        "name" : {
+            "type" : "string"
+        },
+        "member" : {
+            "type" : "array",
+            "items" : {
+                "$ref" : "Agent"
+            }
+        }
+    },
+    "required" : ["objectType", "member"]
+}
