@@ -10,7 +10,8 @@ JaySchema = require 'jayschema'
 FileSystem = require 'fs'
 
 module.exports = class Validator
-  # C'tor
+  # C'tor. The schemaDir has to be relativ to the file which uses this 
+  # class.
   #
   # @param [String] schemaDir Relativ path to the schema directory.
   constructor: (@schemaDir) ->
