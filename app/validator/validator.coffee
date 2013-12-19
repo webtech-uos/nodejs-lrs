@@ -1,60 +1,41 @@
 ###
-# @brief Defines a validator, that tries to validate a given
+# Defines a validator, that tries to validate a given
 #   json oject with a given scheme
 #
-# @class Validator
-# @file Validator.coffee
 # @author Sebastian Pütz (spuetz@uos.de)
-# @author Dominik Lips (ddlips@uos.de)
+# @author Dominik Lips (dlips@uos.de)
 ###
 
 JaySchema = require 'jayschema'
 FileSystem = require 'fs'
 
-class Validator
-  ###
-  # @brief C'tor
+module.exports = class Validator
+  # C'tor
   #
-  # @param file filename of the JSON-schema
-  # @param options file rading options
-  # @param callBack the callback function for the result of validate
-  ###
-  constructor: (@file, @options, @callBack) ->
-    @schema = JSON.parse FileSystem.readFileSync @file, @options
+  # @param [String] schemaDir Relativ path to the schema directory.
+  constructor: (@schemaDir) ->
     @js = new JaySchema()
+    @schema = "xAPI#"
   
-  ###
-  # @brief validates the given json objects and calls the callback 
-  #   function specified in the c'tor.
-  # @param json-object
-  ###
-  validate: (json) ->
+  # Validates the given json objects and calls the callback 
+  #   function specified.
+  #
+  # @param [Object] json JSON-Object to validate.
+  # @param [Function] callback Callback to invoke after validation.
+  validate: (json, callback) ->
     if @js and @schema
-      @js.validate json, @schema, @callBack
+      @js.validate json, @schema, callback
     return
 
-  ###
-  # @brief loads a test json object and tries to validate it
+  # Loads a file and parse the content as JSON.
   # 
-  # @param filename of the test json object
-  # @param options file reading options
-  # @param validator
-  ###
-  loadAndValidate: (filename, options) ->
-    FileSystem.readFile filename, options, (err, data) =>
-      if err
-        console.log 'parse error'
-      else
-        @validate(data)
-    return
+  # @param [String] path Path to the file. 
+  loadJsonFile: (path) ->
+    JSON.parse FileSystem.readFileSync path, 'utf8'
 
-# test callback
-callBack = (err, data) ->
-  console.log 'Error: '
-  console.log err
-  console.log 'Data: '
-  console.log data
-
-# test the validator
-validator = new Validator './xAPI.json', 'utf8', callBack
-validator.loadAndValidate './test.json', 'utf8' 
+  # Load a schema and register it in the validator.
+  # 
+  # @param [String] filename Filename of the schema in the schema directory.
+  loadSchema: (filename) ->
+    schema = @loadJsonFile "#{@schema_dir}schemas/#{filename}"
+    @js.register schema
