@@ -38,5 +38,5 @@ module.exports = class Validator
   # 
   # @param [String] filename Filename of the schema in the schema directory.
   loadSchema: (filename) ->
-    schema = @loadJsonFile "#{@schema_dir}schemas/#{filename}"
+    schema = @loadJsonFile "#{@schemaDir}schemas/#{filename}"
     @js.register schema
