@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id" : "xAPI#",
+    "description": "schema for an statement in the xAPI",
+    "type": "object",
+    "properties": {
+        "id" : {
+            "$ref" : "UUID"
+        },
+        "actor" : {
+            "oneOf" : [ 
+                { "$ref" : "Agent" },
+                { "$ref" : "Group" }
+            ]
+        },
+        "verb" : {
+            "type" : "object"
+        },
+        "object" : {
+            "type" : "object"
+        }
+    }
+}

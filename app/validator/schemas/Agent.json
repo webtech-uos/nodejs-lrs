@@ -1,0 +1,18 @@
+{
+  "id" : "Agent#",
+  "allOf" : [
+    { 
+      "$ref" : "IFI" 
+    },{
+      "type" : "object",
+      "properties" : {
+        "objectType" : {
+            "enum" : ["Agent"]
+        },
+        "name" : {
+            "type" : "string"
+        }
+      }
+    }
+  ]
+}
