@@ -1,0 +1,6 @@
+nach email finden:
+http://localhost:5984/wt2/_design/find_by/_view/email?key=[%22mailto:happy@happyplace.com%22]
+
+
+views (zu 'find_by'):
+http://localhost:5984/wt2/_design/find_by

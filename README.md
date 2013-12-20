@@ -28,3 +28,24 @@ A [report viewer](https://github.com/jvogtherr/ExperienceReportViewer) is beeing
 * hit `grunt` to launch the application
 * `grunt test` for running all test cases
 * `grunt doc` to generate the latest docs locally in the `doc` folder
+
+# Views (temporarily)
+run `coffee db-actions/data/import.coffee` inside the main-folder.
+
+results of the couchdb-views:
+
+[http://localhost:5984/wt2/_design/find_by/_view/email](http://localhost:5984/wt2/_design/find_by/_view/email)
+
+[http://localhost:5984/wt2/_design/find_by/_view/activity_id](http://localhost:5984/wt2/_design/find_by/_view/activity_id)
+
+[http://localhost:5984/wt2/_design/find_by/_view/verb](http://localhost:5984/wt2/_design/find_by/_view/verb)
+
+[http://localhost:5984/wt2/_design/find_by/_view/stored](http://localhost:5984/wt2/_design/find_by/_view/stored)
+
+[http://localhost:5984/wt2/_design/find_by/_view/timestamp](http://localhost:5984/wt2/_design/find_by/_view/timestamp)
+
+Find statements by email (test@test.com):
+[http://localhost:5984/wt2/__design/find__by/_view/email?key="mailto:test@test.com"](http://localhost:5984/wt2/_design/find_by/_view/email?key=%22mailto:test@test.com%22)
+
+Find statements by activity id (http://www.example.com):
+[http://localhost:5984/wt2/__design/find__by/_view/activity_id?key="http://www.example.com"](http://localhost:5984/wt2/_design/find_by/_view/activity_id?key=%22http://www.example.com%22)
