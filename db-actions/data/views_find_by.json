@@ -3,7 +3,7 @@
 "language": "coffeescript",
 "views": {
 "email": {
-"map": "(doc) ->\n  emit doc.actor.mbox, doc"
+"map": "(doc) ->\n  email = doc.actor.mbox.toString()\n  emit email, doc"
 },
 "verb": {
 "map": "(doc) ->\n  emit doc.verb, doc"
