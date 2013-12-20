@@ -1,5 +1,5 @@
 assert = require "assert"
-Validator = require "../../app/validator/validator.coffee"
+Validator = require "../../../app/validator/validator.coffee"
 
 val = new Validator 'app/validator/schemas/'
 
