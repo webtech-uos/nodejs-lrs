@@ -1,4 +1,4 @@
-module.exports = 
+module.exports =
   statements:
     put: 'statements#update'
     post: 'statements#create'
