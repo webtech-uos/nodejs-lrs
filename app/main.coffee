@@ -23,7 +23,8 @@ class Main
       for method, callback of route
         [controllerName, methodName] = callback.split '#'
         controller = require "./controllers/#{controllerName}"
-        @server[method] url, (params...) -> controller[methodName].apply(controller, params)
+        @server[method] url, do (controller, methodName) -> 
+          (params...) -> controller[methodName].apply(controller, params)
 
   # Used to start the server on port `8080`.
   #
