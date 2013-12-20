@@ -1,15 +1,13 @@
-###
-# Defines a validator, that tries to validate a given
-#   json oject with a given scheme
-#
-# @author Sebastian Pütz (spuetz@uos.de)
-# @author Dominik Lips (dlips@uos.de)
-###
-
 JaySchema = require 'jayschema'
 FileSystem = require 'fs'
 
+# Defines a validator, that tries to validate a given
+# JSON-object with a given scheme.
+#
+# @author Sebastian Pütz (spuetz@uos.de)
+# @author Dominik Lips (dlips@uos.de)
 module.exports = class Validator
+  
   # C'tor. The schemaDir has to be relativ to the file which uses this 
   # class.
   #
@@ -18,15 +16,25 @@ module.exports = class Validator
     @js = new JaySchema()
     @schema = "xAPI#"
   
-  # Validates the given json objects and calls the callback 
-  #   function specified.
+  # Validates the given json objects against the default `xAPI#` schema.
   #
   # @param [Object] json JSON-Object to validate.
   # @param [Function] callback Callback to invoke after validation.
   validate: (json, callback) ->
-    if @js and @schema
-      @js.validate json, @schema, callback
+    @validateWithSchema json, @schema, callback
     return
+
+  # Validates the given json objects against a given schema.
+  # The schema can be the id of a previously loaded schema or an JSON-Object
+  # which is a valid JSON-Schema.
+  # 
+  # @param [Object] json JSON-Object to validate.
+  # @param [String, Object] schema Schema to validate.
+  # @param [Function] callback Callback to invoke after validation.
+  validateWithSchema: (json, schema, callback) ->
+    if @js and schema
+      @js.validate json, schema, callback
+    return  
 
   # Loads a file and parse the content as JSON.
   # 
@@ -38,5 +46,5 @@ module.exports = class Validator
   # 
   # @param [String] filename Filename of the schema in the schema directory.
   loadSchema: (filename) ->
-    schema = @loadJsonFile "#{@schemaDir}#{filename}"
+    schema = @loadJsonFile "#{@schemaDir}#{filename}.json"
     @js.register schema
