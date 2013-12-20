@@ -44,5 +44,8 @@ results of the couchdb-views:
 
 [http://localhost:5984/wt2/_design/find_by/_view/timestamp](http://localhost:5984/wt2/_design/find_by/_view/timestamp)
 
-find by email (test@test.com):
-[http://localhost:5984/wt2/_design/find_by/_view/email?key=[%22mailto:test@test.com%22]](http://localhost:5984/wt2/_design/find_by/_view/email?key=[%22mailto:test@test.com%22])
+Find statements by email (test@test.com):
+[http://localhost:5984/wt2/__design/find__by/_view/email?key="mailto:test@test.com"](http://localhost:5984/wt2/_design/find_by/_view/email?key=%22mailto:test@test.com%22)
+
+Find statements by activity id (http://www.example.com):
+[http://localhost:5984/wt2/__design/find__by/_view/activity_id?key="http://www.example.com"](http://localhost:5984/wt2/_design/find_by/_view/activity_id?key=%22http://www.example.com%22)
