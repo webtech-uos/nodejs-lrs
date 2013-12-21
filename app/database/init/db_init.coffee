@@ -1,4 +1,4 @@
-config = require '../db_config.coffee'
+config = require '../../config.coffee'
 cradle = require 'cradle'
 fs = require 'fs'
 
