@@ -11,6 +11,6 @@ describe 'Load a json file with some data', ->
 
 describe "Load a schema from the schema directory", ->
   it 'should return true', ->
-    val.loadSchema "UUID.json"
+    val.loadSchema "UUID"
     assert.ok val.js.isRegistered "UUID#"
     return

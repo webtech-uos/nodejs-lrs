@@ -11,6 +11,10 @@ module.exports = (grunt) ->
         options:
           reporter: 'list'
         src: ['test/**/*.coffee']
+      validator:
+        options:
+          reporter: 'list'
+        src: ['test/validator/*.coffee']
 
     nodemon:
       dev:

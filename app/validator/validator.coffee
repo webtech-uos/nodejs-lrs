@@ -1,5 +1,5 @@
 JaySchema = require 'jayschema'
-FileSystem = require 'fs'
+fs = require 'fs'
 
 # Defines a validator, that tries to validate a given
 # JSON-object with a given scheme.
@@ -13,7 +13,12 @@ module.exports = class Validator
   #
   # @param [String] schemaDir Relativ path to the schema directory.
   constructor: (@schemaDir) ->
-    @js = new JaySchema()
+    @js = new JaySchema (ref, callback) ->
+      fs.readFile @schemaDir + ref + ".json", "utf8", (err, data) ->
+        if err?
+          callback err
+        else
+          callback null, JSON.parse(data)
     @schema = "xAPI#"
   
   # Validates the given json objects against the default `xAPI#` schema.
@@ -40,7 +45,7 @@ module.exports = class Validator
   # 
   # @param [String] path Path to the file. 
   loadJsonFile: (path) ->
-    JSON.parse FileSystem.readFileSync path, 'utf8'
+    JSON.parse fs.readFileSync path, 'utf8'
 
   # Load a schema and register it in the validator.
   # 
