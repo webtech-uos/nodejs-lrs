@@ -3,7 +3,6 @@ cradle = require 'cradle'
 fs = require 'fs'
 
 # A class for initialise the database.
-# Only run me once.
 #
 class InitialiseDataBase
 
@@ -69,6 +68,6 @@ class InitialiseDataBase
         console.log "done."  
         
               
-new InitialiseDataBase()
+init = new InitialiseDataBase
 
 module.exports = InitialiseDataBase

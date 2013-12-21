@@ -21,8 +21,11 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', 'Launch the server using nodemon', ['nodemon']
 
   grunt.registerTask 'test', 'Run the whole test suite', ['mochaTest']
-
+  
   grunt.registerTask 'doc', 'Generate codo documentation', ->
     require 'codo/lib/codo'
     cmd = require 'codo/lib/command'
     cmd.run()
+
+  grunt.registerTask 'init', 'Initialise the database', ->
+  	console.log "TODO"
