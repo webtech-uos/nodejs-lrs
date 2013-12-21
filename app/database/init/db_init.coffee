@@ -28,18 +28,36 @@ class InitialiseDataBase
                                                 cache: true 
                                                 raw: false
     database = conn.database dbName
-
+    
     console.log "Try to connect to database server (#{dbHost}:#{dbPort}) and create database '#{dbName}'..."
 
-    database.exists (error, exists) ->
-      if error
+    database.exists (err, exists) ->
+      if err
         console.error "Error while connect to database server!"
-        console.error error
+        console.error err
 
       else if exists
-        console.error "Database '#{dbName}' already exists! Views and data will not be imported!"
+        console.log "the database '#{dbName}' already exists! Views and sample data will not be imported!"
       else
         database.create()
+        
+        # import views
+        fs.readdir 'data/views', (err, files) ->
+          if err
+            console.error "Error while read views folder!"
+            console.error err
+            database.destroy()
+          else
+          	for file in files
+          	  fs.readFile "data/views/#{file}", (err, contents) ->
+                if err
+                  console.error "Error while read sample data file #{file}!"
+                  console.error err
+                  database.destroy()
+                else
+                  database.save '_design/find_by', JSON.parse contents
+                  
+        # import data    
         fs.readFile 'data/example_data.json', (err, contents) ->
           if err
             console.error "Error while read sample data file!"
@@ -48,10 +66,9 @@ class InitialiseDataBase
           else
             database.save JSON.parse contents
             
-        #TODO import views
-        #TODO import views
-        console.log "done."
+        console.log "done."  
         
               
 new InitialiseDataBase()
-module.import = InitialiseDataBase
+
+module.exports = InitialiseDataBase
