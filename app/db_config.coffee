@@ -1,5 +1,6 @@
-module.exports = 
-  dBconfig:
-    dBhost = "http://localhost"
-    dBport = 5984
-    dBname = "wt2"
+config = 
+  dbConfig:
+    dbHost: "http://localhost"
+    dbPort: 5984
+    dbName: "wt2"
+module.exports = config
