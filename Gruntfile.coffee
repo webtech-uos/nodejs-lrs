@@ -10,6 +10,7 @@ module.exports = (grunt) ->
       test:
         options:
           reporter: 'list'
+          require: ['coffee-script']
         src: ['test/**/*.coffee']
       unit:
         options:
