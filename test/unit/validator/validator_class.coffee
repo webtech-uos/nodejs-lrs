@@ -8,7 +8,7 @@ describe 'Validator class:', ->
   
   describe 'Load a json file with some data', ->
     it 'should return content of file', ->
-      content = val.loadJsonFile 'test/unit/validator/validator_class_data.json'
+      content = val.loadJsonFile 'test/unit/validator/test_data.json'
       assert.deepEqual content, {"test": "ok"}
       return
 

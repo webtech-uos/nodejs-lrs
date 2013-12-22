@@ -15,7 +15,7 @@ module.exports = (grunt) ->
       "unit-validator":
         options:
           reporter: 'list'
-        src: ['test/unit/validator/*.coffee']
+        src: ['test/unit/validator/**/*.coffee']
       
     nodemon:
       dev:
