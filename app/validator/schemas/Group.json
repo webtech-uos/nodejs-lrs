@@ -1,19 +1,64 @@
 {
     "id" : "Group#",
     "type" : "object",
-    "properties" : {
-        "objectType" : {
-            "enum" : ["Group"]
+    "oneOf" : [{
+        "$ref" : "#/definitions/AnonymousGroup"
+    }, {
+        "$ref" : "#/definitions/IdentifiedGroup"
+    }],
+    "definitions" : {
+        "IdentifiedGroup" : {
+            "id" : "IdentifiedGroup",
+            "type" : "object",
+            "allOf" : [{
+                "type" : "object",
+                "properties" : {
+                    "objectType" : {
+                        "type" : "string",
+                        "pattern" : "^[g|G]roup$"
+                    },
+                    "name" : {
+                        "type" : "string"
+                    },
+                    "member" : {
+                        "type" : "array",
+                        "items" : {
+                            "$ref" : "Agent"
+                        },
+                        "minItems" : 1
+                    },
+                    "mbox" : {},
+                    "mbox_sha1sum" : {},
+                    "accout" : {},
+                    "openid" : {}
+                },
+                "additionalProperties" : false,
+                "required" : ["objectType"]
+            }, {
+                "$ref" : "IFI"
+            }]
         },
-        "name" : {
-            "type" : "string"
-        },
-        "member" : {
-            "type" : "array",
-            "items" : {
-                "$ref" : "Agent"
-            }
+        "AnonymousGroup" : {
+            "id" : "AnounymousGroup#",
+            "type" : "object",
+            "properties" : {
+                "objectType" : {
+                    "type" : "string",
+                    "pattern" : "^[g|G]roup$"
+                },
+                "name" : {
+                    "type" : "string"
+                },
+                "member" : {
+                    "type" : "array",
+                    "items" : {
+                        "$ref" : "Agent"
+                    },
+                    "minItems" : 1
+                }
+            },
+            "additionalProperties" : false,
+            "required" : ["objectType", "member"]
         }
-    },
-    "required" : ["objectType", "member"]
+    }
 }

@@ -8,7 +8,7 @@
       "properties" : {
         "objectType" : {
             "type" : "string",
-            "pattern" : "^Agent$"
+            "pattern" : "^[a|A]gent$"
         },
         "name" : {
             "type" : "string"

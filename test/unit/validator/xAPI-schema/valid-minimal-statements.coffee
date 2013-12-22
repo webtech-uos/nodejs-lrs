@@ -14,7 +14,7 @@ val = new Validator "app/validator/schemas/"
 fs.readdir data_path, (err, files) ->
   for file in files
     do (file) ->
-      describe.skip "Valid statement", ->
+      describe "Valid statement", ->
         describe "from #{file}", ->
           it "should be valid", (done) ->
             fs.readFile data_path + file, "utf8", (err, data) ->
