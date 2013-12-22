@@ -19,5 +19,6 @@
         "object" : {
             "type" : "object"
         }
-    }
+    },
+    "required" : ["actor", "verb", "object"]
 }
