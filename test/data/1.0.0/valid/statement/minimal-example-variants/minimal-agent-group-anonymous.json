@@ -3,7 +3,7 @@
   "actor":{
     "objectType":"group",
     "member":[
-        {"objectType":"agent", "mbox":"test@test.test"},
+        {"objectType":"agent", "mbox":"mailto:test@test.test"},
         {"name":"Martin", "openid":"http://martin.test/martin"},
         {"account":{ 
            "homePage":"demo.studip.de",
