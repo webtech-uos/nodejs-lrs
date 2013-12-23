@@ -49,6 +49,17 @@ languageRegion =
   "en-US": "(English as used in the United States)"
   "es-419": "(Spanish appropriate for the Latin America and Caribbean region using the UN region code)"
 
+privateUseSubtags =
+  "de-CH-x-phonebk" : "privat"
+  "az-Arab-x-AZE-derbend" : "privat"
+
+privateUseRegistryValues =
+  "x-whatever": "(private use using the singleton 'x')"
+  "qaa-Qaaa-QM-x-southern": "(all private tags)"
+  "de-Qaaa": "(German, with a private script)"
+  "sr-Latn-QM": "(Serbian, Latin script, private region)"
+  "sr-Qaaa-RS": "(Serbian, private script, for Serbia)"
+
 describe 'LanguageMap', ->
   
   describe 'with simple tags', ->
@@ -89,6 +100,16 @@ describe 'LanguageMap', ->
   describe 'with language region', ->
     it 'should be valid', (done) ->
       val.validateWithSchema languageRegion, "LanguageMap", (err) ->
+        valid err, done
+  
+  describe 'with private use subtags', ->
+    it 'should be valid', (done) ->
+      val.validateWithSchema privateUseSubtags, "LanguageMap", (err) ->
+        valid err, done
+  
+  describe 'with private use registry values', ->
+    it 'should be valid', (done) ->
+      val.validateWithSchema privateUseRegistryValues, "LanguageMap", (err) ->
         valid err, done
   
   
