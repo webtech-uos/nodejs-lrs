@@ -14,7 +14,18 @@
             ]
         },
         "verb" : {
-            "type" : "object"
+            "type" : "object",
+            "properties" : {
+                "id" : {
+                    "type" : "string",
+                    "format" : "uri"
+                },
+                "display" : {
+                    "$ref" : "LanguageMap"
+                }
+            },
+            "additionalProperties" : false,
+            "required" : ["id"]
         },
         "object" : {
             "type" : "object"
