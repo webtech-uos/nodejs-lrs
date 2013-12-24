@@ -1,0 +1,7 @@
+{
+  "id" : "Extensions#",
+  "patternProperties" : {
+    "^[a-zA-Z]+:\/\/[^ \"]+$" : {}
+  },
+  "additionalProperties" : false
+}
