@@ -17,8 +17,7 @@
             "type" : "object",
             "properties" : {
                 "id" : {
-                    "type" : "string",
-                    "format" : "uri"
+                    "$ref" : "IRI"
                 },
                 "display" : {
                     "$ref" : "LanguageMap"

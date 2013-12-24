@@ -1,0 +1,5 @@
+{
+  "id" : "IRI#",
+  "type" : "string",
+  "pattern" : "^[a-zA-Z]+:\/\/[^ \"]+$"
+}
