@@ -56,6 +56,12 @@
         "version" : {
             "type" : "string",
             "pattern" : "^1\\.0\\.\\d+$"
+        },
+        "attachments" : {
+            "type" : "array",
+            "items" : {
+                "$ref" : "Attachment"
+            }
         }
     },
     "required" : ["actor", "verb", "object"]
