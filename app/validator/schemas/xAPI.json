@@ -38,7 +38,19 @@
         "authority" : {
             "oneOf" : [ 
                 { "$ref" : "Agent" },
-                { "$ref" : "Group#/definitions/AnonymousGroup" }
+                { 
+                    "allOf" : [{
+                        "$ref" : "Group#/definitions/AnonymousGroup"
+                    },{
+                        "properties" : { 
+                            "member" : {
+                                "type" : "array",
+                                "minItems" : 2,
+                                "maxItems" : 2
+                            }
+                        }
+                    }]
+                }
             ]
         },
         "version" : {
