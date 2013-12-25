@@ -1,0 +1,30 @@
+{
+    "id" : "Attachment#",
+    "properties" : {
+        "usageType" : {
+            "$ref" : "IRI"
+        },
+        "display" : {
+            "$ref" : "LanguageMap"
+        },
+        "descriptrion" : {
+            "$ref" : "LanguageMap"
+        },
+        "contentType" : {
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9@<>_\"\\-\\.:,]+\/[a-zA-Z0-9@<>_\"\\-\\.:,]+(\\+[a-zA-Z0-9@<>_\"\\-\\.:,]+)?(;\\s([a-zA-Z0-9@<>_\"\\-\\.:,]+[=][a-zA-Z0-9@<>_\"\\-\\.:,]+))*$"
+        },
+        "length" : {
+            "type" : "number"
+        },
+        "sha2" : {
+            "type" : "string",
+            "pattern" : "^[a-fA-F0-9]+$"
+        },
+        "fileUrl" : {
+            "$ref" : "IRI"
+        }    
+    },
+    "required" : ["usageType","display","contentType","length","sha2"],
+    "additionalProperties" : false
+}
