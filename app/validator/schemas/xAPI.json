@@ -14,10 +14,49 @@
             ]
         },
         "verb" : {
-            "type" : "object"
+            "type" : "object",
+            "properties" : {
+                "id" : {
+                    "$ref" : "IRI"
+                },
+                "display" : {
+                    "$ref" : "LanguageMap"
+                }
+            },
+            "additionalProperties" : false,
+            "required" : ["id"]
         },
         "object" : {
             "type" : "object"
+        },
+        "timestamp" : {
+            "$ref" : "ISO8061Date"
+        },
+        "stored" : {
+            "$ref" : "ISO8061Date"
+        },
+        "authority" : {
+            "oneOf" : [ 
+                { "$ref" : "Agent" },
+                { 
+                    "allOf" : [{
+                        "$ref" : "Group#/definitions/AnonymousGroup"
+                    },{
+                        "properties" : { 
+                            "member" : {
+                                "type" : "array",
+                                "minItems" : 2,
+                                "maxItems" : 2
+                            }
+                        }
+                    }]
+                }
+            ]
+        },
+        "version" : {
+            "type" : "string",
+            "pattern" : "^1\\.0\\.\\d+$"
         }
-    }
+    },
+    "required" : ["actor", "verb", "object"]
 }

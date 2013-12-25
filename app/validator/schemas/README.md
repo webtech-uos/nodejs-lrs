@@ -1,0 +1,1 @@
+This folder contains JSON-Schemas for statements of the [xAPI](https://github.com/adlnet/xAPI-Spec/blob/master/xAPI.md).

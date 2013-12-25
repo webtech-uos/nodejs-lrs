@@ -2,7 +2,8 @@
   "id": "12345678-1234-5678-1234-567812345678",
   "actor":{
     "objectType":"group",
-    "name":"Universität Osnabrück, Participants Web-Technologien II, Wintersemester 2013/2014"
+    "name":"Universität Osnabrück, Participants Web-Technologien II, Wintersemester 2013/2014",
+    "mbox":"mailto:test@uos.de"
   },
   "verb":{
     "id":"http://adlnet.gov/expapi/verbs/created",

@@ -12,7 +12,11 @@ module.exports = (grunt) ->
           reporter: 'list'
           require: ['coffee-script']
         src: ['test/**/*.coffee']
-
+      "unit-validator":
+        options:
+          reporter: 'list'
+        src: ['test/unit/validator/**/*.coffee']
+      
     nodemon:
       dev:
         options:

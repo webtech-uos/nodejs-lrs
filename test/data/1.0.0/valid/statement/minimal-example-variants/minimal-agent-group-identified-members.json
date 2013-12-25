@@ -3,8 +3,9 @@
   "actor":{
     "objectType":"group",
     "name":"Universität Osnabrück, Participants Web-Technologien II, Wintersemester 2013/2014",
+    "mbox":"mailto:test@uos.de",
     "member":[
-        {"objectType":"agent", "mbox":"test@test.test"},
+        {"objectType":"agent", "mbox":"mailto:test@test.test"},
         {"name":"Martin", "openid":"http://martin.test/martin"},
         {"account":{ 
            "homePage":"demo.studip.de",
