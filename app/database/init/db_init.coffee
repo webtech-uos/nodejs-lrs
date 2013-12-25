@@ -4,7 +4,7 @@ fs = require 'fs'
 
 # A class for initialise the database.
 #
-class InitialiseDataBase
+module.exports = class InitialiseDataBase
 
   # Must only be runned once while app installing.
   # Create and fill the database if not exists.
@@ -22,6 +22,8 @@ class InitialiseDataBase
     dbHost = config.dbConfig.dbHost
     dbPort = config.dbConfig.dbPort
     dbName = config.dbConfig.dbName
+    
+    modulePath = './app/database/init'
     
     conn = new (cradle.Connection) dbHost, 5984, 
                                                 cache: true 
@@ -41,23 +43,24 @@ class InitialiseDataBase
         database.create()
         
         # import views
-        fs.readdir 'data/views', (err, files) ->
+        fs.readdir "#{modulePath}/data/views", (err, files) ->
           if err
             console.error "Error while read views folder!"
             console.error err
             database.destroy()
           else
           	for file in files
-          	  fs.readFile "data/views/#{file}", (err, contents) ->
+          	  fs.readFile "#{modulePath}/data/views/#{file}", (err, contents) ->
                 if err
                   console.error "Error while read sample data file #{file}!"
                   console.error err
                   database.destroy()
                 else
-                  database.save '_design/find_by', JSON.parse contents
+                  view = JSON.parse contents
+                  database.save view._id, view
                   
         # import data    
-        fs.readFile 'data/example_data.json', (err, contents) ->
+        fs.readFile "#{modulePath}/data/example_data.json", (err, contents) ->
           if err
             console.error "Error while read sample data file!"
             console.error err
@@ -67,7 +70,3 @@ class InitialiseDataBase
             
         console.log "done."  
         
-              
-init = new InitialiseDataBase
-
-module.exports = InitialiseDataBase

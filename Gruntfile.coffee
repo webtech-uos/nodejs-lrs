@@ -28,4 +28,6 @@ module.exports = (grunt) ->
     cmd.run()
 
   grunt.registerTask 'init', 'Initialise the database', ->
-  	console.log "TODO"
+  	"TODO"
+#  	initDb = require './app/database/init/db_init.coffee'
+#  	new initDb
