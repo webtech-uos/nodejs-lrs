@@ -28,6 +28,22 @@
         },
         "object" : {
             "type" : "object"
+        },
+        "timestamp" : {
+            "$ref" : "ISO8061Date"
+        },
+        "stored" : {
+            "$ref" : "ISO8061Date"
+        },
+        "authority" : {
+            "oneOf" : [ 
+                { "$ref" : "Agent" },
+                { "$ref" : "Group#/definitions/AnonymousGroup" }
+            ]
+        },
+        "version" : {
+            "type" : "string",
+            "pattern" : "^1\\.0\\.\\d+$"
         }
     },
     "required" : ["actor", "verb", "object"]
