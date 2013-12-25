@@ -1,0 +1,41 @@
+{
+    "id" : "Result#",
+    "properties" : {
+        "score" : {
+            "type" : "object",
+            "properties" : {
+                "scaled" : {
+                    "type" : "number",
+                    "minimum" : -1,
+                    "maximum" : 1
+                },
+                "raw" : {
+                    "type" : "number"
+                },
+                "min" : {
+                    "type" : "number"
+                },
+                "max" : {
+                    "type" : "number"
+                },
+                "additionalProperties" : false    
+            }
+        },
+        "success" : {
+            "type" : "boolean"
+        },
+        "completion" : {
+            "type" : "boolean"
+        },
+        "response" : {
+            "type" : "string"
+        },
+        "duration" : {
+            "type" : "string"
+        },
+        "extensions" : {
+            "$ref" : "Extensions"
+        }
+    },
+    "additionalProperties" : false
+}

@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id" : "xAPI#",
-    "description": "schema for an statement in the xAPI",
+    "description": "schema for an statement in the xAPI version 1.0.*",
     "type": "object",
     "properties": {
         "id" : {
@@ -62,7 +62,14 @@
             "items" : {
                 "$ref" : "Attachment"
             }
+        },
+        "result" : {
+            "$ref" : "Result"
+        },
+        "context" : {
+
         }
     },
+    "additionalProperties" : false,
     "required" : ["actor", "verb", "object"]
 }
