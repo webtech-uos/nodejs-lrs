@@ -67,7 +67,7 @@
             "$ref" : "Result"
         },
         "context" : {
-
+            "$ref" : "Context"
         }
     },
     "additionalProperties" : false,
