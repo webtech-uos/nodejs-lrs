@@ -18,7 +18,19 @@
       "$ref" : "Group"
     },
     "contextActivities" : {
-
+      "patternProperties" : {
+        "^(parent|grouping|category|other)$" : {
+          "oneOf" : [{
+            "$ref" : "Activity"  
+          },{
+            "type" : "array",
+            "items" : {
+              "$ref" : "Activity"
+            } 
+          }]
+        }
+      },
+      "additionalProperties" : false
     },
     "revision" : {
       "type" : "string"
