@@ -20,7 +20,7 @@ module.exports = class Validator
             callback err
           else
             callback null, JSON.parse(data)
-    @schema = "Statement"
+    @schema = "xAPIStatement"
   
   # Validates the given json objects against the default `xAPI#` schema.
   #

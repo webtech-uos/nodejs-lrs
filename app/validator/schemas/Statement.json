@@ -27,7 +27,7 @@
             "required" : ["id"]
         },
         "object" : {
-            "type" : "object"
+            "$ref" : "Object"
         },
         "timestamp" : {
             "$ref" : "ISO8061Date"
@@ -70,6 +70,5 @@
             "$ref" : "Context"
         }
     },
-    "additionalProperties" : false,
     "required" : ["actor", "verb", "object"]
 }

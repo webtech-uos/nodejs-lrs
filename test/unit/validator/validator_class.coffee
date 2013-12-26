@@ -20,7 +20,7 @@ describe 'Validator class:', ->
 
   describe "Load a schema with external references", ->
     it 'should load all dependencies', (done) ->
-      val.validateWithSchema {}, "Statement", (err) ->
+      val.validateWithSchema {}, "xAPIStatement", (err) ->
         try
           assert.ok val.js.isRegistered("Agent#")
           assert.ok val.js.isRegistered("UUID#")

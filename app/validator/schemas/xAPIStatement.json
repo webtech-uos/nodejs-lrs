@@ -1,0 +1,22 @@
+{
+    "id" : "xAPIStatement#",
+    "allOf" : [{
+        "$ref" : "Statement"
+    },{
+        "type" : "object",
+        "properties" : {
+            "id" : {},
+            "actor" : {},
+            "verb" : {},
+            "object" : {},
+            "result" : {},
+            "context" : {},
+            "timestamp" : {},
+            "stored" : {},
+            "authority" : {},
+            "version" : {},
+            "attachments" : {}
+        },
+        "additionalProperties" : false
+    }]
+}

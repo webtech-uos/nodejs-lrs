@@ -27,5 +27,34 @@
         },
         "required" : ["objectType", "id"],
         "additionalProperties" : false
+    },{
+        "allOf" : [{
+            "$ref" : "Statement"
+        },{
+            "type" : "object",
+            "properties" : {
+                "objectType" : {
+                    "type" : "string",
+                    "pattern" : "^SubStatement$"
+                },
+                "actor" : {},
+                "verb" : {},
+                "object" : {
+                    "type" : "object",
+                    "properties" : {
+                        "objectType" : {
+                            "type" : "string",
+                            "enum" : ["Activity","Agent","Group","StatementRef"]
+                        }
+                    }
+                },
+                "context" : {},
+                "result" : {},
+                "version" : {},
+                "attachments" : {}
+            },
+            "required" : ["objectType"],
+            "additionalProperties" : false
+        }]    
     }]
 }
