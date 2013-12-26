@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "id" : "xAPI#",
+    "id" : "Statement#",
     "description": "schema for an statement in the xAPI version 1.0.*",
     "type": "object",
     "properties": {
