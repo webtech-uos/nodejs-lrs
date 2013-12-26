@@ -1,4 +1,6 @@
 {
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for an agent object of the actor property of a statement in the xAPI, version 1.0.*",
   "id" : "Agent#",
   "allOf" : [
     { 
