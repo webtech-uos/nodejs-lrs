@@ -21,6 +21,12 @@
         },
         "display" : {
           "$ref" : "LanguageMap"
+        },
+        "name" : {
+          "$ref" : "LanguageMap"
+        },
+        "description" : {
+          "$ref" : "LanguageMap"
         }
       },
       "additionalProperties" : false,
