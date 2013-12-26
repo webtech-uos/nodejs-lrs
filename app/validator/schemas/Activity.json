@@ -30,7 +30,18 @@
           "$ref" : "Extensions" 
         },
         "interactionType" : {
-          "type" : "string"
+          "type" : "string",
+          "enum" : [
+            "choice",
+            "sequencing",
+            "likert",
+            "matching",
+            "performance",
+            "true-false",
+            "fill-in",
+            "numeric",
+            "other"
+          ]
         },
         "correctResponsePattern" : {
           "type" : "array",
