@@ -1,0 +1,31 @@
+{
+    "id" : "Object#",
+    "type" : "object",
+    "oneOf" : [{
+        "$ref" : "Activity"
+    },{
+        "oneOf" : [{
+            "allOf" : [{
+                "$ref" : "Agent"
+            },{
+                "type" : "object",
+                "required" : ["objectType"]
+            }]
+        },{
+            "$ref" : "Group"
+        }]
+    },{
+        "type" : "object",
+        "properties" : {
+            "objectType" : {
+                "type" : "string",
+                "pattern" : "^StatementRef$"
+            },
+            "id" : {
+                "$ref" : "UUID"
+            }
+        },
+        "required" : ["objectType", "id"],
+        "additionalProperties" : false
+    }]
+}

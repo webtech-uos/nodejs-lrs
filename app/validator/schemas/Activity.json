@@ -1,0 +1,59 @@
+{
+    "id" : "Activity#",
+    "properties" : {
+        "objectType" : {
+            "type" : "string",
+            "pattern" : "^Activity$"
+        },
+        "id" : {
+            "$ref" : "IRI"
+        },
+        "definition" : {
+            "type" : "object",
+            "properties" : {
+                "name" : { 
+                    "$ref" : "LanguageMap" 
+                },
+                "description" : { 
+                    "$ref" : "LanguageMap" 
+                },
+                "type" : { 
+                    "$ref" : "IRI" 
+                },
+                "moreInfo" : { 
+                    "$ref" : "IRI" 
+                },
+                "extensions" : { 
+                    "$ref" : "Extensions" 
+                },
+                "interactionType" : {
+                    "type" : "string"
+                },
+                "correctResponsePattern" : {
+                    "type" : "array",
+                    "items" : {
+                        "type" : "string"
+                    }
+                }
+            },
+            "patternProperties" : {
+                "^(choices|scale|source|target|steps)$" : {
+                    "type" : "array",
+                    "items" : {
+                        "type" : "object",
+                        "properties" : {
+                            "id" : {
+                                "type" : "string"
+                            },
+                            "description" : {
+                                "$ref" : "LanguageMap"
+                            }
+                        },
+                        "additionalProperties" : false
+                    }
+                }
+            }
+        }
+    },
+    "additionalProperties" : false
+}
