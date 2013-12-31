@@ -36,8 +36,7 @@ describe "POST", ->
         request
           .post("/statements")
           .send(data)
-          .end (err, res) ->
-            done(err) if err?
+          .end done
         request
           .post("/statements")
           .send(data)
