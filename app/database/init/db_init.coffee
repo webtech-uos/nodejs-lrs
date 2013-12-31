@@ -1,4 +1,4 @@
-config = require '../../config.coffee'
+config = require('../../config.coffee').database
 cradle = require 'cradle'
 fs = require 'fs'
 
@@ -18,19 +18,15 @@ module.exports = class InitialiseDataBase
   #
   # @private
   #
-  _createDataBase: ->
-    dbHost = config.database.host
-    dbPort = config.database.port
-    dbName = config.database.name
-    
+  _createDataBase: ->    
     modulePath = './app/database/init'
     
-    conn = new (cradle.Connection) dbHost, 5984, 
+    conn = new (cradle.Connection) config.host, 5984, 
                                                 cache: true 
                                                 raw: false
-    database = conn.database dbName
+    database = conn.database config.name
     
-    console.log "Try to connect to database server (#{dbHost}:#{dbPort}) and create database '#{dbName}'..."
+    console.log "Try to connect to database server (#{config.host}:#{config.port}) and create database '#{config.name}'..."
 
     database.exists (err, exists) ->
       if err
@@ -38,7 +34,7 @@ module.exports = class InitialiseDataBase
         console.error err
 
       else if exists
-        console.log "the database '#{dbName}' already exists! Views and sample data will not be imported!"
+        console.log "the database '#{config.name}' already exists! Views and sample data will not be imported!"
       else
         database.create()
         
