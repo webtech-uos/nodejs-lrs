@@ -19,9 +19,9 @@ module.exports = class InitialiseDataBase
   # @private
   #
   _createDataBase: ->
-    dbHost = config.dbConfig.dbHost
-    dbPort = config.dbConfig.dbPort
-    dbName = config.dbConfig.dbName
+    dbHost = config.database.host
+    dbPort = config.database.port
+    dbName = config.database.name
     
     modulePath = './app/database/init'
     
