@@ -2,7 +2,7 @@ BaseController = require './base.coffee'
 
 # Sample controller for route `statements`.
 #
-class StatementController extends BaseController
+module.exports = class StatementController extends BaseController
 
   # Called whenever the clients requests to add a new statement.
   #
@@ -34,5 +34,3 @@ class StatementController extends BaseController
         res.send 404
       else
         res.send doc
-
-module.exports = new StatementController

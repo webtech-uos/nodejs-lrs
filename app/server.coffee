@@ -27,7 +27,7 @@ module.exports = class Server
     for url, route of routes
       for method, callback of route
         [controllerName, methodName] = callback.split '#'
-        controller = require "./controllers/#{controllerName}"
+        controller = new (require "./controllers/#{controllerName}")
         @restServer[method] url, do (controller, methodName) -> 
           (params...) -> controller[methodName].apply(controller, params)
     
