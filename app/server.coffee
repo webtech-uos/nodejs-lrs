@@ -1,5 +1,5 @@
 restify = require 'restify'
-routes = require './routes.coffee'
+routes = require './routes'
 
 # Main class for launching the server.
 # Only instanciate me once.
@@ -16,6 +16,7 @@ module.exports = class Server
   #   false if server should not listen at all (for testing purposes)
   constructor: (port = 8080) ->
     @restServer = restify.createServer()
+    @restServer.use restify.bodyParser()
     @_registerRoutes()
     @restServer.listen(port) if port
 
@@ -33,5 +34,5 @@ module.exports = class Server
     
   # For getting the required server object when running supertest.
   #
-  _getRestifyServer: ->
+  getRestifyServer: ->
     @restServer
