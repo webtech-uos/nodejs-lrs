@@ -29,10 +29,24 @@ A [report viewer](https://github.com/jvogtherr/ExperienceReportViewer) is beeing
 * `grunt test` for running all test cases
 * `grunt doc` to generate the latest docs locally in the `doc` folder
 
-# Views (temporarily)
-run `coffee db-actions/data/import.coffee` inside the main-folder.
+# DB
+* install `couchDB`, see [here](http://couchdb.apache.org/)
+* run `coffee app/database/init/db_init.coffee` inside the main-folder. This action will create a DB named "wt2" and fill it with sample data and views.
+* results of the views:
+  * views of the view group find by:
+    * find documents by UUID. 
 
-results of the couchdb-views:
+      Example: find documents with UUID-mailbox "mailto:happy@happyplace.com". [http://localhost:5984/wt2/_design/find_by/_view/uuid?key="mailto:happy@happyplace.com"](http://localhost:5984/wt2/_design/find_by/_view/uuid?key="mailto:happy@happyplace.com")
+    * find documents by verb TODO make TinCanAPI conform.
+    * find documents by timestamp. Example: find documents with timestamp "2013-12-02T06:43:28.922Z". [http://localhost:5984/wt2/_design/find_by/_view/timestamp?key="2013-12-02T06:43:28.922Z"](http://localhost:5984/wt2/_design/find_by/_view/timestamp?key=%222013-12-02T06:43:28.922Z%22)
+    * find documents by stored date. Example: find documents with stored date "2013-12-02T06:41:05.344Z". [http://localhost:5984/wt2/_design/find_by/_view/stored?key="2013-12-02T06:41:05.344Z"](http://localhost:5984/wt2/_design/find_by/_view/stored?key=%222013-12-02T06:41:05.344Z%22)
+    * 
+
+
+
+
+
+
 
 [http://localhost:5984/wt2/_design/find_by/_view/email](http://localhost:5984/wt2/_design/find_by/_view/email)
 
