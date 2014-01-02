@@ -68,5 +68,6 @@ module.exports = class InitialiseDataBase
           else
             database.save JSON.parse contents
             
-        console.log "done."  
+        console.log "done."
         
+new InitialiseDataBase
