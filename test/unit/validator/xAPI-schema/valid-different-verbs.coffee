@@ -1,11 +1,12 @@
 Validator = require "../../../../app/validator/validator.coffee"
 fs = require "fs"
+util = require "util"
 
 data_path = "test/data/1.0.0/valid/statement/different-verbs/"
 
 valid = (err, done) ->
   if err?
-    done(new Error err[0].desc)
+    done(new Error util.inspect(err))
   else
     done()
 

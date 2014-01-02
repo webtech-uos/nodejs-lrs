@@ -21,5 +21,5 @@ fs.readdir data_path, (err, files) ->
             catch error
               done()
               return
-            val.validateWithSchema data, "xAPI", (err) ->
+            val.validate data, (err) ->
               invalid err, done

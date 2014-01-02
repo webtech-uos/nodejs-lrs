@@ -1,64 +1,66 @@
 {
-    "id" : "Group#",
-    "type" : "object",
-    "oneOf" : [{
-        "$ref" : "#/definitions/AnonymousGroup"
-    }, {
-        "$ref" : "#/definitions/IdentifiedGroup"
-    }],
-    "definitions" : {
-        "IdentifiedGroup" : {
-            "id" : "IdentifiedGroup",
-            "type" : "object",
-            "allOf" : [{
-                "type" : "object",
-                "properties" : {
-                    "objectType" : {
-                        "type" : "string",
-                        "pattern" : "^[g|G]roup$"
-                    },
-                    "name" : {
-                        "type" : "string"
-                    },
-                    "member" : {
-                        "type" : "array",
-                        "items" : {
-                            "$ref" : "Agent"
-                        },
-                        "minItems" : 1
-                    },
-                    "mbox" : {},
-                    "mbox_sha1sum" : {},
-                    "accout" : {},
-                    "openid" : {}
-                },
-                "additionalProperties" : false,
-                "required" : ["objectType"]
-            }, {
-                "$ref" : "IFI"
-            }]
-        },
-        "AnonymousGroup" : {
-            "id" : "AnounymousGroup#",
-            "type" : "object",
-            "properties" : {
-                "objectType" : {
-                    "type" : "string",
-                    "pattern" : "^[g|G]roup$"
-                },
-                "name" : {
-                    "type" : "string"
-                },
-                "member" : {
-                    "type" : "array",
-                    "items" : {
-                        "$ref" : "Agent"
-                    },
-                    "minItems" : 1
-                }
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for a group object of a statement in the xAPI, version 1.0.*",
+  "id" : "Group#",
+  "type" : "object",
+  "oneOf" : [{
+    "$ref" : "#/definitions/AnonymousGroup"
+  }, {
+    "$ref" : "#/definitions/IdentifiedGroup"
+  }],
+  "definitions" : {
+    "IdentifiedGroup" : {
+      "id" : "IdentifiedGroup",
+      "type" : "object",
+      "allOf" : [{
+        "type" : "object",
+        "properties" : {
+          "objectType" : {
+            "type" : "string",
+            "pattern" : "^[g|G]roup$"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "member" : {
+            "type" : "array",
+            "items" : {
+                "$ref" : "Agent"
             },
-            "additionalProperties" : false,
-            "required" : ["objectType", "member"]
+            "minItems" : 1
+          },
+          "mbox" : {},
+          "mbox_sha1sum" : {},
+          "accout" : {},
+          "openid" : {}
+        },
+        "additionalProperties" : false,
+        "required" : ["objectType"]
+      }, {
+        "$ref" : "IFI"
+      }]
+    },
+    "AnonymousGroup" : {
+      "id" : "AnounymousGroup#",
+      "type" : "object",
+      "properties" : {
+        "objectType" : {
+          "type" : "string",
+          "pattern" : "^[g|G]roup$"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "member" : {
+          "type" : "array",
+          "items" : {
+              "$ref" : "Agent"
+          },
+          "minItems" : 1
         }
+      },
+      "additionalProperties" : false,
+      "required" : ["objectType", "member"]
     }
+  }
 }

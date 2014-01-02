@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for an activity object of a statement in the xAPI, version 1.0.*",
+  "id" : "Activity#",
+  "type" : "object",
+  "properties" : {
+    "objectType" : {
+      "type" : "string",
+      "pattern" : "^Activity$"
+    },
+    "id" : {
+      "$ref" : "IRI"
+    },
+    "definition" : {
+      "type" : "object",
+      "properties" : {
+        "name" : { 
+          "$ref" : "LanguageMap" 
+        },
+        "description" : { 
+          "$ref" : "LanguageMap" 
+        },
+        "type" : { 
+          "$ref" : "IRI" 
+        },
+        "moreInfo" : { 
+          "$ref" : "IRI" 
+        },
+        "extensions" : { 
+          "$ref" : "Extensions" 
+        },
+        "interactionType" : {
+          "type" : "string",
+          "enum" : [
+            "choice",
+            "sequencing",
+            "likert",
+            "matching",
+            "performance",
+            "true-false",
+            "fill-in",
+            "numeric",
+            "other"
+          ]
+        },
+        "correctResponsePattern" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      },
+      "patternProperties" : {
+        "^(choices|scale|source|target|steps)$" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "type" : "string"
+              },
+              "description" : {
+                "$ref" : "LanguageMap"
+              }
+            },
+            "additionalProperties" : false
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties" : false
+}

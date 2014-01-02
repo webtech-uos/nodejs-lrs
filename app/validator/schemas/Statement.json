@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id" : "Statement#",
+  "description": "schema for a statement object in the xAPI without restricted properties, version 1.0.*",
+  "type": "object",
+  "properties": {
+    "id" : {
+      "$ref" : "UUID"
+    },
+    "actor" : {
+      "oneOf" : [ 
+        { "$ref" : "Agent" },
+        { "$ref" : "Group" }
+      ]
+    },
+    "verb" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "$ref" : "IRI"
+        },
+        "display" : {
+          "$ref" : "LanguageMap"
+        },
+        "name" : {
+          "$ref" : "LanguageMap"
+        },
+        "description" : {
+          "$ref" : "LanguageMap"
+        }
+      },
+      "additionalProperties" : false,
+      "required" : ["id"]
+    },
+    "object" : {
+      "$ref" : "Object"
+    },
+    "timestamp" : {
+      "$ref" : "ISO8061Date"
+    },
+    "stored" : {
+      "$ref" : "ISO8061Date"
+    },
+    "authority" : {
+      "oneOf" : [{ 
+        "$ref" : "Agent" 
+      },{ 
+        "allOf" : [{
+          "$ref" : "Group#/definitions/AnonymousGroup"
+        },{
+          "properties" : { 
+            "member" : {
+              "type" : "array",
+              "minItems" : 2,
+              "maxItems" : 2
+            }
+          }
+        }]
+      }]
+    },
+    "version" : {
+      "type" : "string",
+      "pattern" : "^1\\.0\\.\\d+$"
+    },
+    "attachments" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "Attachment"
+      }
+    },
+    "result" : {
+      "$ref" : "Result"
+    },
+    "context" : {
+      "$ref" : "Context"
+    }
+  },
+  "required" : ["actor", "verb", "object"]
+}

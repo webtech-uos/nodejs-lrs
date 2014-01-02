@@ -1,4 +1,6 @@
 {
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for a extensions object of a statement in the xAPI, version 1.0.*",
   "id" : "Extensions#",
   "patternProperties" : {
     "^[a-zA-Z]+:\/\/[^ \"]+$" : {}

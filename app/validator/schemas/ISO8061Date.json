@@ -1,5 +1,7 @@
 {
-    "id" : "ISO8061Date#",
-    "type" : "string",
-    "pattern" : "^[+-]?(\\d\\d\\d\\d)(-)?(\\d\\d)(-)?(\\d\\d)(T)?(\\d\\d)(:)?(\\d\\d)(:)?(\\d\\d)(\\.\\d+)?(Z|([+-])(\\d\\d)(:)?(\\d\\d))?$"
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for a ISO8061 date used in statements in the xAPI, version 1.0.*",
+  "id" : "ISO8061Date#",
+  "type" : "string",
+  "pattern" : "^[+-]?(\\d\\d\\d\\d)(-)?(\\d\\d)(-)?(\\d\\d)(T)?(\\d\\d)(:)?(\\d\\d)(:)?(\\d\\d)(\\.\\d+)?(Z|([+-])(\\d\\d)(:)?(\\d\\d))?$"
 }

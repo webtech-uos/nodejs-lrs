@@ -1,4 +1,6 @@
 {
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for a IRI used in statements in the xAPI, version 1.0.*. Caution: very lazy validation regex!",
   "id" : "IRI#",
   "type" : "string",
   "pattern" : "^[a-zA-Z]+:\/\/[^ \"]+$"

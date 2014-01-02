@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for a context object of a statement in the xAPI, version 1.0.*",
+  "id" : "Context#",
+  "type" : "object",
+  "properties" : {
+    "registration" : {
+      "$ref" : "UUID"
+    },
+    "instructor" : {
+      "oneOf" : [{
+        "$ref" : "Agent"    
+      },{
+        "$ref" : "Group"
+      }]
+    },
+    "team" : {
+      "$ref" : "Group"
+    },
+    "contextActivities" : {
+      "patternProperties" : {
+        "^(parent|grouping|category|other)$" : {
+          "oneOf" : [{
+            "$ref" : "Activity"  
+          },{
+            "type" : "array",
+            "items" : {
+              "$ref" : "Activity"
+            } 
+          }]
+        }
+      },
+      "additionalProperties" : false
+    },
+    "revision" : {
+      "type" : "string"
+    },
+    "platform" : {
+      "type" : "string"
+    },
+    "language" : {
+      "type" : "string",
+      "pattern" : "^(([a-zA-Z]{2,8}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){0,2})?(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-[a-zA-Z0-9]{4,8})*(-([0-9]|[a-w]|[y-z]|[A-W]|[Y-Z])-[0-9a-zA-Z]{2,8})*(-x(-[a-zA-Z0-9]{1,8})+)?)|x(-[a-zA-Z0-9]{1,8})+|en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)$"
+    },
+    "statement" : {
+      "type" : "object",
+      "properties" : {
+        "objectType" : {
+          "type" : "string",
+          "pattern" : "^StatementRef$"
+        },
+        "id" : {
+          "$ref" : "UUID"
+        }
+      },
+      "required" : ["objectType", "id"],
+      "additionalProperties" : false
+    },
+    "extensions" : {
+      "$ref" : "Extensions"
+    }        
+  }
+}

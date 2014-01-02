@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for a `object` object of a statement in the xAPI, version 1.0.*",
+  "id" : "Object#",
+  "type" : "object",
+  "oneOf" : [{
+    "$ref" : "Activity"
+  },{
+    "oneOf" : [{
+      "allOf" : [{
+        "$ref" : "Agent"
+      },{
+        "type" : "object",
+        "required" : ["objectType"]
+      }]
+    },{
+      "$ref" : "Group"
+    }]
+  },{
+    "type" : "object",
+    "properties" : {
+      "objectType" : {
+        "type" : "string",
+        "pattern" : "^StatementRef$"
+      },
+      "id" : {
+        "$ref" : "UUID"
+      }
+    },
+    "required" : ["objectType", "id"],
+    "additionalProperties" : false
+  },{
+    "allOf" : [{
+      "$ref" : "Statement"
+    },{
+      "type" : "object",
+      "properties" : {
+        "objectType" : {
+          "type" : "string",
+          "pattern" : "^SubStatement$"
+        },
+        "actor" : {},
+        "verb" : {},
+        "object" : {
+          "type" : "object",
+          "properties" : {
+            "objectType" : {
+              "type" : "string",
+              "enum" : ["Activity","Agent","Group","StatementRef"]
+            }
+          }
+        },
+        "context" : {},
+        "result" : {},
+        "version" : {},
+        "attachments" : {}
+      },
+      "required" : ["objectType"],
+      "additionalProperties" : false
+    }]    
+  }]
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "schema for a result object of a statement in the xAPI, version 1.0.*",
+  "id" : "Result#",
+  "properties" : {
+    "score" : {
+      "type" : "object",
+      "properties" : {
+        "scaled" : {
+          "type" : "number",
+          "minimum" : -1,
+          "maximum" : 1
+        },
+        "raw" : {
+          "type" : "number"
+        },
+        "min" : {
+          "type" : "number"
+        },
+        "max" : {
+          "type" : "number"
+        },
+        "additionalProperties" : false    
+      }
+    },
+    "success" : {
+      "type" : "boolean"
+    },
+    "completion" : {
+      "type" : "boolean"
+    },
+    "response" : {
+      "type" : "string"
+    },
+    "duration" : {
+      "type" : "string",
+      "pattern" : "^P(\\d+((\\.|,)\\d+)?Y)?(\\d+((\\.|,)\\d+)?M)?(\\d+((\\.|,)\\d+)?W)?(\\d+((\\.|,)\\d+)?D)?(T(\\d+((\\.|,)\\d+)?H)?(\\d+((\\.|,)\\d+)?M)?(\\d+((\\.|,)\\d+)?S)?)?$"
+    },
+    "extensions" : {
+      "$ref" : "Extensions"
+    }
+  },
+  "additionalProperties" : false
+}
