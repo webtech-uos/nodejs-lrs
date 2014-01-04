@@ -1,7 +1,10 @@
 module.exports =
   database: # couchDB
-    host: "http://localhost"
+    host: 'localhost'
     port: 5984
-    name: "wt2"
+    name: 'nodejs-lrs'
   server: # REST server (xAPI)
     port: 8080
+    name: 'nodejs-lrs'
+    version: '0.0.1'
+

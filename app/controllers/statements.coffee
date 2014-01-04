@@ -16,7 +16,7 @@ module.exports = class StatementsController extends BaseController
     # TODO: Modify statement.map accordingly
     s.save =>
       @send res, 200
-    
+
   # Called whenever the clients requests to get all statements.
   #
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
@@ -28,7 +28,7 @@ module.exports = class StatementsController extends BaseController
         result.push s.map
       res.body = JSON.stringify result
       @send res, 200
-    
+
   # Called whenever the clients requests to modify a specific statement.
   #
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
@@ -38,7 +38,7 @@ module.exports = class StatementsController extends BaseController
       # TODO: Modify statement.map accordingly
       s.save =>
         @send res, 204
-    
+
   # Called whenever the clients requests to get a specific statement.
   #
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
@@ -47,8 +47,8 @@ module.exports = class StatementsController extends BaseController
     s = Statement.find req.params.id, (statement) =>
       res.body = JSON.stringify statement.map
       @send res, 501
-    
+
   _prepareResponse: (res) ->
     super res
     res.header 'X-Experience-API-Consistent-Through', new Date(new Date() - 1000*60*60).toISOString()
-    
+
