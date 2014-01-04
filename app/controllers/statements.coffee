@@ -26,7 +26,9 @@ module.exports = class StatementsController extends BaseController
       result = []
       for s in statements
         result.push s.map
+
       res.body = JSON.stringify result
+      console.log "sending #{result.length} statements..."
       @send res, 200
 
   # Called whenever the clients requests to modify a specific statement.

@@ -8,9 +8,17 @@ module.exports = class Statement
   # returns all stored statements
   #
   @all: (callback) ->
-    dbController.db
-    callback []
+    statements = []
+    dbController.db.view 'find_by/uuid', (err, docs) =>
+      if err
+        console.error "database access failed"
+        console.error err
+      else
+        for doc in docs
+          statement = new (Statement)(doc.value)
+          statements.push statement
 
+        callback statements
   # returns the statement with the given id
   #
   @find: (id, callback) ->
@@ -24,7 +32,7 @@ module.exports = class Statement
   # Creates a new statement
   #
   constructor: (data) ->
-
+    @map = data
   # Saves this statement to the database
   #
   save: (callback) ->

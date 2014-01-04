@@ -14,7 +14,6 @@ module.exports = class DBController
   _importViews = (db, dir, callback) ->
     console.log "Import views: #{dir}"
     filesFinished = 0
-    console.log "ARRR" if not db
     do(db) ->
       fs.readdir dir, (err, files) ->
         if err
@@ -40,7 +39,6 @@ module.exports = class DBController
   _importTestData = (db, dir, callback) ->
     console.log "Import test data: #{dir}"
     filesFinished = 0
-    console.log "ARRR" if not db
     do(db) ->
       fs.readdir dir, (err, files) ->
         if err
@@ -74,6 +72,7 @@ module.exports = class DBController
 
     cradle.setup dbOptions
     conn = new (cradle.Connection)
+    console.log(conn.config())
     database = conn.database config.name
 
     console.log "Try to connect to database server (#{dbOptions.host}:#{dbOptions.port})..."
