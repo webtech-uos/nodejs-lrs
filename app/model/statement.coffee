@@ -8,22 +8,34 @@ module.exports = class Statement
   # returns all stored statements
   #
   @all: (callback) ->
-    statements = []
     dbController.db.view 'find_by/uuid', (err, docs) =>
       if err
         console.error "database access failed"
         console.error err
+        callback err, []
       else
+        statements = []
         for doc in docs
           statement = new (Statement)(doc.value)
           statements.push statement
 
-        callback statements
+        callback undefined, statements
   # returns the statement with the given id
   #
   @find: (id, callback) ->
-    dbController.db
-    callback new Statement
+    dbController.db.view 'find_by/uuid', key: id, (err, docs) =>
+      if err
+        console.error "database access failed"
+        console.error err
+        callback err, []
+      else
+        if docs
+          console.log docs
+          doc = docs[0]
+          statement = new (Statement)(doc.value)
+          callback undefined, statement
+        else
+          #callback FEHLER, null
 
   # An object containing the json document
   # for this statement.
