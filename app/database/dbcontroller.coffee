@@ -72,7 +72,6 @@ module.exports = class DBController
 
     cradle.setup dbOptions
     conn = new (cradle.Connection)
-    console.log(conn.config())
     database = conn.database config.name
 
     console.log "Try to connect to database server (#{dbOptions.host}:#{dbOptions.port})..."
