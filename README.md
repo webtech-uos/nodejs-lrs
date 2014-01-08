@@ -44,7 +44,12 @@ A [report viewer](https://github.com/jvogtherr/ExperienceReportViewer) is beeing
     * number of all documents stored in the db: [link](http://localhost:5984/wt2/_design/counter/_view/all_docs)
     * number of documents stored at one day. Example: number of documents, created at "2013-12-02" [link](http://localhost:5984/wt2/_design/counter/_view/docs_per_day?key=%222013-12-02%22)
 
-## vim configuration
+# Rules
+
+* Code-Style: https://github.com/polarmobile/coffeescript-style-guide
+
+
+## Vim Configuration
 * a useful [vim script](http://www.vim.org/scripts/script.php?script_id=3590) that adds syntax highlighting, indentation and compilation support for Coffeescript.
 Installation is explained on the site, but [pathogen](http://www.vim.org/scripts/script.php?script_id=2332) users can just clone this [URL](https://github.com/kchmck/vim-coffee-script.git) into their bundle directory.
 * to conform to our [style guide](https://github.com/polarmobile/coffeescript-style-guide#whitespace), use these settings in your `.vimrc`, perhaps only for files with `.coffee` extension:
