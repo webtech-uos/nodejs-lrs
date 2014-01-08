@@ -69,8 +69,6 @@ module.exports = class DBController
       cache: true
       raw: false
 
-    modulePath = './app/database'
-
     cradle.setup dbOptions
     conn = new (cradle.Connection)
     database = conn.database @config.name
@@ -83,7 +81,7 @@ module.exports = class DBController
     else
       @_prepareDB callback, database
 
-  _prepareDB: (callback, database) ->
+  _prepareDB: (callback, database, modulePath) ->
     database.exists (err, exists) =>
       if err
         console.error "Error while connect to database server!"
@@ -97,6 +95,6 @@ module.exports = class DBController
         database.create()
         @db = database
         console.log "The database '#{@config.name}' has been created."
-        _importTestData database, "#{modulePath}/testData", () =>
-          _importViews database, "#{modulePath}/views", () =>
+        _importTestData database, "./app/database/testData", () =>
+          _importViews database, "./app/database/views", () =>
             callback()

@@ -16,7 +16,7 @@ module.exports = class Server
   # @param port
   #   number if server should listen on the supplied port
   #   false if server should not listen at all (for testing purposes)
-  constructor: (config, callback) ->
+  constructor: (config, callback = ->) ->
     console.log "Let the magic happen."
     srvOptions =
       name: config.server.name
@@ -30,9 +30,9 @@ module.exports = class Server
       if config.server.port
         @restServer.listen config.server.port, =>
           console.log '%s is listening at %s', @restServer.name, @restServer.url
-          callback?()
+          callback @
       else
-        callback?()
+        callback @
   # Used to register all routes contained in the file `routes.coffee`.
   #
   # @private
