@@ -8,3 +8,12 @@ module.exports =
     get: 'statements#index'
   'statements/:id':
     get: 'statements#show'
+
+  request_token:
+    get: 'oauth#request_token'
+
+  access_token:
+    get: 'oauth#access_token'
+
+  authorize:
+    get: 'oauth#authorize_token'
