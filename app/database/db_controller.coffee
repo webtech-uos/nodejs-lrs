@@ -13,19 +13,19 @@ module.exports = class DBController
   # imports some views into the database
   # @param [String] dir directory, where the views are
   _importViews = (db, dir, callback) ->
-    console.log "Import views: #{dir}"
+    console.log "Importing views: #{dir}"
     filesFinished = 0
     do (db) ->
       fs.readdir dir, (err, files) ->
         if err
-          console.error "Error while read views folder!"
+          console.error "Error while reading views folder!"
           console.error err
         else
           for file in files
             do (file, db) ->
               fs.readFile "#{dir}/#{file}", (err, contents) ->
                 if err
-                  console.error "Error while read view file #{file}!"
+                  console.error "Error while reading view file #{file}!"
                   console.error err
                 else
                   view = JSON.parse contents
@@ -38,12 +38,12 @@ module.exports = class DBController
   # imports some test data into database
   # @param [String] dir directory, where the test data are
   _importTestData = (db, dir, callback) ->
-    console.log "Import test data: #{dir}"
+    console.log "Importing test data: #{dir}"
     filesFinished = 0
     do (db) ->
       fs.readdir dir, (err, files) ->
         if err
-          console.error "Error while read test data folder!"
+          console.error "Error while reading test data folder!"
           console.error err
         else
           for file in files
@@ -62,7 +62,6 @@ module.exports = class DBController
 
   # tries to create a database
   setup : (callback) ->
-
     dbOptions =
       host: @config.host
       port: @config.port
@@ -73,19 +72,25 @@ module.exports = class DBController
     conn = new (cradle.Connection)
     database = conn.database @config.name
 
-    console.log "Try to connect to database server (#{dbOptions.host}:#{dbOptions.port})..."
-    if @config.reset and database.exists
-      console.log 'RESETTING DATABASE'
-      database.destroy =>
-        @_prepareDB callback, database
-    else
-      @_prepareDB callback, database
-
-  _prepareDB: (callback, database, modulePath) ->
+    console.log "Trying to connect to database server (#{dbOptions.host}:#{dbOptions.port})..."
     database.exists (err, exists) =>
       if err
-        console.error "Error while connect to database server!"
+        console.log 'ERROR UPON CONNECTING TO DATABASE: ' + err
+        callback err
+      else
+        if exists and @config.reset
+          console.log 'RESETTING DATABASE: ' + @config.name
+          database.destroy =>
+            @_prepareDB database, callback
+        else
+          @_prepareDB database, callback
+
+  _prepareDB: (database, callback) ->
+    database.exists (err, exists) =>
+      if err
+        console.error "Error while connecting to database server!"
         console.error err
+        callback err
         undefined
       else if exists
         console.log "Found database '#{@config.name}' on the database server."

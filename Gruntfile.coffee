@@ -9,16 +9,16 @@ module.exports = (grunt) ->
     mochaTest:
       test:
         options:
-          reporter: 'list'
+          reporter: 'nyan'
           require: ['coffee-script']
         src: ['test/**/*.coffee']
       "unit-validator":
         options:
-          reporter: 'list'
+          reporter: 'nyan'
         src: ['test/unit/validator/**/*.coffee']
       "api":
         options:
-          reporter: 'list'
+          reporter: 'nyan'
         src: ['test/functional/**/*.coffee']
 
     nodemon:

@@ -1,7 +1,7 @@
 restify = require 'restify'
 config = require './config'
 routes = require './routes'
-DBController = require './database/dbcontroller.coffee'
+DBController = require './database/db_controller.coffee'
 
 # Main class for launching the server.
 # Only instanciate me once.
@@ -13,9 +13,10 @@ module.exports = class Server
   # Should only be called once.
   # Launches the learning record store.
   #
-  # @param port
-  #   number if server should listen on the supplied port
-  #   false if server should not listen at all (for testing purposes)
+  # @param config
+  #
+  # @param callback
+  #
   constructor: (config, callback = ->) ->
     console.log "Let the magic happen."
     srvOptions =
@@ -24,16 +25,19 @@ module.exports = class Server
 
     @restServer = restify.createServer(srvOptions)
     @restServer.use restify.bodyParser()
-    @dbController = new DBController config.database, =>
-      # init database
-      if config.server.port
-        @restServer.listen config.server.port, =>
-          console.log '%s is listening at %s', @restServer.name, @restServer.url
-          callback @
+    @dbController = new DBController config.database, (err) =>
+      if err 
+        callback err
       else
-        callback @
-        
+        # init database
+        if config.server.port
+          @restServer.listen config.server.port, (err) =>
+            console.log '%s is listening at %s', @restServer.name, @restServer.url
+            callback err, @
+        else
+          callback undefined, @
     @_registerRoutes()
+    
   # Used to register all routes contained in the file `routes.coffee`.
   #
   # @private
