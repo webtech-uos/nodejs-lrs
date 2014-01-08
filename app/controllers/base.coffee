@@ -11,6 +11,6 @@ module.exports = class BaseController
   _prepareResponse: (res) ->
     res.header 'Content-Type', 'application/json'
 
-  send: (res, params...) ->
+  send: (res, status, object={}) ->
     @_prepareResponse res
-    res.send.apply(res, params)
+    res.send status, object

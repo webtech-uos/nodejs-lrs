@@ -14,22 +14,23 @@ module.exports = class StatementsController extends BaseController
   create: (req, res, next) ->
     counter = 0
 
-    # TODO: check first all ids ?
-    res.params.ids = []
-    for statement in req.params.statements
-      s = new (Statement)(statement)
+    ids = []
+    statements = if typeof req.params[0]? then req.params else [req.params]    
+    for statement in statements
+      errors = {}
+      status = 200
 
-      s.save (err, statement) =>
+      Statement.create statement, (err, s) =>
         if err
-          # TODO collect errors, conflicts, etc.
-          null
+          errors[statement] = err
+          status = err.code ? 500
         else
-          res.params.ids.push s.map.id
+          ids.push s.map.id
 
         counter++
-        if counter == req.params.statements.length
-        # everything is done, send response
-          @send res, 200
+        if counter == statements.length
+          # everything is done, send response
+          @send res, status, errors
 
   # Called whenever the clients requests to get all statements.
   #
@@ -41,9 +42,7 @@ module.exports = class StatementsController extends BaseController
       for s in statements
         result.push s.map
 
-      res.body = JSON.stringify result
-      console.log "sending #{result.length} statements..."
-      @send res, 200
+      @send res, 200, result
 
   # Called whenever the clients requests to modify a specific statement.
   #

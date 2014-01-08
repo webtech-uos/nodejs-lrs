@@ -1,3 +1,3 @@
 Server = require './server'
 
-new Server
+new Server require './config'

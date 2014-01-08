@@ -4,7 +4,7 @@ fs = require "fs"
 ##
 # start server
 ##
-server = require "setup_server.coffee"
+server = require("setup_server.coffee").setup()
 exampleStatements = require "example_statements.coffee"
 
 invalidStatements = "test/data/1.0.0/invalid/statement/"

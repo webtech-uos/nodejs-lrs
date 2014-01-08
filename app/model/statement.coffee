@@ -5,6 +5,11 @@ dbController = require '../database/dbcontroller.coffee'
 # of couchDB.
 #
 module.exports = class Statement
+  
+  # creates a new statement and saves it to the database
+  #
+  @create: (data, callback) ->
+    (new Statement(data)).save callback
 
   # returns all stored statements
   #
@@ -23,8 +28,16 @@ module.exports = class Statement
         callback undefined, statements
 
   # returns the statement with the given id
+  # 
+  # @param id
+  #   id of the statement to look up
+  # @param callback 
+  #   will be called as soon as the statement is retrieved
+  #   first callback param: error object
+  #   second callback param: retrieved statement
   #
   @find: (id, callback) ->
+    console.log 'find...'
     dbController.db.view 'find_by/id', key: id, (err, docs) =>
       if err
         console.error "database access failed"
@@ -35,7 +48,7 @@ module.exports = class Statement
           when 0
             # there is no statement with the given id
             # TODO callback ERROR, null
-            null
+            callback 'STATEMENT NOT FOUND'
           when 1
             # all right, one statement found
             doc = docs[0]
@@ -45,7 +58,7 @@ module.exports = class Statement
             # should not happen, there are more
             # then one statements with the same id
             # TODO callback ERROR, null
-            null
+            callback 'DUPLICATE STATEMENT'
 
   # An object containing the json document
   # for this statement.
@@ -58,23 +71,22 @@ module.exports = class Statement
   # Saves this statement to the database
   #
   save: (callback) ->
+    console.log 'called save'
     # Tries to store this statement and if there
     # is no id, it generates an id, otherwise
     # ist check the two statements for equality
     if @map.id
     # if the id is already defined,
     # check if the given id is already in the database
-      find @map.id, (err, statement) =>
+      Statement.find @map.id, (err, statement) =>
         if err
+          console.log 'err after find'
           # there is no statement with the given id
           # the given statement will be inserted
           dbController.db.save @map, (err, res) =>
-            if err
-              # TODO callback ERROR, null
-              null
-            else
-              callback undefined, this
+            callback err, @
         else
+          console.log 'all good after find'
           if isEqual statement, this
             # all right statement is already in the database
             callback undefined, statement
@@ -82,27 +94,19 @@ module.exports = class Statement
             # conflict, there is a statement with the
             # same id but a different content
             # TODO callback ERROR, null
-            null
+            callback 'CONFLICTING STATEMENT ALREADY EXISTS'
     else
       # No id is given, generate one
       @map.id = uuid()
       dbController.db.save @map, (err, res) =>
-        if err
-          # TODO callback ERROR, null
-          null
-        else
-          callback undefined, this
+        callback err, @
 
   # Reload this statement from the database
   #
   fetch: (callback) ->
     find @map.id, (err, statement) =>
-      if err
-        # TODO callback ERROR, null
-        null
-      else
-        @map = statement.map
-        callback undefined, this
+        @map = statement?.map
+        callback err, @
 
   @isEqual: (s1, s2) ->
     # TODO agents equality etc.

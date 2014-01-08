@@ -1,4 +1,3 @@
-config = require('../config.coffee').database
 cradle = require 'cradle'
 fs = require 'fs'
 
@@ -14,7 +13,7 @@ module.exports = class DBController
   _importViews = (db, dir, callback) ->
     console.log "Import views: #{dir}"
     filesFinished = 0
-    do(db) ->
+    do (db) ->
       fs.readdir dir, (err, files) ->
         if err
           console.error "Error while read views folder!"
@@ -39,7 +38,7 @@ module.exports = class DBController
   _importTestData = (db, dir, callback) ->
     console.log "Import test data: #{dir}"
     filesFinished = 0
-    do(db) ->
+    do (db) ->
       fs.readdir dir, (err, files) ->
         if err
           console.error "Error while read test data folder!"
@@ -60,9 +59,7 @@ module.exports = class DBController
                     callback()
 
   # tries to create a database
-  @setup : (callback) ->
-
-    modulePath = './app/database'
+  @setup : (config, callback) ->
 
     dbOptions =
       host: config.host
@@ -70,11 +67,21 @@ module.exports = class DBController
       cache: true
       raw: false
 
+    modulePath = './app/database'
+
     cradle.setup dbOptions
     conn = new (cradle.Connection)
     database = conn.database config.name
-
+    
     console.log "Try to connect to database server (#{dbOptions.host}:#{dbOptions.port})..."
+    if config.reset and database.exists
+      console.log 'RESETTING DATABASE'
+      database.destroy => 
+        @_prepareDB callback, database, config
+    else
+      @_prepareDB callback, database, config
+
+  @_prepareDB: (callback, database, config) ->
     database.exists (err, exists) =>
       if err
         console.error "Error while connect to database server!"
@@ -91,4 +98,3 @@ module.exports = class DBController
         _importTestData database, "#{modulePath}/testData", () =>
           _importViews database, "#{modulePath}/views", () =>
             callback()
-

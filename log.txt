@@ -1,0 +1,232 @@
+[4mRunning "mochaTest:test" (mochaTest) task[24m
+Let the magic happen.
+Try to connect to database server (localhost:5984)...
+
+    GET /statements responds with 200 OK: Found database 'nodejs-lrs' on the database server.
+
+  1) GET /statements responds with 200 OK
+  - GET /statements/id with a valid ID responds with 200 OK and a valid StatementResult
+  - GET /statements/id with an invalid ID responds with 404 Not Found
+    POST a minimal valid statement that doesn't exist yet responds with 200 OK: 
+  2) POST a minimal valid statement that doesn't exist yet responds with 200 OK
+    POST a minimal valid statement that exists already SHOULD respond with 200 OK: 
+  3) POST a minimal valid statement that exists already SHOULD respond with 200 OK
+    POST a minimal valid statement with an ID that exists already SHOULD respond with 409 Conflict: 
+  4) POST a minimal valid statement with an ID that exists already SHOULD respond with 409 Conflict
+    PUT valid statement to /statements responds with 204 No Content: 
+  5) PUT valid statement to /statements responds with 204 No Content
+    Media type with parameter should all be valid: 
+  . Media type with parameter should all be valid: 0ms
+    Agent is empty should be invalid: 
+  . Agent is empty should be invalid: 14ms
+    Agent is account name missing should be invalid: 
+  . Agent is account name missing should be invalid: 11ms
+    Agent is account homepage missing should be invalid: 
+  . Agent is account homepage missing should be invalid: 3ms
+    Agent is openid empty should be invalid: 
+  . Agent is openid empty should be invalid: 3ms
+    Agent is openid invalid url should be invalid: 
+  . Agent is openid invalid url should be invalid: 3ms
+    Agent is mbox empty should be invalid: 
+  . Agent is mbox empty should be invalid: 5ms
+    Agent is mbox invalid url should be invalid: 
+  . Agent is mbox invalid url should be invalid: 3ms
+    Agent is mbox with optional field `objectType` unequal to `Agent` should be invalid: 
+  . Agent is mbox with optional field `objectType` unequal to `Agent` should be invalid: 3ms
+    Agent is mbox with additional property should be invalid: 
+  . Agent is mbox with additional property should be invalid: 4ms
+    Agent is mbox_sha1sum empty should be invalid: 
+  . Agent is mbox_sha1sum empty should be invalid: 7ms
+    Agent is mbox_sha1sum invalid url should be invalid: 
+  . Agent is mbox_sha1sum invalid url should be invalid: 2ms
+    Agent has mixed properties should be invalid: 
+  . Agent has mixed properties should be invalid: 3ms
+    Extensions with abitrary property should be invalid: 
+  . Extensions with abitrary property should be invalid: 1ms
+    Anonymous Group is empty should be invalid: 
+  . Anonymous Group is empty should be invalid: 10ms
+    Anonymous Group has empty member should be invalid: 
+  . Anonymous Group has empty member should be invalid: 6ms
+    Anonymous Group with missing objectType should be invalid: 
+  . Anonymous Group with missing objectType should be invalid: 21ms
+    Anonymous Group with missing member should be invalid: 
+  . Anonymous Group with missing member should be invalid: 10ms
+    Identified Group with invalid mbox should be invalid: 
+  . Identified Group with invalid mbox should be invalid: 23ms
+    LanguageMap is empty should be invalid: 
+  . LanguageMap is empty should be invalid: 2ms
+    LanguageMap with two region tags should be invalid: 
+  . LanguageMap with two region tags should be invalid: 1ms
+    LanguageMap with single charactor subtag should be invalid: 
+  . LanguageMap with single charactor subtag should be invalid: 1ms
+    Agent is account should be valid: 
+  . Agent is account should be valid: 5ms
+    Agent is openID should be valid: 
+  . Agent is openID should be valid: 2ms
+    Agent is mbox should be valid: 
+  . Agent is mbox should be valid: 2ms
+    Agent is mbox_sha1sum should be valid: 
+  . Agent is mbox_sha1sum should be valid: 3ms
+    Agent is mbox_sha1sum with optional field `name` should be valid: 
+  . Agent is mbox_sha1sum with optional field `name` should be valid: 2ms
+    Agent is mbox_sha1sum with optional field `objectType` should be valid: 
+  . Agent is mbox_sha1sum with optional field `objectType` should be valid: 2ms
+    Agent is mbox_sha1sum with optional field `name` and `objectType` should be valid: 
+  . Agent is mbox_sha1sum with optional field `name` and `objectType` should be valid: 2ms
+    Extensions with ISBN should be valid: 
+  . Extensions with ISBN should be valid: 2ms
+    Extensions with integer values should be valid: 
+  . Extensions with integer values should be valid: 1ms
+    Extensions with object should be valid: 
+  . Extensions with object should be valid: 0ms
+    Anonymous Group with minimal fields should be valid: 
+  . Anonymous Group with minimal fields should be valid: 17ms
+    Identified Group with minimal fields should be valid: 
+  . Identified Group with minimal fields should be valid: 13ms
+    Identified Group without members should be valid: 
+  . Identified Group without members should be valid: 4ms
+    ISO 8061 date with delimiter should be valid: 
+  . ISO 8061 date with delimiter should be valid: 2ms
+    ISO 8061 date with milliseconds should be valid: 
+  . ISO 8061 date with milliseconds should be valid: 1ms
+    ISO 8061 date without delimiter should be valid: 
+  . ISO 8061 date without delimiter should be valid: 0ms
+    ISO 8061 date without timezone should be valid: 
+  . ISO 8061 date without timezone should be valid: 0ms
+    ISO 8061 date with utc timezone should be valid: 
+  . ISO 8061 date with utc timezone should be valid: 2ms
+    ISO 8061 date extended with plus should be valid: 
+  . ISO 8061 date extended with plus should be valid: 0ms
+    ISO 8061 date extended with minus should be valid: 
+  . ISO 8061 date extended with minus should be valid: 0ms
+    ISO 8061 date with wrong year should be invalid: 
+  . ISO 8061 date with wrong year should be invalid: 1ms
+    ISO 8061 date without wrong hour should be invalid: 
+  . ISO 8061 date without wrong hour should be invalid: 0ms
+    ISO 8061 date with wrong timezone should be invalid: 
+  . ISO 8061 date with wrong timezone should be invalid: 0ms
+    LanguageMap with simple tags should be valid: 
+  . LanguageMap with simple tags should be valid: 2ms
+    LanguageMap with subtags should be valid: 
+  . LanguageMap with subtags should be valid: 1ms
+    LanguageMap with extended tags and primary language should be valid: 
+  . LanguageMap with extended tags and primary language should be valid: 0ms
+    LanguageMap with region should be valid: 
+  . LanguageMap with region should be valid: 0ms
+    LanguageMap with language variant should be valid: 
+  . LanguageMap with language variant should be valid: 2ms
+    LanguageMap with language variant and region should be valid: 
+  . LanguageMap with language variant and region should be valid: 2ms
+    LanguageMap with language script, variant and region should be valid: 
+  . LanguageMap with language script, variant and region should be valid: 1ms
+    LanguageMap with language region should be valid: 
+  . LanguageMap with language region should be valid: 1ms
+    LanguageMap with private use subtags should be valid: 
+  . LanguageMap with private use subtags should be valid: 1ms
+    LanguageMap with private use registry values should be valid: 
+  . LanguageMap with private use registry values should be valid: 1ms
+    Validator class: Load a json file with some data should return content of file: 
+  . Validator class: Load a json file with some data should return content of file: 0ms
+    Validator class: Load a schema from the schema directory should return true: 
+  . Validator class: Load a schema from the schema directory should return true: 0ms
+    Validator class: Load a schema with external references should load all dependencies: 
+  . Validator class: Load a schema with external references should load all dependencies: 13ms
+    POST an invalid statement from file: empty.json responds with 400 Bad Request: 
+  6) POST an invalid statement from file: empty.json responds with 400 Bad Request
+    POST an invalid statement from file: minimal-misbalanced-braces.json responds with 400 Bad Request: 
+  7) POST an invalid statement from file: minimal-misbalanced-braces.json responds with 400 Bad Request
+    POST an invalid statement from file: minimal-missing-actor.json responds with 400 Bad Request: 
+  8) POST an invalid statement from file: minimal-missing-actor.json responds with 400 Bad Request
+    POST an invalid statement from file: minimal-missing-comma.json responds with 400 Bad Request: 
+  9) POST an invalid statement from file: minimal-missing-comma.json responds with 400 Bad Request
+    POST an invalid statement from file: minimal-missing-quotes.json responds with 400 Bad Request: 
+  10) POST an invalid statement from file: minimal-missing-quotes.json responds with 400 Bad Request
+    POST an invalid statement from file: minimal-missing-verb.json responds with 400 Bad Request: 
+  11) POST an invalid statement from file: minimal-missing-verb.json responds with 400 Bad Request
+    POST an invalid statement from file: missing-actor-213ddef2-d306-49c5-a978-2c1a44b51906.json responds with 400 Bad Request: 
+  12) POST an invalid statement from file: missing-actor-213ddef2-d306-49c5-a978-2c1a44b51906.json responds with 400 Bad Request
+    POST an invalid statement from file: missing-verb-213ddef2-d306-49c5-a978-2c1a44b51906.json responds with 400 Bad Request: 
+  13) POST an invalid statement from file: missing-verb-213ddef2-d306-49c5-a978-2c1a44b51906.json responds with 400 Bad Request
+    Invalid statement from empty.json should be invalid: 
+  . Invalid statement from empty.json should be invalid: 13ms
+    Invalid statement from minimal-misbalanced-braces.json should be invalid: 
+  . Invalid statement from minimal-misbalanced-braces.json should be invalid: 0ms
+    Invalid statement from minimal-missing-actor.json should be invalid: 
+  . Invalid statement from minimal-missing-actor.json should be invalid: 21ms
+    Invalid statement from minimal-missing-comma.json should be invalid: 
+  . Invalid statement from minimal-missing-comma.json should be invalid: 0ms
+    Invalid statement from minimal-missing-quotes.json should be invalid: 
+  . Invalid statement from minimal-missing-quotes.json should be invalid: 0ms
+    Invalid statement from minimal-missing-verb.json should be invalid: 
+  . Invalid statement from minimal-missing-verb.json should be invalid: 24ms
+    Invalid statement from missing-actor-213ddef2-d306-49c5-a978-2c1a44b51906.json should be invalid: 
+  . Invalid statement from missing-actor-213ddef2-d306-49c5-a978-2c1a44b51906.json should be invalid: 23ms
+    Invalid statement from missing-verb-213ddef2-d306-49c5-a978-2c1a44b51906.json should be invalid: 
+  . Invalid statement from missing-verb-213ddef2-d306-49c5-a978-2c1a44b51906.json should be invalid: 29ms
+    Valid statement with different verb from answered-a2050403-6ac3-424e-8c75-5ff67897f612.json should be valid: 
+  . Valid statement with different verb from answered-a2050403-6ac3-424e-8c75-5ff67897f612.json should be valid: 31ms
+    Valid statement with different verb from attended-67d9c0ed-49e7-4b1b-a4aa-2254d07132f9.json should be valid: 
+  . Valid statement with different verb from attended-67d9c0ed-49e7-4b1b-a4aa-2254d07132f9.json should be valid: 25ms
+    Valid statement with different verb from completed-3d0b70c1-f72b-4809-b1f3-9f7351bf38cb.json should be valid: 
+  . Valid statement with different verb from completed-3d0b70c1-f72b-4809-b1f3-9f7351bf38cb.json should be valid: 16ms
+    Valid statement with different verb from experienced-213ddef2-d306-49c5-a978-2c1a44b51906.json should be valid: 
+  . Valid statement with different verb from experienced-213ddef2-d306-49c5-a978-2c1a44b51906.json should be valid: 17ms
+    Valid statement with different verb from failed-62e6f06c-e95b-4666-88c6-78a9dd5beb0f.json should be valid: 
+  . Valid statement with different verb from failed-62e6f06c-e95b-4666-88c6-78a9dd5beb0f.json should be valid: 16ms
+    Valid statement with different verb from interacted-with-a88ac43d-0453-4817-a9c6-188234222189.json should be valid: 
+  . Valid statement with different verb from interacted-with-a88ac43d-0453-4817-a9c6-188234222189.json should be valid: 16ms
+    Valid statement with different verb from mastered-0ce664f8-0242-4821-bc25-604a2200c24f.json should be valid: 
+  . Valid statement with different verb from mastered-0ce664f8-0242-4821-bc25-604a2200c24f.json should be valid: 18ms
+    Valid statement with different verb from passed-34a010d9-5df9-4f6b-bc60-bd5dfbb48e88.json should be valid: 
+  . Valid statement with different verb from passed-34a010d9-5df9-4f6b-bc60-bd5dfbb48e88.json should be valid: 13ms
+    Valid statement with different verb from read-9dc389b8-3d7c-4be3-a969-8bfe31d6a53d.json should be valid: 
+  . Valid statement with different verb from read-9dc389b8-3d7c-4be3-a969-8bfe31d6a53d.json should be valid: 16ms
+    Valid statement with different verb from started-89947510-d376-452f-a481-e662c276586c.json should be valid: 
+  . Valid statement with different verb from started-89947510-d376-452f-a481-e662c276586c.json should be valid: 15ms
+    Valid statement with different verb from stopped-129709f8-f159-4374-9e25-df0cdfd9b889.json should be valid: 
+  . Valid statement with different verb from stopped-129709f8-f159-4374-9e25-df0cdfd9b889.json should be valid: 14ms
+    Valid statement with different verb from voided-334377cb-9c0b-4538-83c8-ee195d94436f.json should be valid: 
+  . Valid statement with different verb from voided-334377cb-9c0b-4538-83c8-ee195d94436f.json should be valid: 14ms
+    Valid statement from minimal-agent-account.json should be valid: 
+  . Valid statement from minimal-agent-account.json should be valid: 25ms
+    Valid statement from minimal-agent-group-anonymous.json should be valid: 
+  . Valid statement from minimal-agent-group-anonymous.json should be valid: 21ms
+    Valid statement from minimal-agent-group-identified-members.json should be valid: 
+  . Valid statement from minimal-agent-group-identified-members.json should be valid: 21ms
+    Valid statement from minimal-agent-group-identified-nomembers.json should be valid: 
+  . Valid statement from minimal-agent-group-identified-nomembers.json should be valid: 13ms
+    Valid statement from minimal-agent-mbox_sha1sum.json should be valid: 
+  . Valid statement from minimal-agent-mbox_sha1sum.json should be valid: 10ms
+    Valid statement from minimal-agent-openid.json should be valid: 
+  . Valid statement from minimal-agent-openid.json should be valid: 12ms
+    Valid statement from minimal-no-id.json should be valid: 
+  . Valid statement from minimal-no-id.json should be valid: 11ms
+    Valid statement from minimal-permutation-01.json should be valid: 
+  . Valid statement from minimal-permutation-01.json should be valid: 11ms
+    Valid statement from minimal-permutation-02.json should be valid: 
+  . Valid statement from minimal-permutation-02.json should be valid: 13ms
+    Valid statement from minimal-permutation-03.json should be valid: 
+  . Valid statement from minimal-permutation-03.json should be valid: 10ms
+    Valid statement from minimal-permutation-04.json should be valid: 
+  . Valid statement from minimal-permutation-04.json should be valid: 11ms
+    Valid statement from minimal-verb-multilang.json should be valid: 
+  . Valid statement from minimal-verb-multilang.json should be valid: 10ms
+    Valid statement from minimal-verb-nolang.json should be valid: 
+  . Valid statement from minimal-verb-nolang.json should be valid: 10ms
+    Valid statement from minimal-verb-utf8.json should be valid: 
+  . Valid statement from minimal-verb-utf8.json should be valid: 13ms
+    Valid statement from minimal-with-should-fields.json should be valid: 
+  . Valid statement from minimal-with-should-fields.json should be valid: 10ms
+    Valid statement from minimal-without-should-fields.json should be valid: 
+  . Valid statement from minimal-without-should-fields.json should be valid: 10ms
+    Valid statement with substatement as object from planned-with-substatement.json should be valid: 
+  . Valid statement with substatement as object from planned-with-substatement.json should be valid: 40ms
+    Media type should all be valid: 
+  . Media type should all be valid: 2ms
+
+  96 passing (963ms)
+  2 pending
+
+[33mWarning: Task "mochaTest:test" failed. Use --force to continue.[39m
+
+[31mAborted due to warnings.[39m

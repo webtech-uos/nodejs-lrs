@@ -4,7 +4,7 @@ request = require "supertest"
 ##
 # start server
 ##
-server = require "setup_server.coffee"
+server = require("setup_server.coffee").setup()
 
 exampleStatements = require "example_statements.coffee"
 

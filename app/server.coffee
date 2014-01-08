@@ -16,19 +16,20 @@ module.exports = class Server
   # @param port
   #   number if server should listen on the supplied port
   #   false if server should not listen at all (for testing purposes)
-  constructor: (port = config.server.port) ->
+  constructor: (config) ->
     console.log "Let the magic happen."
     srvOptions =
       name: config.server.name
       version: config.server.version # A default version set for all routes
 
+    @restServer = restify.createServer(srvOptions)
+    @restServer.use restify.bodyParser()
+    @_registerRoutes()
+    
     # init database
-    dbController.setup () =>
-      @restServer = restify.createServer(srvOptions)
-      @restServer.use restify.bodyParser()
-      @_registerRoutes()
-      if port
-        @restServer.listen port, () =>
+    if config.server.port
+      dbController.setup config.database, =>
+        @restServer.listen config.server.port, =>
           console.log '%s is listening at %s', @restServer.name, @restServer.url
 
   # Used to register all routes contained in the file `routes.coffee`.
