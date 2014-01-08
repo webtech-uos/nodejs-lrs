@@ -16,7 +16,11 @@ module.exports = (grunt) ->
         options:
           reporter: 'list'
         src: ['test/unit/validator/**/*.coffee']
-      
+      "api":
+        options:
+          reporter: 'list'
+        src: ['test/functional/**/*.coffee']
+
     nodemon:
       dev:
         options:
@@ -25,13 +29,13 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', 'Launch the server using nodemon', ['nodemon']
 
   grunt.registerTask 'test', 'Run the whole test suite', ['mochaTest']
-  
+
   grunt.registerTask 'doc', 'Generate codo documentation', ->
     require 'codo/lib/codo'
     cmd = require 'codo/lib/command'
     cmd.run()
 
   grunt.registerTask 'init', 'Initialise the database', ->
-  	"TODO"
-#  	initDb = require './app/database/init/db_init.coffee'
-#  	new initDb
+    "TODO"
+#   initDb = require './app/database/init/db_init.coffee'
+#   new initDb
