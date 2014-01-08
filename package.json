@@ -15,7 +15,9 @@
   ],
   "dependencies": {
     "restify": "~2.6.0",
+    "crypto": "~0.0.3",
     "passport": "~0.1.17",
+    "oauthorize": "~0.1",
     "jayschema": "~0.2.0",
     "cradle": "~0.6.6",
     "winston": "~0.7.2",
