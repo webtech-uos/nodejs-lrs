@@ -19,22 +19,29 @@ module.exports = class StatementsController extends BaseController
     counter = 0
 
     ids = []
-    statements = if typeof req.params[0]? then req.params else [req.params]
+    statements = if req.params[0]? then req.params else [req.params]
+    errors = {}
+    errorOccured = false
+    status = 200
     for statement in statements
-      errors = {}
-      status = 200
-
-      @mapper.save statement, (err, s) =>
+      BaseController.validator.validateWithSchema statement, "xAPIStatement", (err) =>
         if err
-          errors[statement] = err
-          status = err.code ? 500
+          @send res, 400, err
         else
-          ids.push s.map.id
-
-        counter++
-        if counter == statements.length
-          # everything is done, send response
-          @send res, status, errors
+          @mapper.save statement, (err, createdStatement) =>
+            if err
+              console.log err
+              errors[statement] = err
+              status = err.code ? 500
+              errorOccured = true
+            else
+              ids.push createdStatement.id
+    
+            counter++
+    
+            if counter == statements.length
+              # everything is done, send response
+              @send res, status, if errorOccured then errors else ids
 
   # Called whenever the clients requests to get all statements.
   #
@@ -44,7 +51,7 @@ module.exports = class StatementsController extends BaseController
     @mapper.getAll (err, statements) =>
       result = []
       for s in statements
-        result.push s.map
+        result.push s
 
       @send res, 200, result
 
@@ -53,25 +60,18 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   update: (req, res, next) ->
-
-    @mapper.save (err, statement) =>
-      if err
-        #TODO Error check -> database access or no statement with the given id found, etc.
-        @send res, error.code ? 500
-      else
-        @send res, 204
+    @mapper.save req.params, (err, statement) =>
+      # TODO: Handle Error
+      @send res, 204
 
   # Called whenever the clients requests to get a specific statement.
   #
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   show: (req, res, next) ->
-    # TODO voiding statements with auth...
     @mapper.find req.params.id, (err, statement) =>
-      if err
-        @send res, error.code ? 500
-      else
-        @send res, 200, statement
+      # TODO: Handle Error
+      @send res, 200, statement
 
   _prepareResponse: (res) ->
     super res

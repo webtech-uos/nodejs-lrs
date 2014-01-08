@@ -8,7 +8,7 @@ module.exports = class StatementMapper
   #
   #TODO max param
   getAll: (callback) ->
-    dbController.db.view 'find_by/id', (err, docs) =>
+    @dbController.db.view 'find_by/id', (err, docs) =>
       if err
         console.error "database access failed"
         console.error err
@@ -31,17 +31,18 @@ module.exports = class StatementMapper
   #
   find: (id, callback) ->
     console.log 'find...'
-    dbController.db.view 'find_by/id', key: id, (err, docs) =>
+    @dbController.db.view 'find_by/id', key: id, (err, docs) =>
       if err
         console.error "database access failed"
         console.error err
         callback err, []
       else
+        console.log docs    
         switch docs.length
           when 0
             # there is no statement with the given id
             # TODO callback ERROR, null
-            callback 'STATEMENT NOT FOUND'
+            callback undefined, []
           when 1
             # all right, one statement found
             callback undefined, docs[0].value
@@ -50,23 +51,20 @@ module.exports = class StatementMapper
             # then one statements with the same id
             # TODO callback ERROR, null
             callback 'DUPLICATE STATEMENT'
-
-
   #
   #
   constructor: (@dbController) ->
 
   # Saves this statement to the database
   #
-  save: (callback, statement) ->
-    console.log 'called save'
+  save: (statement, callback) ->
     # Tries to store this statement and if there
     # is no id, it generates an id, otherwise
     # ist check the two statements for equality
     if statement?.id
     # if the id is already defined,
     # check if the given id is already in the database
-      find statement.id, (err, foundStatement) =>
+      @find statement.id, (err, foundStatement) =>
         if err
           console.log 'err after find'
           # there is no statement with the given id
@@ -75,7 +73,7 @@ module.exports = class StatementMapper
         else
           switch foundStatement.length
             when 0
-              dbController.db.save statement, (err, res) =>
+              @dbController.db.save statement, (err, res) =>
                 callback err, statement
             when 1
               if isEqual statement, foundStatement
@@ -90,8 +88,8 @@ module.exports = class StatementMapper
               callback 'ERROR: Multiple Statements for the same id found.'
     else
       # No id is given, generate one
-      statement.id = generateUUID()
-      dbController.db.save statement, (err, res) =>
+      statement.id = @generateUUID()
+      @dbController.db.save statement, (err, res) =>
         callback err, statement
 
   isEqual: (s1, s2) ->
@@ -102,12 +100,12 @@ module.exports = class StatementMapper
   # RFC4122 A Universally Unique IDentifier (UUID) URN Namespace
   # Generates a UUID from the current date and a random number.
   generateUUID: ->
-    d = (new (Data)()).getTime()
+    d = (new (Date)()).getTime()
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
-    r = (d + Math.random()*16)%16 | 0
-    d = Math.floor(d/16)
-    d = if c is 'x' then r else (r & 0x3|0x8)
-    v.toString(16)
+      r = (d + Math.random()*16)%16 | 0
+      d = Math.floor(d/16)
+      d = if c is 'x' then r else (r & 0x3|0x8)
+      d.toString(16)
 
 
 

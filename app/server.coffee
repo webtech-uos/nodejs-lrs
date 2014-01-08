@@ -24,7 +24,6 @@ module.exports = class Server
 
     @restServer = restify.createServer(srvOptions)
     @restServer.use restify.bodyParser()
-    @_registerRoutes()
     @dbController = new DBController config.database, =>
       # init database
       if config.server.port
@@ -33,15 +32,18 @@ module.exports = class Server
           callback @
       else
         callback @
+        
+    @_registerRoutes()
   # Used to register all routes contained in the file `routes.coffee`.
   #
   # @private
   #
   _registerRoutes: ->
+    controllers = {}
     for url, route of routes
       for method, callback of route
         [controllerName, methodName] = callback.split '#'
-        controller = new (require "./controllers/#{controllerName}") @dbController
+        controller = controllers[controllerName] ?= new (require "./controllers/#{controllerName}") @dbController
         @restServer[method] url, do (controller, methodName) ->
           (params...) -> controller[methodName].apply(controller, params)
 

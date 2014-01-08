@@ -4,10 +4,11 @@ Validator = require '../validator/validator'
 #
 module.exports = class BaseController
 
+  @validator: new Validator 'app/validator/schemas/'
+
   # Creates a new controller.
   #
-  constructor: (@dbController) ->
-
+  constructor: (@dbController) -> 
 
   _prepareResponse: (res) ->
     res.header 'Content-Type', 'application/json'
