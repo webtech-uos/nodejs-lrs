@@ -1,7 +1,7 @@
 restify = require 'restify'
 config = require './config'
 routes = require './routes'
-dbController = require './database/dbcontroller.coffee'
+DBController = require './database/dbcontroller.coffee'
 
 # Main class for launching the server.
 # Only instanciate me once.
@@ -16,7 +16,7 @@ module.exports = class Server
   # @param port
   #   number if server should listen on the supplied port
   #   false if server should not listen at all (for testing purposes)
-  constructor: (config) ->
+  constructor: (config, callback) ->
     console.log "Let the magic happen."
     srvOptions =
       name: config.server.name
@@ -25,13 +25,14 @@ module.exports = class Server
     @restServer = restify.createServer(srvOptions)
     @restServer.use restify.bodyParser()
     @_registerRoutes()
-    
-    # init database
-    if config.server.port
-      dbController.setup config.database, =>
+    @dbController = new DBController config.database, =>
+      # init database
+      if config.server.port
         @restServer.listen config.server.port, =>
           console.log '%s is listening at %s', @restServer.name, @restServer.url
-
+          callback?()
+      else
+        callback?()
   # Used to register all routes contained in the file `routes.coffee`.
   #
   # @private
@@ -40,7 +41,7 @@ module.exports = class Server
     for url, route of routes
       for method, callback of route
         [controllerName, methodName] = callback.split '#'
-        controller = new (require "./controllers/#{controllerName}")
+        controller = new (require "./controllers/#{controllerName}") @dbController
         @restServer[method] url, do (controller, methodName) ->
           (params...) -> controller[methodName].apply(controller, params)
 

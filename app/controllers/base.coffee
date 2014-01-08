@@ -6,7 +6,8 @@ module.exports = class BaseController
 
   # Creates a new controller.
   #
-  constructor: ->
+  constructor: (@dbController) ->
+
 
   _prepareResponse: (res) ->
     res.header 'Content-Type', 'application/json'

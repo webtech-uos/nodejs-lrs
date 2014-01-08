@@ -1,11 +1,15 @@
 BaseController = require './base'
-Statement = require '../model/statement'
+StatementMapper = require '../model/statement_mapper'
 
 # Sample controller for route `statements`.
 #
 # TODO: Validate incoming JSON
 #
 module.exports = class StatementsController extends BaseController
+
+  constructor: ->
+    super
+    @mapper = new StatementMapper(@dbController)
 
   # Called whenever the clients requests to add a new statement.
   #
@@ -15,12 +19,12 @@ module.exports = class StatementsController extends BaseController
     counter = 0
 
     ids = []
-    statements = if typeof req.params[0]? then req.params else [req.params]    
+    statements = if typeof req.params[0]? then req.params else [req.params]
     for statement in statements
       errors = {}
       status = 200
 
-      Statement.create statement, (err, s) =>
+      @mapper.save statement, (err, s) =>
         if err
           errors[statement] = err
           status = err.code ? 500
@@ -37,7 +41,7 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   index: (req, res, next) ->
-    Statement.all (err, statements) =>
+    @mapper.getAll (err, statements) =>
       result = []
       for s in statements
         result.push s.map
@@ -49,13 +53,11 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   update: (req, res, next) ->
-    # TODO id or statementId ???
-    s = new (Statement)(req.params) # TODO Is this correct?
-    # TODO validate check if id is set, id must be set
-    s.save (err, statement) =>
+
+    @mapper.save (err, statement) =>
       if err
         #TODO Error check -> database access or no statement with the given id found, etc.
-        null
+        @send res, error.code ? 500
       else
         @send res, 204
 
@@ -65,13 +67,11 @@ module.exports = class StatementsController extends BaseController
   #
   show: (req, res, next) ->
     # TODO voiding statements with auth...
-    Statement.find req.params.id, (err, statement) =>
+    @mapper.find req.params.id, (err, statement) =>
       if err
-        #TODO ERROR code etc.
-        null
+        @send res, error.code ? 500
       else
-        res.body = JSON.stringify statement.map
-        @send res, 200
+        @send res, 200, statement
 
   _prepareResponse: (res) ->
     super res

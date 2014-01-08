@@ -4,9 +4,11 @@ fs = require 'fs'
 # A class for initialise the database.
 #
 module.exports = class DBController
-  # holds the dbObject singleton
+  # holds the dbObject
   db : null
 
+  constructor: (@config, callback) ->
+    @setup callback
 
   # imports some views into the database
   # @param [String] dir directory, where the views are
@@ -59,11 +61,11 @@ module.exports = class DBController
                     callback()
 
   # tries to create a database
-  @setup : (config, callback) ->
+  setup : (callback) ->
 
     dbOptions =
-      host: config.host
-      port: config.port
+      host: @config.host
+      port: @config.port
       cache: true
       raw: false
 
@@ -71,30 +73,30 @@ module.exports = class DBController
 
     cradle.setup dbOptions
     conn = new (cradle.Connection)
-    database = conn.database config.name
-    
-    console.log "Try to connect to database server (#{dbOptions.host}:#{dbOptions.port})..."
-    if config.reset and database.exists
-      console.log 'RESETTING DATABASE'
-      database.destroy => 
-        @_prepareDB callback, database, config
-    else
-      @_prepareDB callback, database, config
+    database = conn.database @config.name
 
-  @_prepareDB: (callback, database, config) ->
+    console.log "Try to connect to database server (#{dbOptions.host}:#{dbOptions.port})..."
+    if @config.reset and database.exists
+      console.log 'RESETTING DATABASE'
+      database.destroy =>
+        @_prepareDB callback, database
+    else
+      @_prepareDB callback, database
+
+  _prepareDB: (callback, database) ->
     database.exists (err, exists) =>
       if err
         console.error "Error while connect to database server!"
         console.error err
         undefined
       else if exists
-        console.log "Found database '#{config.name}' on the database server."
+        console.log "Found database '#{@config.name}' on the database server."
         @db = database
         callback()
       else
         database.create()
         @db = database
-        console.log "The database '#{config.name}' has been created."
+        console.log "The database '#{@config.name}' has been created."
         _importTestData database, "#{modulePath}/testData", () =>
           _importViews database, "#{modulePath}/views", () =>
             callback()
