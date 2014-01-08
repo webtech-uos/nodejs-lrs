@@ -23,8 +23,6 @@
     "coffee-script": "~1.6.3",
     "codo": "~2.0.2",
     "supertest": "~0.8.2",
-    "mocha": "~1.16.2",
-    "shelljs": "~0.2.6",
     "grunt-cli": "~0.1.11",
     "grunt": "~0.4.2",
     "grunt-mocha-test": "~0.8.0",
