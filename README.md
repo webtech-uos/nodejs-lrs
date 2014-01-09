@@ -1,5 +1,5 @@
 # Overview
-This project aims to implement a [Learning Record Store](https://en.wikipedia.org/wiki/Learning_Record_Store) based on the specifications of the RESTful [Experience API](http://www.adlnet.gov/tla/experience-api) [API Spec](https://github.com/adlnet/xAPI-Spec/blob/1.0.0/xAPI.md) in [node.js](http://nodejs.org/).
+This project aims to implement a [Learning Record Store](https://en.wikipedia.org/wiki/Learning_Record_Store) based on the specifications of the RESTful [Experience API](http://www.adlnet.gov/tla/experience-api) ([API Spec](https://github.com/adlnet/xAPI-Spec/blob/1.0.0/xAPI.md)) in [node.js](http://nodejs.org/).
 
 [![Build Status](https://travis-ci.org/webtech-uos/nodejs-lrs.png)](https://travis-ci.org/webtech-uos/nodejs-lrs)
 [![Dependency Status](https://gemnasium.com/webtech-uos/nodejs-lrs.png)](https://gemnasium.com/webtech-uos/nodejs-lrs)
