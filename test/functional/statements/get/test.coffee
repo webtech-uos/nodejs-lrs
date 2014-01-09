@@ -2,10 +2,9 @@
 # start server
 ##
 
+request = require('setup_test_env').testRequest
+
 describe "GET", ->
-
-  request = null
-
   describe "/statements", ->
     it "responds with 200 OK", (done) ->
       request

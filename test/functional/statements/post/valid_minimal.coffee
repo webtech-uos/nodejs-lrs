@@ -3,6 +3,16 @@ fs = require "fs"
 # start server
 ##
 
+request = null
+
+beforeEach (done) ->
+  require('setup_test_env').prepareTest (err, req) ->
+    request = req
+    done err
+    
+afterEach ->
+  require('setup_test_env').tearDown()
+
 exampleStatements = require "example_statements.coffee"
 
 describe "POST", ->

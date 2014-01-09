@@ -1,5 +1,14 @@
 fs = require "fs"
-require ('test_init')
+
+request = null
+
+beforeEach (done) ->
+  require('setup_test_env').prepareTest (err, req) ->
+    request = req
+    done err
+    
+afterEach ->
+  require('setup_test_env').tearDown()
 
 ##
 # start server
