@@ -20,5 +20,6 @@ require("setup_server.coffee").prepareTest (request) ->
                 return
               request
                 .post("/statements")
-                .send(data)
+                .set('Content-Type', 'application/json')
+                .send(data.toString())
                 .expect(400, done)

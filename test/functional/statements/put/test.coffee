@@ -12,5 +12,6 @@ require("setup_server.coffee").prepareTest (request) ->
       fs.readFile exampleStatements.minimalWithoutId, (err, data) ->
           request
             .put("/statements")
-            .send(data)
+            .set('Content-Type', 'application/json')
+            .send(data.toString())
             .expect(204, done)

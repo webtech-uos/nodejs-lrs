@@ -1,4 +1,5 @@
 logger = require '../logger'
+_ = require 'underscore'
 
 # Provides operations for all statements on top
 # of couchDB.
@@ -37,20 +38,21 @@ module.exports = class StatementMapper
         logger.error "database access failed: " + err
         callback err, []
       else
-        logger.info 'statement found: ' + id
         switch docs.length
           when 0
+            logger.info 'statement does not exist: ' + id
             # there is no statement with the given id
             # TODO callback ERROR, null
-            callback undefined, []
+            callback undefined
           when 1
+            logger.info 'statement found: ' + id
             # all right, one statement found
             callback undefined, docs[0].value
           else
             # should not happen, there are more
             # then one statements with the same id
             # TODO callback ERROR, null
-            callback 'DUPLICATE STATEMENT'
+            callback 'Multiple Statements for the same id found.'
   #
   #
   constructor: (@dbController) ->
@@ -71,21 +73,19 @@ module.exports = class StatementMapper
           # the given statement will be inserted
           callback err
         else
-          switch foundStatement.length
-            when 0
-              @dbController.db.save statement, (err, res) =>
-                callback err, statement
-            when 1
-              if isEqual statement, foundStatement
-                # all right statement is already in the database
-                callback undefined, statement
-              else
-                # conflict, there is a statement with the
-                # same id but a different content
-                # TODO callback ERROR, null
-                callback 'CONFLICTING STATEMENT ALREADY EXISTS'
+          if foundStatement
+            if @isEqual statement, foundStatement
+              # all right statement is already in the database
+              callback undefined, statement
             else
-              callback 'ERROR: Multiple Statements for the same id found.'
+              # conflict, there is a statement with the
+              # same id but a different content
+              # TODO callback ERROR, null
+              callback {code: 409, message: 'CONFLICTING STATEMENT ALREADY EXISTS' }
+          else
+            # statement does not exist yet, save it
+            @dbController.db.save statement, (err, res) =>
+              callback err, statement
     else
       # No id is given, generate one
       statement.id = @generateUUID()

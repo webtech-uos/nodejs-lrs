@@ -24,6 +24,7 @@ module.exports = class StatementsController extends BaseController
     errors = {}
     errorOccured = false
     status = 200
+    logger.warn req.params
     for statement in statements
       BaseController.validator.validateWithSchema statement, "xAPIStatement", (err) =>
         if err
@@ -31,7 +32,7 @@ module.exports = class StatementsController extends BaseController
         else
           @mapper.save statement, (err, createdStatement) =>
             if err
-              logger.error err
+              logger.warn err
               errors[statement] = err
               status = err.code ? 500
               errorOccured = true
