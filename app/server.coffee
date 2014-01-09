@@ -2,11 +2,10 @@ restify = require 'restify'
 config = require './config'
 routes = require './routes'
 DBController = require './database/db_controller.coffee'
+logger = require './logger'
 
 # Main class for launching the server.
 # Only instanciate me once.
-#
-# TODO: Instanciate database
 #
 module.exports = class Server
 
@@ -18,7 +17,7 @@ module.exports = class Server
   # @param callback
   #
   constructor: (config, callback = ->) ->
-    console.log "Let the magic happen."
+    logger.info "Let the magic happen."
     srvOptions =
       name: config.server.name
       version: config.server.version # A default version set for all routes
@@ -32,7 +31,7 @@ module.exports = class Server
         # init database
         if config.server.port
           @restServer.listen config.server.port, (err) =>
-            console.log '%s is listening at %s', @restServer.name, @restServer.url
+            logger.info '%s is listening at %s', @restServer.name, @restServer.url
             callback err, @
         else
           callback undefined, @

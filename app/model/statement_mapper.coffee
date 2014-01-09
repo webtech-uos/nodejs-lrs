@@ -1,3 +1,5 @@
+logger = require '../logger'
+
 # Provides operations for all statements on top
 # of couchDB.
 #
@@ -10,8 +12,7 @@ module.exports = class StatementMapper
   getAll: (callback) ->
     @dbController.db.view 'find_by/id', (err, docs) =>
       if err
-        console.error "database access failed"
-        console.error err
+        logger.error "database access failed: " + err
         callback err, []
       else
         statements = []
@@ -30,14 +31,13 @@ module.exports = class StatementMapper
   #   second callback param: retrieved statement
   #
   find: (id, callback) ->
-    console.log 'find...'
+    logger.info 'find statement: ' + id
     @dbController.db.view 'find_by/id', key: id, (err, docs) =>
       if err
-        console.error "database access failed"
-        console.error err
+        logger.error "database access failed: " + err
         callback err, []
       else
-        console.log docs    
+        logger.info 'statement found: ' + id
         switch docs.length
           when 0
             # there is no statement with the given id
@@ -66,7 +66,7 @@ module.exports = class StatementMapper
     # check if the given id is already in the database
       @find statement.id, (err, foundStatement) =>
         if err
-          console.log 'err after find'
+          logger.error 'find returned error: ' + err
           # there is no statement with the given id
           # the given statement will be inserted
           callback err

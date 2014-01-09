@@ -1,8 +1,9 @@
 Server = require './server'
+logger = require './logger'
 
 new Server require('./config'), (err) ->
   if err
-    console.log 'CRITICAL ERROR, BYE!'
+    logger.error 'CRITICAL ERROR, BYE!'
     process.exit()
   else
-    console.log 'SERVER IS UP AND RUNNING'
+    logger.info 'SERVER IS UP AND RUNNING'

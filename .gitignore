@@ -2,3 +2,5 @@
 .project
 doc
 test/npm-debug.log
+log.txt
+*.log

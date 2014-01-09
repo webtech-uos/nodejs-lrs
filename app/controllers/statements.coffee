@@ -1,5 +1,6 @@
 BaseController = require './base'
 StatementMapper = require '../model/statement_mapper'
+logger = require '../logger'
 
 # Sample controller for route `statements`.
 #
@@ -30,7 +31,7 @@ module.exports = class StatementsController extends BaseController
         else
           @mapper.save statement, (err, createdStatement) =>
             if err
-              console.log err
+              logger.error err
               errors[statement] = err
               status = err.code ? 500
               errorOccured = true
