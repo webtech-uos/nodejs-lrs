@@ -23,24 +23,21 @@ module.exports = class StatementsController extends BaseController
     errorOccured = false
     status = 200
     for statement in statements
-      BaseController.validator.validateWithSchema statement, "xAPIStatement", (err) =>
+      @mapper.save statement, (err, createdStatement) =>
         if err
-          @send res, 400, err
+          logger.warn err
+          errors[statement] = err
+          status = err.code ? 500
+          errorOccured = true
         else
-          @mapper.save statement, (err, createdStatement) =>
-            if err
-              logger.warn err
-              errors[statement] = err
-              status = err.code ? 500
-              errorOccured = true
-            else
-              ids.push createdStatement.id
-    
-            counter++
-    
-            if counter == statements.length
-              # everything is done, send response
-              @send res, status, if errorOccured then errors else ids
+          ids.push createdStatement.id
+
+        counter++
+
+        if counter == statements.length
+          # everything is done, send response
+          # TODO send errors and ids ??
+          @send res, status, if errorOccured then errors else ids
 
   # Called whenever the clients requests to get all statements.
   #
