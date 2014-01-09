@@ -105,12 +105,13 @@ module.exports = class StatementMapper
           @dbController.db.save statement, (err, res) =>
             callback err, statement
 
-  # Checks whether two statements are equal by performing a deep comparison.
+  # Checks whether two statements are equal
+  # Currently by performing a deep comparison. TODO
   _isEqual: (s1, s2) ->
     _.isEqual(s1, s2)
 
   # Generates a UUID from the current date and a random number.
-  # see RFC4122
+  # @see http://www.ietf.org/rfc/rfc4122.txt
   generateUUID: ->
     d = (new (Date)()).getTime()
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->

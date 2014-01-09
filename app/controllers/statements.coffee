@@ -36,6 +36,7 @@ module.exports = class StatementsController extends BaseController
 
         if counter == statements.length
           # everything is done, send response
+          # TODO send errors and ids ??
           @send res, status, if errorOccured then errors else ids
 
   # Called whenever the clients requests to get all statements.
