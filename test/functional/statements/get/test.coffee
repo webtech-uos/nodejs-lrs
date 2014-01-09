@@ -30,15 +30,21 @@ describe "GET", ->
         .expect("Content-Type", /json/, done)
 
     it "has the required header fields", (done) ->
+      Validator = require "../../../../app/validator/validator.coffee"
+      val = new Validator 'app/validator/schemas/'
+
       request
         .get("/statements")
-        #TODO validate these fields
         .end (err, res) ->
           if err?
             done(err)
-          for header in ["X-Experience-API-Consistent-Through"]
-            assert header of res?.headers,
-              "has #{header} header"
+          consistent = 'X-Experience-API-Consistent-Through'
+          #FIXME Why are headers lowercase?
+          assert consistent.toLowerCase() of res?.headers,
+              "has #{consistent} header"
+          val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
+            'ISO8061Date',
+            done
 
   describe "/statements/id with a valid ID", ->
     it "responds with 200 OK and a valid StatementResult"

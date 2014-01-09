@@ -44,7 +44,7 @@ module.exports = class Validator
       @js.validate json, schema, callback
     else
       throw new Error "No schema specified!"
-    return  
+    return
 
   # Loads a file and parse the content as JSON.
   # 

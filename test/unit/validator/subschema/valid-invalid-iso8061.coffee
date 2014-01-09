@@ -13,16 +13,15 @@ validDates =
   withDelimiter : "2012-01-11T11:13:42+02:00"
   withMillis : "2012-01-11T11:13:42.111+02:00"
   withoutDelimiter : "20120111T111342+02:00"
-  withUTCTimezone : "2012-01-11T00:00:00Z"        
+  withUTCTimezone : "2012-01-11T00:00:00Z"
   withoutTimezone : "2012-01-11T11:13:42"
   extendedPlus : "+2012-01-11T00:00:00Z"
-  extendedMinus : "-0001-01-11T00:00:00Z"      
+  extendedMinus : "-0001-01-11T00:00:00Z"
 
 invalidDates =
   wrongYear : "20-01-11T11:13:42+02:00"
   wrongHour : "2012-01-11T1:13:42+02:00"
   wrongTimezone : "2012-01-11T11:13:42+02:"
-  
 
 describe 'ISO 8061 date', ->
 
