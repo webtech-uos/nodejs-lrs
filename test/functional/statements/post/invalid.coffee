@@ -19,7 +19,7 @@ fs.readdir invalidStatements, (err, files) ->
 
       describe "from file: #{file}", ->
         it "responds with 400 Bad Request", (done) ->
-          fs.readFile 'utf-8', invalidStatements + file, (err, data) ->
+          fs.readFile invalidStatements + file, 'utf8', (err, data) ->
             if err
               console.log "error reading file '#{file}'. #{err}"
               done(err)

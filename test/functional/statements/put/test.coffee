@@ -11,7 +11,7 @@ describe "PUT valid statement to /statements", ->
       done err
 
   it "responds with 204 No Content", (done) ->
-    fs.readFile 'utf-8', exampleStatements.minimalWithoutId, (err, data) ->
+    fs.readFile exampleStatements.minimalWithoutId, 'utf8', (err, data) ->
         request
           .put("/statements")
           .set('Content-Type', 'application/json')
