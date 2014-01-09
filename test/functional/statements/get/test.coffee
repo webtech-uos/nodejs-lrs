@@ -1,15 +1,11 @@
 ##
 # start server
 ##
-  
+   
 describe "GET", ->
   
   request = null
-  beforeEach (done) ->
-    require('setup_server').prepareTest (err, req) ->
-      request = req
-      done err
-  
+   
   describe "/statements", ->
     it "responds with 200 OK", (done) ->
       request

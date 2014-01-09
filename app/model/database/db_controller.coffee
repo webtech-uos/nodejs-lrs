@@ -111,3 +111,18 @@ module.exports = class DBController
         _importTestData database, "./app/model/database/testData", () =>
           _importViews database, "./app/model/database/views", () =>
             callback()
+ 
+  deleteDB: (callback) -> 
+    @db.exists (err, exists) =>
+      if err
+        logger.info 'ERROR DELETING DATABASE: ' + err        
+        callback err
+      else if exists
+        logger.info "Deleting database '#{@config.name}' on the database server."
+        @db.destroy =>
+          callback()
+        
+        
+        
+    
+    

@@ -1,5 +1,5 @@
 fs = require "fs"
-
+require ('test_init')
 ##
 # start server
 ##
@@ -12,12 +12,6 @@ describe "POST", ->
   #        Only in terms of provided descriptions.
   
   # TODO: this assumes the item doesn't exist, set up db accordingly
-      
-  request = null
-  beforeEach (done) ->
-    require('setup_server').prepareTest (err, req) ->
-      request = req
-      done err
   
   describe "a minimal valid statement that doesn't exist yet", ->
     it "responds with 200 OK", (done) ->
