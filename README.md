@@ -27,7 +27,7 @@ A [report viewer](https://github.com/jvogtherr/ExperienceReportViewer) is beeing
   * `coffee-script` (won't be needed as soon as [this issue](https://github.com/remy/nodemon/issues/210) is resolved)
 * run `npm install` to install all dependencies locally
 * hit `grunt` to launch the application
-* `grunt test` for running all test cases
+* `grunt mochaTest` for running all test cases
 * `grunt doc` to generate the latest docs locally in the `doc` folder
 
 # DB
