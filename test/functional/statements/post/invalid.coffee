@@ -4,12 +4,15 @@ fs = require "fs"
 #test header start
 ##
 request = null
+server = null
 beforeEach (done) ->
-  require('setup_test_env').prepareTest (err, req) ->
+  require('setup_test_env').prepareTest (err, serv, req) ->
     request = req
+    server = serv
     done err
+
 afterEach ->
-    require('setup_test_env').tearDownTest((->))
+  server.tearDown((->))
 ##
 #test header end
 ##
