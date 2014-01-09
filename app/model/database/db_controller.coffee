@@ -1,6 +1,6 @@
 cradle = require 'cradle'
 fs = require 'fs'
-logger = require '../logger'
+logger = require '../../logger'
 
 # A class for handling all database interaction. 
 # Asserts that a couchDB with respective name and all required views exists.
@@ -21,13 +21,13 @@ module.exports = class DBController
     do (db) ->
       fs.readdir dir, (err, files) ->
         if err
-          logger.error "Error while reading views folder: " + err
+          logger.error "Error while readinging views folder: " + err
         else
           for file in files
             do (file, db) ->
               fs.readFile "#{dir}/#{file}", (err, contents) ->
                 if err
-                  logger.error "Error while reading view file #{file}: " + err
+                  logger.error "Error while readinging view file #{file}: " + err
                 else
                   view = JSON.parse contents
                   db.save view._id, view
@@ -98,6 +98,6 @@ module.exports = class DBController
         database.create()
         @db = database
         logger.info "The database '#{@config.name}' has been created."
-        _importTestData database, "./app/database/testData", () =>
-          _importViews database, "./app/database/views", () =>
+        _importTestData database, "./app/model/database/testData", () =>
+          _importViews database, "./app/model/database/views", () =>
             callback()

@@ -1,7 +1,7 @@
 restify = require 'restify'
 config = require './config'
 routes = require './routes'
-DBController = require './database/db_controller.coffee'
+DBController = require './model/database/db_controller.coffee'
 logger = require './logger'
 
 # Main class for launching the server.

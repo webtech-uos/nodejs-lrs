@@ -12,6 +12,7 @@ A [report viewer](https://github.com/jvogtherr/ExperienceReportViewer) is beeing
 # File Structure
  * `app` everything required during runtime
    * `controllers` controllers for each route
+   * `validator` used to validate incoming JSON
    * `model` database abstraction layer
  * `test` all test cases
    * `unit` simple unit tests
