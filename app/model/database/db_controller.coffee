@@ -5,16 +5,21 @@ logger = require '../../logger'
 # A class for handling all database interaction. 
 # Asserts that a couchDB with respective name and all required views exists.
 # Based on cradle.
+# Each database-controller is working on a specific databasse.
+# There can be multiple controllers working on multiple databases at the same time.
 #
 module.exports = class DBController
-  # holds the dbObject
-  db : null
-
+  db : null # holds the dbObject
+  
+  # Instanciates a new database-controller based on the supplied configuration object.
+  #
   constructor: (@config, callback) ->
     @setup callback
 
   # imports some views into the database
-  # @param [String] dir directory, where the views are
+  #
+  # @param [String] dir
+  #   location of the views (relative to working directory)
   _importViews = (db, dir, callback) ->
     logger.info "Importing views: #{dir}"
     filesFinished = 0
@@ -37,7 +42,10 @@ module.exports = class DBController
                     callback()
 
   # imports some test data into database
-  # @param [String] dir directory, where the test data are
+  #
+  # @param [String] dir
+  #   directory where the test data is stored (relative to working directory)
+  #
   _importTestData = (db, dir, callback) ->
     logger.info "Importing test data: #{dir}"
     filesFinished = 0
@@ -59,7 +67,9 @@ module.exports = class DBController
                   if filesFinished == files.length
                     callback()
 
-  # tries to create a database
+  # Tries to create a database.
+  # Will return an error to callback if something bad happened.
+  #
   setup : (callback) ->
     dbOptions =
       host: @config.host

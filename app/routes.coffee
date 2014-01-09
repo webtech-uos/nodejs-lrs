@@ -1,3 +1,6 @@
+# All HTTP routes are defined in this file.
+# 
+
 module.exports =
   statements:
     put: 'statements#update'

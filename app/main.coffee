@@ -1,3 +1,6 @@
+# Launches the LRS
+# with the paramters defined in `config.coffee`
+
 Server = require './server'
 logger = require './logger'
 

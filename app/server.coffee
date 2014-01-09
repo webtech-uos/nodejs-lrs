@@ -13,8 +13,14 @@ module.exports = class Server
   # Launches the learning record store.
   #
   # @param config
+  #   the configuration object, for details
+  #   take a look at `config.coffee`
   #
   # @param callback
+  #   Will be called as soon as the server is started
+  #   or an error occured (first parameter).
+  #   If no error occured one can assume a valid database
+  #   connection and listening HTTP server.
   #
   constructor: (config, callback = ->) ->
     logger.info "Let the magic happen."

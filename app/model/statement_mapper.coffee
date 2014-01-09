@@ -5,11 +5,18 @@ _ = require 'underscore'
 # of couchDB.
 #
 module.exports = class StatementMapper
+  
+  # Instanciates a new statement mapper.
+  #
+  # @param dbController
+  #  the database-controller to be used by this mapper
+  #
+  constructor: (@dbController) ->
 
-  # returns all stored statements
+  # Returns all stored statements to the callback.
   #
+  # TODO: one should be able to specify the maximum number of returned statements
   #
-  #TODO max param
   getAll: (callback) ->
     @dbController.db.view 'find_by/id', (err, docs) =>
       if err
@@ -22,14 +29,10 @@ module.exports = class StatementMapper
 
         callback undefined, statements
 
-  # returns the statement with the given id
+  # Returns the statement with the given id to the callback.
   #
   # @param id
   #   id of the statement to look up
-  # @param callback
-  #   will be called as soon as the statement is retrieved
-  #   first callback param: error object
-  #   second callback param: retrieved statement
   #
   find: (id, callback) ->
     logger.info 'find statement: ' + id
@@ -53,9 +56,6 @@ module.exports = class StatementMapper
             # then one statements with the same id
             # TODO callback ERROR, null
             callback 'Multiple Statements for the same id found.'
-  #
-  #
-  constructor: (@dbController) ->
 
   # Saves this statement to the database
   #
@@ -74,7 +74,7 @@ module.exports = class StatementMapper
           callback err
         else
           if foundStatement
-            if @isEqual statement, foundStatement
+            if @_isEqual statement, foundStatement
               # all right statement is already in the database
               callback undefined, statement
             else
@@ -92,12 +92,10 @@ module.exports = class StatementMapper
       @dbController.db.save statement, (err, res) =>
         callback err, statement
 
-  isEqual: (s1, s2) ->
-    # TODO agents equality etc.
+  # Checks whether two statements are equal by performing a deep comparison.
+  _isEqual: (s1, s2) ->
     _.isEqual(s1, s2)
 
-
-  # RFC4122 A Universally Unique IDentifier (UUID) URN Namespace
   # Generates a UUID from the current date and a random number.
   generateUUID: ->
     d = (new (Date)()).getTime()

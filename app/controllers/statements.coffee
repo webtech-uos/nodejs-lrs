@@ -2,9 +2,7 @@ BaseController = require './base'
 StatementMapper = require '../model/statement_mapper'
 logger = require '../logger'
 
-# Sample controller for route `statements`.
-#
-# TODO: Validate incoming JSON
+# Controller for route `statements`.
 #
 module.exports = class StatementsController extends BaseController
 
@@ -74,6 +72,8 @@ module.exports = class StatementsController extends BaseController
       # TODO: Handle Error
       @send res, 200, statement
 
+  # Sets the required header fields.
+  #
   _prepareResponse: (res) ->
     super res
     res.header 'X-Experience-API-Consistent-Through', new Date(new Date() - 1000*60*60).toISOString()

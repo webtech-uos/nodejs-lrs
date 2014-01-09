@@ -1,3 +1,5 @@
+# All configuration should be stored here.
+
 module.exports =
   database: # couchDB
     host: 'localhost'
