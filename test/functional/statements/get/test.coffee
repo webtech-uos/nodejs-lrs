@@ -1,6 +1,19 @@
 assert = require "assert"
 
-request = require('setup_test_env').testRequest
+##
+#test header start
+##
+request = null
+beforeEach (done) ->
+  require('setup_test_env').prepareTest (err, req) ->
+    request = req
+    done err
+
+#afterEach ->
+  require('setup_test_env').tearDownTest((->))
+##
+#test header end
+##
 
 describe "GET", ->
   describe "/statements", ->
