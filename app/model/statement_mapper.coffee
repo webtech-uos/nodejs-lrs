@@ -1,3 +1,4 @@
+Validator = require '../validator/validator'
 logger = require '../logger'
 _ = require 'underscore'
 
@@ -5,13 +6,15 @@ _ = require 'underscore'
 # of couchDB.
 #
 module.exports = class StatementMapper
-  
+
+
   # Instanciates a new statement mapper.
   #
   # @param dbController
   #  the database-controller to be used by this mapper
   #
   constructor: (@dbController) ->
+    @validator = new Validator 'app/validator/schemas/'
 
   # Returns all stored statements to the callback.
   #
@@ -64,39 +67,50 @@ module.exports = class StatementMapper
     # is no id, it generates an id, otherwise
     # ist check the two statements for equality
     if statement?.id
-    # if the id is already defined,
-    # check if the given id is already in the database
-      @find statement.id, (err, foundStatement) =>
-        if err
-          logger.error 'find returned error: ' + err
-          # there is no statement with the given id
-          # the given statement will be inserted
-          callback err
+      # If the id is already defined
+      # validate Statement
+      @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
+        if validatorErr
+          callback {code: 400, message: 'Statement is invalid.' }
         else
-          if foundStatement
-            if @_isEqual statement, foundStatement
-              # all right statement is already in the database
-              callback undefined, statement
+          # Check if the given id is already in the database
+          @find statement.id, (err, foundStatement) =>
+            if err
+              logger.error 'find returned error: ' + err
+              # There is no statement with the given id,
+              # the given statement will be inserted
+              callback err
             else
-              # conflict, there is a statement with the
-              # same id but a different content
-              # TODO callback ERROR, null
-              callback {code: 409, message: 'CONFLICTING STATEMENT ALREADY EXISTS' }
-          else
-            # statement does not exist yet, save it
-            @dbController.db.save statement, (err, res) =>
-              callback err, statement
+              if foundStatement
+                if @_isEqual statement, foundStatement
+                  # all right statement is already in the database
+                  callback undefined, statement
+                else
+                  # conflict, there is a statement with the
+                  # same id but a different content
+                  callback {code: 409, message: 'Conflicting statement: Found a statement with the same id but a different content!' }
+              else
+                # statement does not exist yet, save it
+                @dbController.db.save statement, (err, res) =>
+                  callback err, statement
     else
       # No id is given, generate one
       statement.id = @generateUUID()
-      @dbController.db.save statement, (err, res) =>
-        callback err, statement
+      logger.info 'generated statement id: ' + statement.id
+      # validate the given statement with the generated id
+      @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
+        if validatorErr
+          callback {code: 400, message: 'Statement is invalid.' }
+        else
+          @dbController.db.save statement, (err, res) =>
+            callback err, statement
 
   # Checks whether two statements are equal by performing a deep comparison.
   _isEqual: (s1, s2) ->
     _.isEqual(s1, s2)
 
   # Generates a UUID from the current date and a random number.
+  # see RFC4122
   generateUUID: ->
     d = (new (Date)()).getTime()
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
