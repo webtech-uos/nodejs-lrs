@@ -31,7 +31,7 @@ module.exports = class Server
     @restServer = restify.createServer(srvOptions)
     @restServer.use restify.bodyParser()
     @dbController = new DBController config.database, (err) =>
-      if err 
+      if err
         callback err
       else
         # init database
@@ -42,7 +42,7 @@ module.exports = class Server
         else
           callback undefined, @
     @_registerRoutes()
-    
+
   # Used to register all routes contained in the file `routes.coffee`.
   #
   # @private
