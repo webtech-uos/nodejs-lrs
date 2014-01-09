@@ -31,7 +31,7 @@ describe "POST", ->
           .set('Content-Type', 'application/json')
           .send(data)
           .expect(200, done)
-  #
+
   # FIXME: we can't rely on the first statement being saved before the second request
   # ("The LRS MAY respond before Statements that have been stored are available for retrieval.",
   # xAPI 1.0.0 spec)
@@ -43,7 +43,6 @@ describe "POST", ->
           .set('Content-Type', 'application/json')
           .send(data)
           .end()
-        request
           .post("/statements")
           .set('Content-Type', 'application/json')
           .send(data.toString())
