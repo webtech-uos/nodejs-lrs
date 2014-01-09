@@ -18,6 +18,7 @@ require("setup_server.coffee").prepareTest (request) ->
             .send(data)
             .expect(200, done)
   
+    # FIXME: this assumes the item DOES exist
     describe "a minimal valid statement that exists already", ->
       it "SHOULD respond with 200 OK", (done) ->
         fs.readFile exampleStatements.minimalWithoutId, (err, data) ->
@@ -35,8 +36,8 @@ require("setup_server.coffee").prepareTest (request) ->
           request
             .post("/statements")
             .send(data)
-            .end done
-          request
-            .post("/statements")
-            .send(data)
-            .expect(409, done)
+            .end ->
+              request
+                .post("/statements")
+                .send(data)
+                .expect(409, done)
