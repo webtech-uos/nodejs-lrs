@@ -24,7 +24,6 @@ module.exports = class StatementsController extends BaseController
     errors = {}
     errorOccured = false
     status = 200
-    logger.warn req.params
     for statement in statements
       BaseController.validator.validateWithSchema statement, "xAPIStatement", (err) =>
         if err
