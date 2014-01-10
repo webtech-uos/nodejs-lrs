@@ -1,6 +1,7 @@
 Validator = require '../validator/validator'
 logger = require '../logger'
 _ = require 'underscore'
+utils = require '../utils'
 
 # Provides operations for all statements on top
 # of couchDB.
@@ -74,7 +75,7 @@ module.exports = class StatementMapper
 
         unless statement.id
           # No id is given, generate one
-          statement.id = @generateUUID()
+          statement.id = utils.generateUUID()
           logger.info 'generated statement id: ' + statement.id
           # Check if the given id is already in the database
 
@@ -102,17 +103,3 @@ module.exports = class StatementMapper
   # Currently by performing a deep comparison. TODO
   _isEqual: (s1, s2) ->
     _.isEqual(s1, s2)
-
-  # Generates a UUID from the current date and a random number.
-  # @see http://www.ietf.org/rfc/rfc4122.txt
-  generateUUID: ->
-    d = (new (Date)()).getTime()
-    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
-      r = (d + Math.random()*16)%16 | 0
-      d = Math.floor(d/16)
-      d = if c is 'x' then r else (r & 0x3|0x8)
-      d.toString(16)
-
-
-
-
