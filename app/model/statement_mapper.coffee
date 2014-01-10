@@ -66,44 +66,37 @@ module.exports = class StatementMapper
     # Tries to store this statement and if there
     # is no id, it generates an id, otherwise
     # ist check the two statements for equality
-    if statement?.id
-      # If the id is already defined
-      # validate Statement
-      @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
-        if validatorErr
-          callback {code: 400, message: 'Statement is invalid.' }
-        else
+
+    @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
+      if validatorErr
+        callback {code: 400, message: 'Statement is invalid.' }
+      else
+
+        unless statement.id
+          # No id is given, generate one
+          statement.id = @generateUUID()
+          logger.info 'generated statement id: ' + statement.id
           # Check if the given id is already in the database
-          @find statement.id, (err, foundStatement) =>
-            if err
-              logger.error 'find returned error: ' + err
-              # There is no statement with the given id,
-              # the given statement will be inserted
-              callback err
-            else
-              if foundStatement
-                if @_isEqual statement, foundStatement
-                  # all right statement is already in the database
-                  callback undefined, statement
-                else
-                  # conflict, there is a statement with the
-                  # same id but a different content
-                  callback {code: 409, message: 'Conflicting statement: Found a statement with the same id but a different content!' }
+
+        @find statement.id, (err, foundStatement) =>
+          if err
+            logger.error 'find returned error: ' + err
+            # There is no statement with the given id,
+            # the given statement will be inserted
+            callback err
+          else
+            if foundStatement
+              if @_isEqual statement, foundStatement
+                # all right statement is already in the database
+                callback undefined, statement
               else
-                # statement does not exist yet, save it
-                @dbController.db.save statement, (err, res) =>
-                  callback err, statement
-    else
-      # No id is given, generate one
-      statement.id = @generateUUID()
-      logger.info 'generated statement id: ' + statement.id
-      # validate the given statement with the generated id
-      @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
-        if validatorErr
-          callback {code: 400, message: 'Statement is invalid.' }
-        else
-          @dbController.db.save statement, (err, res) =>
-            callback err, statement
+                # conflict, there is a statement with the
+                # same id but a different content
+                callback {code: 409, message: 'Conflicting statement: Found a statement with the same id but a different content!' }
+            else
+              # statement does not exist yet, save it
+              @dbController.db.save statement, (err, res) =>
+                callback err, statement
 
   # Checks whether two statements are equal
   # Currently by performing a deep comparison. TODO
