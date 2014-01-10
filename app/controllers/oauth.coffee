@@ -2,9 +2,9 @@ passport = require 'passport'
 oauthorize = require 'oauthorize'
 BaseController = require './base'
 utils = require '../utils'
-clients = require '../database/clients'
-accessTokens = require '../database/accessTokens'
-requestTokens = require '../database/requestTokens'
+clients = require '../model/oauth/clients'
+accessTokens = require '../model/oauth/accessTokens'
+requestTokens = require '../model/oauth/requestTokens'
 
 class OAuthController extends BaseController
 
