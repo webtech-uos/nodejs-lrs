@@ -30,42 +30,19 @@ module.exports = class DBController
         else
           for file in files
             do (file, db) ->
+              # FIXME: Use CoffeeScript for views
+              #        include views by require instead of readFile
               fs.readFile "#{dir}/#{file}", (err, contents) ->
                 if err
                   logger.error "Error while readinging view file #{file}: " + err
                 else
                   view = JSON.parse contents
-                  db.save view._id, view
-                  logger.info "imported view #{dir}/#{file}."
-                  filesFinished++
-                  if filesFinished == files.length
-                    callback()
-
-  # imports some test data into database
-  #
-  # @param [String] dir
-  #   directory where the test data is stored (relative to working directory)
-  #
-  _importTestData = (db, dir, callback) ->
-    logger.info "Importing test data: #{dir}"
-    filesFinished = 0
-    do (db) ->
-      fs.readdir dir, (err, files) ->
-        if err
-          logger.error "Error while reading test data folder: " + err
-        else
-          for file in files
-            do (file, db) ->
-              fs.readFile "#{dir}/#{file}", (err, contents) ->
-                if err
-                  logger.error "Error while read test data file #{file}!: " + err
-                else
-                  testdata = JSON.parse contents
-                  db.save testdata
-                  logger.info "imported test data #{dir}/#{file}."
-                  filesFinished++
-                  if filesFinished == files.length
-                    callback()
+                  db.save view._id, view, (err) ->
+                    logger.erro "unable to import view #{dir}/#{file}" if err
+                    logger.info "imported view #{dir}/#{file}" unless err
+                    filesFinished++
+                    if filesFinished == files.length
+                      callback err
 
   # Tries to create a database.
   # Will return an error to callback if something bad happened.
@@ -108,9 +85,8 @@ module.exports = class DBController
         database.create()
         @db = database
         logger.info "The database '#{@config.name}' has been created."
-        _importTestData database, "./app/model/database/testData", () =>
-          _importViews database, "./app/model/database/views", () =>
-            callback()
+        _importViews database, "./app/model/database/views", (err) =>
+          callback err
  
   deleteDB: (callback) -> 
     @db.exists (err, exists) =>

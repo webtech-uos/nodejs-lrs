@@ -24,7 +24,7 @@ module.exports = class StatementMapper
   getAll: (callback) ->
     @dbController.db.view 'find_by/id', (err, docs) =>
       if err
-        logger.error "database access failed: " + err
+        logger.error "getALL: database access failed: #{JSON.stringify err}"
         callback err, []
       else
         statements = []
@@ -42,7 +42,7 @@ module.exports = class StatementMapper
     logger.info 'find statement: ' + id
     @dbController.db.view 'find_by/id', key: id, (err, docs) =>
       if err
-        logger.error "database access failed: " + err
+        logger.error "find: database access failed: #{JSON.stringify err}"
         callback err, []
       else
         switch docs.length
