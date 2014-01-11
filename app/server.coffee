@@ -60,6 +60,3 @@ module.exports = class Server
   #
   getRestifyServer: ->
     @restServer
-     
-  tearDown: (callback) ->
-    @dbController.deleteDB(callback)

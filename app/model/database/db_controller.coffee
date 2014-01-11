@@ -88,6 +88,8 @@ module.exports = class DBController
         _importViews database, "./app/model/database/views", (err) =>
           callback err
  
+  # Completely removes this database
+  #
   deleteDB: (callback) -> 
     @db.exists (err, exists) =>
       if err
