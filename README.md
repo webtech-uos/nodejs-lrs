@@ -10,6 +10,7 @@ The current Docs can be found [here](http://coffeedoc.info/github/webtech-uos/no
 A [report viewer](https://github.com/jvogtherr/ExperienceReportViewer) is beeing developed as part of this implementation.
 
 # Deployment
+* edit `app/config.coffee` to match your `couchDB` server
 * install `node`, see `package.json` for required version
 * install all global dependencies or add the projects `node_modules/.bin` to your `PATH`. This only needs to be done in development mode. Currently the global dependencies are:
   * `grunt-cli`
