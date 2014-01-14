@@ -34,10 +34,9 @@ module.exports = class Server
       if err
         callback err
       else
-        # init database
         if config.server.port
           @restServer.listen config.server.port, (err) =>
-            logger.info '%s is listening at %s', @restServer.name, @restServer.url
+            logger.info "#{@restServer.name} is listening at #{@restServer.url}"
             callback err, @
         else
           callback undefined, @
