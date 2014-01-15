@@ -54,7 +54,10 @@ module.exports = class StatementMapper
           when 1
             logger.info 'statement found: ' + id
             # all right, one statement found
-            callback undefined, docs[0].value
+            statement = docs[0].value
+            delete statement._id
+            delete statement._rev
+            callback undefined, statement
           else
             # should not happen, there are more
             # then one statements with the same id
