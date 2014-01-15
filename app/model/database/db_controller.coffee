@@ -38,7 +38,7 @@ module.exports = class DBController
                 else
                   view = JSON.parse contents
                   db.save view._id, view, (err) ->
-                    logger.erro "unable to import view #{dir}/#{file}" if err
+                    logger.error "unable to import view #{dir}/#{file}" if err
                     logger.info "imported view #{dir}/#{file}" unless err
                     filesFinished++
                     if filesFinished == files.length
