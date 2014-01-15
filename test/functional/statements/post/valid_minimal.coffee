@@ -30,4 +30,15 @@ describe 'POST', ->
             .expect(200, done)
 
   describe 'a minimal valid statement with an ID that exists already', ->
-    it 'SHOULD respond with 409 Conflict'
+    it 'SHOULD respond with 409 Conflict', (done) ->
+      factory = new StatementFactory env.dbController
+      factory.create (err, statement) ->
+        if err
+          done(err) 
+        else
+          statement.object.id += 'this-is-different'
+          env.request
+            .post('/statements')
+            .set('Content-Type', 'application/json')
+            .send(statement)
+            .expect(409, done)
