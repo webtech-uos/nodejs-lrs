@@ -1,5 +1,7 @@
 assert = require 'assert'
 env = require 'setup_test_env'
+StatementFactory = require '../../../factories/statement'
+_ = require 'underscore'
 
 describe 'GET', ->
 
@@ -24,7 +26,6 @@ describe 'GET', ->
           if err?
             done(err)
           consistent = 'X-Experience-API-Consistent-Through'
-          #FIXME Why are headers lowercase?
           assert consistent.toLowerCase() of res?.headers,
               "has #{consistent} header"
           val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
@@ -32,8 +33,22 @@ describe 'GET', ->
             done
 
   describe '/statements/id with a valid ID', ->
-    it 'responds with 200 OK and a valid StatementResult'
-  describe '/statements/id with an invalid ID', ->
-    it 'responds with 404 Not Found'
-
-# TODO: validate the returned statement
+    it 'responds with 200 OK and a valid StatementResult', (done) ->
+      factory = new StatementFactory env.dbController
+      factory.create (err, statement) ->
+        if err
+          done(err) 
+        else
+          env.request
+            .get("/statements/#{statement.id}")
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end (err, res) ->
+              err ?= 'statements do not match' unless _.isEqual statement, res.body 
+              done err
+    
+  describe '/statements/id with an invalid ID', (done) ->
+    it 'responds with 404 Not Found', ->
+      env.request
+        .get('/statements/this-id-does-not-exist')
+          .expect(404, done)
