@@ -1,4 +1,4 @@
-restify = require 'restify'
+express = require 'express'
 config = require './config'
 routes = require './routes'
 DBController = require './model/database/db_controller.coffee'
@@ -24,19 +24,19 @@ module.exports = class Server
   #
   constructor: (config, callback = ->) ->
     logger.info "Let the magic happen."
-    srvOptions =
-      name: config.server.name
-      version: config.server.version # A default version set for all routes
 
-    @restServer = restify.createServer(srvOptions)
-    @restServer.use restify.bodyParser()
+    @express = express()
+    @express.use express.logger stream:
+      write: (message) -> logger.info message
+    @express.use express.json()
+    
     @dbController = new DBController config.database, (err) =>
       if err
         callback err
       else
         if config.server.port
-          @restServer.listen config.server.port, (err) =>
-            logger.info "#{@restServer.name} is listening at #{@restServer.url}"
+          @express.listen config.server.port, (err) =>
+            logger.info 'server listening'
             callback err, @
         else
           callback undefined, @
@@ -52,10 +52,18 @@ module.exports = class Server
       for method, callback of route
         [controllerName, methodName] = callback.split '#'
         controller = controllers[controllerName] ?= new (require "./controllers/#{controllerName}") @dbController
-        @restServer[method] url, do (controller, methodName) ->
+        logger.info "registering route '#{method} #{url}'"
+        if url[0] isnt '/'
+          url = '/' + url
+        @express[method] url, do (controller, methodName) ->
           (params...) -> controller[methodName].apply(controller, params)
 
   # For getting the required server object when running supertest.
   #
-  getRestifyServer: ->
-    @restServer
+  getRestServer: ->
+    @express
+
+  # For getting the required database controller when running supertest.
+  #
+  getDBController: ->
+    @dbController

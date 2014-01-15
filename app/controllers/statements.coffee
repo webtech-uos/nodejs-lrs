@@ -18,7 +18,7 @@ module.exports = class StatementsController extends BaseController
     counter = 0
 
     ids = []
-    statements = if req.params[0]? then req.params else [req.params]
+    statements = if req.body[0]? then req.body else [req.body]
     errors = {}
     errorOccured = false
     status = 200
@@ -56,7 +56,7 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   update: (req, res, next) ->
-    @mapper.save req.params, (err, statement) =>
+    @mapper.save req.body, (err, statement) =>
       # TODO: Handle Error
       @send res, 204
 

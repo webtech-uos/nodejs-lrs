@@ -73,9 +73,8 @@ module.exports = class StatementMapper
 
     @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
       if validatorErr
-        callback {code: 400, message: 'Statement is invalid.' }
+        callback {code: 400, message: 'Statement is invalid.', details: validatorErr }
       else
-
         unless statement.id
           # No id is given, generate one
           statement.id = utils.generateUUID()

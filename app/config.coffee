@@ -10,4 +10,6 @@ module.exports =
     port: 8080
     name: 'nodejs-lrs'
     version: '0.0.1'
-
+  logger:
+    file: 'log.txt'
+    level: 'error'

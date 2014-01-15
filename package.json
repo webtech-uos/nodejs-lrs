@@ -14,7 +14,7 @@
     }
   ],
   "dependencies": {
-    "restify": "~2.6.0",
+    "express": "~3.4.8",
     "crypto": "~0.0.3",
     "passport": "~0.1.17",
     "oauthorize": "~0.1",
