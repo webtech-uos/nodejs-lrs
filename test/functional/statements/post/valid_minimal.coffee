@@ -1,13 +1,10 @@
 fs = require 'fs'
 exampleStatements = require 'example_statements.coffee'
 env = require 'setup_test_env'
+StatementFactory = require '../../../factories/statement'
 
 describe 'POST', ->
-    
-  # FIXME: You dont know which of these tests is finished first.
-  #        Does it matter?
-  #        Only in terms of provided descriptions.  
-  # TODO: this assumes the item doesn't exist, set up db accordingly
+
   describe "a minimal valid statement that doesn't exist yet", ->
     it 'responds with 200 OK', (done) ->
       fs.readFile exampleStatements.minimalWithoutId, 'utf8', (err, data) ->
@@ -17,15 +14,20 @@ describe 'POST', ->
           .send(data)
           .expect(200, done)
 
-  # FIXME: this assumes the item DOES exist
+
   describe 'a minimal valid statement that exists already', ->
+    @timeout 20000
     it 'SHOULD respond with 200 OK', (done) ->
-      fs.readFile exampleStatements.minimalWithoutId, 'utf8', (err, data) ->
-        env.request
-          .post('/statements')
-          .set('Content-Type', 'application/json')
-          .send(data)
-          .expect(200, done)
+      factory = new StatementFactory env.dbController
+      factory.create (err, statement) ->
+        if err
+          done(err) 
+        else
+          env.request
+            .post('/statements')
+            .set('Content-Type', 'application/json')
+            .send(statement)
+            .expect(200, done)
 
   describe 'a minimal valid statement with an ID that exists already', ->
     it 'SHOULD respond with 409 Conflict'
