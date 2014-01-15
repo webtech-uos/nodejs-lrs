@@ -7,7 +7,7 @@ describe 'PUT valid statement to /statements', ->
   it 'responds with 204 No Content', (done) ->
     fs.readFile exampleStatements.minimalWithoutId, 'utf8', (err, data) ->
       env.request
-        .put('/statements')
+        .put('/api/statements')
         .set('Content-Type', 'application/json')
         .send(data)
         .expect(204, done)

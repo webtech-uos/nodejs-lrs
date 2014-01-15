@@ -9,7 +9,7 @@ describe 'POST', ->
     it 'responds with 200 OK', (done) ->
       fs.readFile exampleStatements.minimalWithoutId, 'utf8', (err, data) ->
         env.request
-          .post('/statements')
+          .post('/api/statements')
           .set('Content-Type', 'application/json')
           .send(data)
           .expect(200, done)
@@ -24,7 +24,7 @@ describe 'POST', ->
           done(err) 
         else
           env.request
-            .post('/statements')
+            .post('/api/statements')
             .set('Content-Type', 'application/json')
             .send(statement)
             .expect(200, done)
@@ -38,7 +38,7 @@ describe 'POST', ->
         else
           statement.object.id += 'this-is-different'
           env.request
-            .post('/statements')
+            .post('/api/statements')
             .set('Content-Type', 'application/json')
             .send(statement)
             .expect(409, done)

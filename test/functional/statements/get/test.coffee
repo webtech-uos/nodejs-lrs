@@ -5,15 +5,15 @@ _ = require 'underscore'
 
 describe 'GET', ->
 
-  describe '/statements', ->
+  describe '/api/statements', ->
     it 'responds with 200 OK', (done) ->
         env.request
-          .get('/statements')
+          .get('/api/statements')
           .expect(200, done)
 
     it 'has Content-Type: json', (done) ->
       env.request
-        .get('/statements')
+        .get('/api/statements')
         .expect('Content-Type', /json/, done)
 
     it 'has the required header fields', (done) ->
@@ -21,34 +21,35 @@ describe 'GET', ->
       val = new Validator 'app/validator/schemas/'
   
       env.request
-        .get('/statements')
+        .get('/api/statements')
         .end (err, res) ->
-          if err?
+          if err
             done(err)
-          consistent = 'X-Experience-API-Consistent-Through'
-          assert consistent.toLowerCase() of res?.headers,
-              "has #{consistent} header"
-          val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
-            'ISO8061Date',
-            done
+          else
+            consistent = 'X-Experience-API-Consistent-Through'
+            assert consistent.toLowerCase() of res?.headers,
+                "has #{consistent} header"
+            val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
+              'ISO8061Date',
+              done
 
-  describe '/statements/id with a valid ID', ->
+  describe '/api/statements/id with a valid ID', ->
     it 'responds with 200 OK and a valid StatementResult', (done) ->
       factory = new StatementFactory env.dbController
       factory.create (err, statement) ->
         if err
-          done(err) 
+          done(err)
         else
           env.request
-            .get("/statements/#{statement.id}")
+            .get("/api/statements/#{statement.id}")
             .expect('Content-Type', /json/)
             .expect(200)
             .end (err, res) ->
               err ?= 'statements do not match' unless _.isEqual statement, res.body 
               done err
     
-  describe '/statements/id with an invalid ID', (done) ->
+  describe 'api/statements/id with an invalid ID', (done) ->
     it 'responds with 404 Not Found', ->
       env.request
-        .get('/statements/this-id-does-not-exist')
+        .get('/api/statements/this-id-does-not-exist')
           .expect(404, done)

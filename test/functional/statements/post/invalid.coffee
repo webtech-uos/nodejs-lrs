@@ -12,9 +12,9 @@ describe 'POST an invalid statement', ->
             if err
               console.log "error reading file '#{file}'. #{err}"
               done(err)
-              return
-            env.request
-              .post('/statements')
-              .set('Content-Type', 'application/json')
-              .send(data)
-              .expect(400, done)
+            else
+              env.request
+                .post('/api/statements')
+                .set('Content-Type', 'application/json')
+                .send(data)
+                .expect(400, done)
