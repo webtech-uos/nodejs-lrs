@@ -31,17 +31,17 @@ module.exports = class Server
     @express.set 'views', './app/auth/views'
     @express.use express.logger stream:
       write: (message) -> logger.info message
-      
+
     @express.use express.cookieParser()
     # bodyParser is still required for passport
     # hopefully getting fixed soon
     # @express.use express.urlencoded()
     # @express.use express.json()
     @express.use express.bodyParser()
-    
+
     # FIXME: Not exactly a secret
     @express.use express.session { secret: 'keyboard cat' }
-    
+
     @express.use passport.initialize()
     @express.use passport.session()
     @express.use @express.router
@@ -52,17 +52,17 @@ module.exports = class Server
     require './auth/strategies'
     user = require './auth/user'
     oauth = require './auth/oauth'
-      
+
     @express.get '/login', user.loginForm
     @express.post '/login', user.login
     @express.get '/logout', user.logout
     @express.get '/account', user.account
-    
+
     @express.get '/dialog/authorize', oauth.userAuthorization
     @express.post '/dialog/authorize/decision', oauth.userDecision
     @express.post '/oauth/request_token', oauth.requestToken
     @express.post '/oauth/access_token', oauth.accessToken
-   
+
     @dbController = new DBController config.database, (err) =>
       if err
         callback err

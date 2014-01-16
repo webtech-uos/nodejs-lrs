@@ -74,4 +74,3 @@ module.exports = class StatementsController extends BaseController
   _prepareResponse: (res) ->
     super res
     res.header 'X-Experience-API-Consistent-Through', new Date(new Date() - 1000*60*60).toISOString()
-

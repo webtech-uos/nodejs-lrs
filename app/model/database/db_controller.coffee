@@ -10,7 +10,7 @@ logger = require '../../logger'
 #
 module.exports = class DBController
   db : null # holds the dbObject
-  
+
   # Instanciates a new database-controller based on the supplied configuration object.
   #
   constructor: (@config, callback) ->
@@ -87,7 +87,7 @@ module.exports = class DBController
         logger.info "The database '#{@config.name}' has been created."
         _importViews database, "./app/model/database/views", (err) =>
           callback err
- 
+
   # Completely removes this database
   #
   deleteDB: (callback) -> 
@@ -99,8 +99,3 @@ module.exports = class DBController
         logger.info "Deleting database '#{@config.name}' on the database server."
         @db.destroy =>
           callback()
-        
-        
-        
-    
-    
