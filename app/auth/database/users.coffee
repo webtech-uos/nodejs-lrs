@@ -1,6 +1,6 @@
 users = [
-  { id: 1, password: 'pizza', name: 'bob' },
-  { id: 2, password: 'cats', name: 'henry' }
+  { id: 0, password: 'pizza', name: 'bob' },
+  { id: 1, password: 'cats', name: 'henry' }
 ]
 
 module.exports =
