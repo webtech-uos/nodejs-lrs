@@ -5,7 +5,7 @@ logger = require '../../logger'
 # A class for handling all database interaction. 
 # Asserts that a couchDB with respective name and all required views exists.
 # Based on cradle.
-# Each database-controller is working on a specific databasse.
+# Each database-controller is working on a specific database.
 # There can be multiple controllers working on multiple databases at the same time.
 #
 module.exports = class DBController
@@ -46,7 +46,6 @@ module.exports = class DBController
 
   # Tries to create a database.
   # Will return an error to callback if something bad happened.
-  #
   setup : (callback) ->
     dbOptions =
       host: @config.host

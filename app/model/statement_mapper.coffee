@@ -69,7 +69,7 @@ module.exports = class StatementMapper
   save: (statement, callback) ->
     # Tries to store this statement and if there
     # is no id, it generates an id, otherwise
-    # ist check the two statements for equality
+    # it checks the two statements for equality
 
     @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
       if validatorErr
