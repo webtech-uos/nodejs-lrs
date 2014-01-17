@@ -58,10 +58,10 @@ module.exports = class Server
     @express.get '/logout', user.logout
     @express.get '/account', user.account
 
-    @express.get '/dialog/authorize', oauth.userAuthorization
-    @express.post '/dialog/authorize/decision', oauth.userDecision
-    @express.post '/oauth/request_token', oauth.requestToken
-    @express.post '/oauth/access_token', oauth.accessToken
+    @express.get '/OAuth/authorize', oauth.userAuthorization
+    @express.post '/OAuth/authorize', oauth.userDecision
+    @express.post '/OAuth/initiate', oauth.requestToken
+    @express.post '/OAuth/token', oauth.accessToken
 
     @dbController = new DBController config.database, (err) =>
       if err
