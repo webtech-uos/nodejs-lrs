@@ -13,4 +13,5 @@ describe 'POST an invalid statement', ->
               .post('/api/statements')
               .set('Content-Type', 'application/json')
               .send(data)
+              .expect('x-experience-api-version', '1.0.0')
               .expect(400, done)

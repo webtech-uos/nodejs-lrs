@@ -14,14 +14,13 @@ describe 'PUT', ->
           .query(
             statementId: '12345678-1234-5678-1234-567812345681')
           .send(data)
+          .expect('x-experience-api-version', '1.0.0')
           .expect(204, done)
 
   describe 'a different statement with same ID', ->
-    it 'SHOULD respond with 409 Conflict', (done) ->
+    testCase = (minimalStatement, done) ->
       factory = new StatementFactory env.dbController
-      minimalStatement = exampleStatements.minimalWithId
       factory.create minimalStatement, (err, statement) ->
-        # FIXME: someone is throwing empty objects around here?
         return done err if err?
         statement.actor.mbox = "mailto:test@example.com"
         env.request
@@ -29,4 +28,9 @@ describe 'PUT', ->
           .type('application/json')
           .query(statementId: statement.id)
           .send(statement)
+          .expect('x-experience-api-version', '1.0.0')
           .expect(409, done)
+    it 'SHOULD respond with 409 Conflict', (done) ->
+      testCase exampleStatements.minimalWithoutId, done
+    it 'SHOULD respond with 409 Conflict', (done) ->
+      testCase exampleStatements.minimalWithId, done

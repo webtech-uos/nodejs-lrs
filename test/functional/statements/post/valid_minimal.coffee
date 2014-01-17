@@ -13,6 +13,7 @@ describe 'POST', ->
           .post('/api/statements')
           .set('Content-Type', 'application/json')
           .send(data)
+          .expect('x-experience-api-version', '1.0.0')
           .expect(200, done)
 
   describe 'an identical statement with same ID', ->
@@ -25,6 +26,7 @@ describe 'POST', ->
           .post('/api/statements')
           .set('Content-Type', 'application/json')
           .send(statement)
+          .expect('x-experience-api-version', '1.0.0')
           .expect(200, done)
 
   describe 'an identical statement with different ID', ->
@@ -37,6 +39,7 @@ describe 'POST', ->
           .post('/api/statements')
           .set('Content-Type', 'application/json')
           .send(statement)
+          .expect('x-experience-api-version', '1.0.0')
           .expect(200, done)
 
   describe 'a different statement with same ID', ->
@@ -50,4 +53,8 @@ describe 'POST', ->
           .post('/api/statements')
           .set('Content-Type', 'application/json')
           .send(statement)
+          .expect('x-experience-api-version', '1.0.0')
           .expect(409, done)
+
+  describe 'a GET request as a POST request instead', ->
+    it 'MUST "differentiate a POST to add a Statement or to list Statements based on the parameters passed"'
