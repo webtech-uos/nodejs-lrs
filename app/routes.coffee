@@ -8,3 +8,5 @@ module.exports =
     get: 'statements#index'
   'statements/:id':
     get: 'statements#show'
+  'about':
+    get: 'about#info'
