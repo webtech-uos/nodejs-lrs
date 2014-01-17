@@ -57,8 +57,7 @@ module.exports = class StatementsController extends BaseController
   #
   update: (req, res, next) ->
     @mapper.save req.body, (err, statement) =>
-      # TODO: Handle Error
-      @send res, 204
+      @send res, err?.code ? 204, err
 
   # Called whenever the clients requests to get a specific statement.
   #
