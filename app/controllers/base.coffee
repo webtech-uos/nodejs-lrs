@@ -11,6 +11,7 @@ module.exports = class BaseController
   #
   _prepareResponse: (res) ->
     # res.header 'Content-Type', 'application/json'
+    res.header 'X-Experience-API-Version', '1.0.0'
 
   # Should be used instead of `res.send`, triggers any nessecary preparations.
   #
