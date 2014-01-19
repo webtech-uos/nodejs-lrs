@@ -88,6 +88,7 @@ module.exports = class Server
         controller = controllers[controllerName] ?= new (require "./controllers/#{controllerName}") @dbController
         logger.info "registering API route '#{method} #{url}'"
         @express[method] url, passport.authenticate 'token', { session: false } if config.server.oauth
+        @express[method] url, controller.before
         @express[method] url, do (controller, methodName) ->
           methods = controller[methodName]
           (params...) -> controller[methodName].apply(controller, params)

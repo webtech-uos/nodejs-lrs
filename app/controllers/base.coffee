@@ -1,3 +1,6 @@
+semver = require 'semver'
+version = require('../config').server.xApiVersion
+
 # Base class for all conttrollers.
 #
 module.exports = class BaseController
@@ -7,14 +10,22 @@ module.exports = class BaseController
   #
   constructor: (@dbController) ->
 
-  # Called before each send to set header field and prepare the response.
-  #
-  _prepareResponse: (res) ->
-    # res.header 'Content-Type', 'application/json'
-    res.header 'X-Experience-API-Version', '1.0.0'
 
-  # Should be used instead of `res.send`, triggers any nessecary preparations.
+  # Executed before each controller action.
   #
-  send: (res, status, object={}) ->
-    @_prepareResponse res
-    res.json status, object
+  before: (req, res, next) ->
+    res.header 'Content-Type', 'application/json'
+    res.header 'x-experience-api-version', version
+    
+    # validate version
+    reqVersion = req.get('x-experience-api-version')
+    if reqVersion and reqVersion isnt '1.0'
+      if semver.valid reqVersion
+        if semver.eq reqVersion, version
+          next()
+        else
+        res.send 400, "Currently only #{version} is supported."
+      else
+        res.send 400, "Invalid API version. Please refer to semver versioning."
+    else
+      next()

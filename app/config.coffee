@@ -1,6 +1,7 @@
 # All configuration should be stored here.
 
 module.exports =
+  version: '0.0.1'
   database: # couchDB
     host: 'localhost'
     port: 5984
@@ -9,7 +10,7 @@ module.exports =
   server: # REST server (xAPI)
     port: 8080
     name: 'nodejs-lrs'
-    version: '0.0.1'
+    xApiVersion: '1.0.0'
     oauth: false
   logger:
     file: 'log.txt'

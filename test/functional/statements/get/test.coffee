@@ -19,7 +19,7 @@ describe 'GET /api/statements', ->
     it 'should respond with 200 OK if requested api version is "1.0"', (done) ->
       env.request
         .get('/api/statements')
-        .send('x-experience-api-version', '1.0')
+        .set('x-experience-api-version', '1.0')
         .expect('content-type', /json/)
         .expect('x-experience-api-version', '1.0.0')
         .expect(200, done)
@@ -28,14 +28,14 @@ describe 'GET /api/statements', ->
     it 'should reject the request if requested api version is < "1.0.0"', (done) ->
       env.request
         .get('/api/statements')
-        .send('x-experience-api-version', '0.9.5')
+        .set('x-experience-api-version', '0.9.5')
         .expect('x-experience-api-version', '1.0.0')
         .expect(400, done)
 
     it 'should reject the request if requested api version is >= "1.1.0"', (done) ->
       env.request
         .get('/api/statements')
-        .send('x-experience-api-version', '2.5.1')
+        .set('x-experience-api-version', '2.5.1')
         .expect('x-experience-api-version', '1.0.0')
         .expect(400, done)
 

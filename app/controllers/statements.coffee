@@ -37,7 +37,7 @@ module.exports = class StatementsController extends BaseController
         if counter == statements.length
           # everything is done, send response
           # TODO send errors and ids ??
-          @send res, status, if errorOccured then errors else ids
+          res.json status, if errorOccured then errors else ids
 
   # Called whenever the clients requests to get all statements.
   #
@@ -49,7 +49,7 @@ module.exports = class StatementsController extends BaseController
       for s in statements
         result.push s
 
-      @send res, 200, result
+      res.json 200, result
 
   # Called whenever the clients requests to modify a specific statement.
   #
@@ -57,7 +57,7 @@ module.exports = class StatementsController extends BaseController
   #
   update: (req, res, next) ->
     @mapper.save req.body, (err, statement) =>
-      @send res, err?.code ? 204, err
+      res.json err?.code ? 204, err
 
   # Called whenever the clients requests to get a specific statement.
   #
@@ -66,10 +66,10 @@ module.exports = class StatementsController extends BaseController
   show: (req, res, next) ->
     @mapper.find req.params.id, (err, statement) =>
       # TODO: Handle Error
-      @send res, 200, statement
+      res.json 200, statement
 
   # Sets the required header fields.
   #
-  _prepareResponse: (res) ->
-    super res
+  before: (req, res, next) ->
     res.header 'X-Experience-API-Consistent-Through', new Date(new Date() - 1000*60*60).toISOString()
+    super
