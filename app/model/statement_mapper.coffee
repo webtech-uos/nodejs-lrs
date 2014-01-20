@@ -41,30 +41,34 @@ module.exports = class StatementMapper
   #   id of the statement to look up
   #
   find: (id, callback) ->
-    logger.info 'find statement: ' + id
-    @dbController.db.view 'find_by/id', key: id, (err, docs) =>
+    @validator.validateWithSchema id, 'UUID', (err) =>
       if err
-        logger.error "find: database access failed: #{JSON.stringify err}"
-        callback err, []
+        callback { code: 400, message: 'Invalid UUID supplied!' }
       else
-        switch docs.length
-          when 0
-            logger.info 'statement does not exist: ' + id
-            # there is no statement with the given id
-            # TODO callback ERROR, null
-            callback undefined
-          when 1
-            logger.info 'statement found: ' + id
-            # all right, one statement found
-            statement = docs[0].value
-            delete statement._id
-            delete statement._rev
-            callback undefined, statement
+        logger.info 'find statement: ' + id
+        @dbController.db.view 'find_by/id', key: id, (err, docs) =>
+          if err
+            logger.error "find: database access failed: #{JSON.stringify err}"
+            callback err, []
           else
-            # should not happen, there are more
-            # then one statements with the same id
-            # TODO callback ERROR, null
-            callback 'Multiple Statements for the same id found.'
+            switch docs.length
+              when 0
+                logger.info 'statement does not exist: ' + id
+                # there is no statement with the given id
+                # TODO callback ERROR, null
+                callback undefined
+              when 1
+                logger.info 'statement found: ' + id
+                # all right, one statement found
+                statement = docs[0].value
+                delete statement._id
+                delete statement._rev
+                callback undefined, statement
+              else
+                # should not happen, there are more
+                # then one statements with the same id
+                # TODO callback ERROR, null
+                callback 'Multiple Statements for the same id found.'
 
   # Saves this statement to the database
   #

@@ -81,7 +81,7 @@ module.exports = class StatementsController extends BaseController
         if statement
           res.json 200, statement
         else
-          res.json 404
+          res.json 404, "No statement with id #{id} found!"
     
 
   # Sets the required header fields.
