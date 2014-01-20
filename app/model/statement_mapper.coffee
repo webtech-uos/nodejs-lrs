@@ -29,6 +29,8 @@ module.exports = class StatementMapper
       else
         statements = []
         for doc in docs
+          delete doc.value._id
+          delete doc.value._rev
           statements.push doc.value
 
         callback undefined, statements

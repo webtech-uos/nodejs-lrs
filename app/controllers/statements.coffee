@@ -44,12 +44,15 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   index: (req, res, next) ->
-    @mapper.getAll (err, statements) =>
-      result = []
-      for s in statements
-        result.push s
-
-      res.json 200, result
+    id = req.query['statementId']
+    if id
+      @_sendStatement id, res
+    else
+      @mapper.getAll (err, statements) =>
+        result = []
+        for s in statements
+          result.push s
+        res.json 200, result
 
   # Called whenever the clients requests to modify a specific statement.
   #
@@ -64,9 +67,22 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   show: (req, res, next) ->
-    @mapper.find req.params.id, (err, statement) =>
-      # TODO: Handle Error
-      res.json 200, statement
+    @_sendStatement req.params.id, res
+      
+  # Sends a specific statement.
+  #
+  # @private
+  #
+  _sendStatement: (id, res) ->
+    @mapper.find id, (err, statement) =>
+      if err
+        res.json err.code ? 500, err
+      else
+        if statement
+          res.json 200, statement
+        else
+          res.json 404
+    
 
   # Sets the required header fields.
   #
