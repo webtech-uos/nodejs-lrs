@@ -58,10 +58,11 @@ module.exports = class Server
     @express.get '/logout', user.logout
     @express.get '/account', user.account
 
-    @express.get '/OAuth/authorize', oauth.userAuthorization
-    @express.post '/OAuth/authorize', oauth.userDecision
-    @express.post '/OAuth/initiate', oauth.requestToken
-    @express.post '/OAuth/token', oauth.accessToken
+    if config.server.oauth
+      @express.get config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
+      @express.post config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
+      @express.post config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
+      @express.post config.server.routePrefix+'/OAuth/token', oauth.accessToken
 
     @dbController = new DBController config.database, (err) =>
       if err
@@ -82,7 +83,7 @@ module.exports = class Server
   _registerRoutes: ->
     controllers = {}
     for url, route of routes
-      url = "/api/#{url}"
+      url = config.server.routePrefix+"/#{url}"
       for method, callback of route
         [controllerName, methodName] = callback.split '#'
         controller = controllers[controllerName] ?= new (require "./controllers/#{controllerName}") @dbController
