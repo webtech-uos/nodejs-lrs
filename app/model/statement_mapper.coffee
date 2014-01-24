@@ -22,18 +22,66 @@ module.exports = class StatementMapper
   # TODO: one should be able to specify the maximum number of returned statements
   #
   getAll: (callback) ->
-    @dbController.db.view 'find_by/id', (err, docs) =>
+    #TODO
+    startIndex = null
+    maxNumberStatements = 100
+    numberRequested = maxNumberStatements
+
+    @dbController.db.view 'counter/all_docs', (err, count) =>
       if err
         logger.error "getALL: database access failed: #{JSON.stringify err}"
         callback err, []
-      else
-        statements = []
-        for doc in docs
-          delete doc.value._id
-          delete doc.value._rev
-          statements.push doc.value
+      else if count.length > 0 # TODO
+        scount = count[0].value
+        if scount > numberRequested
+          @dbController.db.view 'list/ids', descending: true, (err,  ids) =>
+            if err
+              logger.error "getALL: database access failed: #{JSON.stringify err}"
+              callback err, []
+            else
+              startIndex = 0 unless startIndex
 
-        callback undefined, statements
+              if startIndex > scount
+                callback {code: 400, message: 'More statements requested as there are'}
+              else
+                if startIndex + numberRequested < scount
+                  endIndex = startIndex + numberRequested - 1
+                  # TODO generate URI for more statements
+                else
+                  endIndex = scount - 1
+
+                filterRange =
+                  startkey : ids[startIndex].key
+                  endkey: ids[endIndex].key
+                  descending: true
+
+                @dbController.db.view 'find_by/db_id', filterRange, (err, docs) =>
+                  if err
+                    logger.error "getALL: database access failed: #{JSON.stringify err}"
+                    callback err, []
+                  else
+                    console.log docs
+                    statements = []
+                    for doc in docs
+                      delete doc.value._id
+                      delete doc.value._rev
+                      statements.push doc.value
+
+                    callback undefined, statements
+
+        else
+          @dbController.db.view 'find_by/id', (err, docs) =>
+            if err
+              logger.error "getALL: database access failed: #{JSON.stringify err}"
+              callback err, []
+            else
+              statements = []
+              for doc in docs
+                delete doc.value._id
+                delete doc.value._rev
+                statements.push doc.value
+
+              callback undefined, statements
 
   # Returns the statement with the given id to the callback.
   #
@@ -49,7 +97,7 @@ module.exports = class StatementMapper
         @dbController.db.view 'find_by/id', key: id, (err, docs) =>
           if err
             logger.error "find: database access failed: #{JSON.stringify err}"
-            callback err, []
+            callbck err, []
           else
             switch docs.length
               when 0

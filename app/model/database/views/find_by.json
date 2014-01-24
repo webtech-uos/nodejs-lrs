@@ -2,6 +2,9 @@
     "_id": "_design/find_by",
     "language": "coffeescript",
     "views": {
+        "db_id" : {
+            "map": "(doc) ->\n  emit doc._id, doc"
+        },
         "id" : {
             "map": "(doc) ->\n  emit doc.id, doc"
         },

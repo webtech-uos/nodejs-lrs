@@ -16,7 +16,7 @@ module.exports = class StatementsController extends BaseController
   #
   create: (req, res, next) ->
     counter = 0
-
+    console.log "create..."
     ids = []
     statements = if req.body[0]? then req.body else [req.body]
     errors = {}
@@ -68,7 +68,7 @@ module.exports = class StatementsController extends BaseController
   #
   show: (req, res, next) ->
     @_sendStatement req.params.id, res
-      
+
   # Sends a specific statement.
   #
   # @private
@@ -82,7 +82,7 @@ module.exports = class StatementsController extends BaseController
           res.json 200, statement
         else
           res.json 404, "No statement with id #{id} found!"
-    
+
 
   # Sets the required header fields.
   #

@@ -69,7 +69,7 @@ module.exports = class Server
       else
         if config.server.port
           @express.listen config.server.port, (err) =>
-            logger.info 'server listening'
+            logger.info "server is listening on port #{config.server.port}..."
             callback err, @
         else
           callback undefined, @

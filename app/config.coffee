@@ -14,4 +14,4 @@ module.exports =
     oauth: false
   logger:
     file: 'log.txt'
-    level: 'error'
+    level: 'info'
