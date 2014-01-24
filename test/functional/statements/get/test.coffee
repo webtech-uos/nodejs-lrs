@@ -13,7 +13,7 @@ describe 'GET /api/statements', ->
       env.request
         .get('/api/statements')
         .expect('content-type', /json/)
-        .expect('x-experience-api-version', '1.0.0')
+        .expect('x-experience-api-version', env.apiVersion)
         .expect(200, done)
 
     it 'should respond with 200 OK if requested api version is "1.0"', (done) ->
@@ -21,7 +21,7 @@ describe 'GET /api/statements', ->
         .get('/api/statements')
         .set('x-experience-api-version', '1.0')
         .expect('content-type', /json/)
-        .expect('x-experience-api-version', '1.0.0')
+        .expect('x-experience-api-version', env.apiVersion)
         .expect(200, done)
 
     # TODO if we can fully support lower versions, change this test case
@@ -29,20 +29,20 @@ describe 'GET /api/statements', ->
       env.request
         .get('/api/statements')
         .set('x-experience-api-version', '0.9.5')
-        .expect('x-experience-api-version', '1.0.0')
+        .expect('x-experience-api-version', env.apiVersion)
         .expect(400, done)
 
     it 'should reject the request if requested api version is >= "1.1.0"', (done) ->
       env.request
         .get('/api/statements')
         .set('x-experience-api-version', '2.5.1')
-        .expect('x-experience-api-version', '1.0.0')
+        .expect('x-experience-api-version', env.apiVersion)
         .expect(400, done)
 
     it 'should have the required header fields', (done) ->
       env.request
         .get('/api/statements')
-        .expect('x-experience-api-version', '1.0.0')
+        .expect('x-experience-api-version', env.apiVersion)
         .end (err, res) ->
           return done err if err?
 
@@ -66,7 +66,7 @@ describe 'GET /api/statements', ->
           .get('/api/statements')
           .query(statementId: statement.id)
           .expect('Content-Type', /json/)
-          .expect('x-experience-api-version', '1.0.0')
+          .expect('x-experience-api-version', env.apiVersion)
           .expect(200)
           .end (err, res) ->
             return done err if err?
@@ -77,13 +77,13 @@ describe 'GET /api/statements', ->
     it 'should respond with 400 Bad Request', (done) ->
       env.request
         .get('/api/statements/1337')
-        .expect('x-experience-api-version', '1.0.0')
+        .expect('x-experience-api-version', env.apiVersion)
         .expect(400, done)
     it 'should respond with 400 Bad Request', (done) ->
       env.request
         .get('/api/statements/1337')
         .query(statementId: 'this-is-not-even-a-valid-uuid')
-        .expect('x-experience-api-version', '1.0.0')
+        .expect('x-experience-api-version', env.apiVersion)
         .expect(400, done)
 
 
@@ -97,14 +97,14 @@ describe 'GET /api/statements', ->
         env.request
           .get('/api/statements')
           .query(statementId: 'this-is-not-even-a-valid-uuid')
-          .expect('x-experience-api-version', '1.0.0')
+          .expect('x-experience-api-version', env.apiVersion)
           .expect(400, done)
     describe 'with a valid, but nonexisting statementId', ->
       it 'should respond with 404 Not Found', (done) ->
         env.request
           .get('/api/statements')
           .query(statementId: '12345678-1234-5678-1234-567812345681')
-          .expect('x-experience-api-version', '1.0.0')
+          .expect('x-experience-api-version', env.apiVersion)
           .expect(404, done)
 
   describe 'with a voidedStatementId parameter', ->
