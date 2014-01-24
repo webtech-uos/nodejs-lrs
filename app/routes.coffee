@@ -6,8 +6,6 @@ module.exports =
     put: 'statements#update'
     post: 'statements#create'
     get: 'statements#index'
-  'statements/:id':
-    get: 'statements#show'
   'about':
     get: 'about#info'
   'activities/state':

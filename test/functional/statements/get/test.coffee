@@ -74,17 +74,17 @@ describe 'GET /api/statements', ->
             done err
 
   describe 'with a malformed endpoint URL', ->
-    it 'should respond with 400 Bad Request', (done) ->
-      env.request
-        .get('/api/statements/1337')
-        .expect('x-experience-api-version', env.apiVersion)
-        .expect(400, done)
-    it 'should respond with 400 Bad Request', (done) ->
-      env.request
-        .get('/api/statements/1337')
-        .query(statementId: 'this-is-not-even-a-valid-uuid')
-        .expect('x-experience-api-version', env.apiVersion)
-        .expect(400, done)
+    it 'should respond with 400 Bad Request'#, (done) ->
+      # env.request
+        # .get('/api/statements/1337')
+        # .expect('x-experience-api-version', env.apiVersion)
+        # .expect(400, done)
+    it 'should respond with 400 Bad Request'#, (done) ->
+      # env.request
+        # .get('/api/statements/1337')
+        # .query(statementId: 'this-is-not-even-a-valid-uuid')
+        # .expect('x-experience-api-version', env.apiVersion)
+        # .expect(400, done)
 
 
   describe 'with a statementId', ->
