@@ -32,8 +32,10 @@ module.exports = class StatementMapper
         logger.error "getALL: database access failed: #{JSON.stringify err}"
         callback err, []
       else if count.length > 0 # TODO
+        console.log "B"
         scount = count[0].value
         if scount > numberRequested
+          console.log "A"
           @dbController.db.view 'list/ids', descending: true, (err,  ids) =>
             if err
               logger.error "getALL: database access failed: #{JSON.stringify err}"
@@ -82,7 +84,9 @@ module.exports = class StatementMapper
                 statements.push doc.value
 
               callback undefined, statements
-
+      else
+        #there are no statements in the db
+        callback undefined, []
   # Returns the statement with the given id to the callback.
   #
   # @param id
