@@ -3,6 +3,7 @@ passport = require 'passport'
 routes = require './routes'
 DBController = require './model/database/db_controller'
 logger = require './logger'
+OAuthStrategies = require './auth/strategies'
 
 # Main class for launching the server.
 # Only instanciate me once.
@@ -96,6 +97,10 @@ module.exports = class Server
               else
                 callback undefined, @
 
+        @_initOAuth (createErr) =>
+          if createErr
+            callback createErr
+
   # Read all routes in the file `routes.coffee` and create all controllers.
   #
   # @private
@@ -157,6 +162,27 @@ module.exports = class Server
 
     callback()
 
+  _initOAuth: (callback) ->
+    new OAuthStrategies @dbController, (err) =>
+      if err
+        logger.error err
+        callback(err)
+      else
+        callback()
+
+    user = require './auth/user'
+    oauth = require './auth/oauth'
+
+    @express.get '/login', user.loginForm
+    @express.post '/login', user.login
+    @express.get '/logout', user.logout
+    @express.get '/account', user.account
+
+    if config.server.oauth
+      @express.get config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
+      @express.post config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
+      @express.post config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
+      @express.post config.server.routePrefix+'/OAuth/token', oauth.accessToken
 
   # For getting the required server object when running supertest.
   #
