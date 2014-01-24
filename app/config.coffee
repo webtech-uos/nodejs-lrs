@@ -12,6 +12,7 @@ module.exports =
     name: 'nodejs-lrs'
     xApiVersion: '1.0.0'
     oauth: false
+    routePrefix: '/api'
   logger:
     file: 'log.txt'
     level: 'error'

@@ -82,7 +82,7 @@ module.exports = class Server
   _registerRoutes: ->
     controllers = {}
     for url, route of routes
-      url = "/api/#{url}"
+      url = config.server.routePrefix+"/#{url}"
       for method, callback of route
         [controllerName, methodName] = callback.split '#'
         controller = controllers[controllerName] ?= new (require "./controllers/#{controllerName}") @dbController
