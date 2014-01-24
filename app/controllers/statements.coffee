@@ -16,7 +16,6 @@ module.exports = class StatementsController extends BaseController
   #
   create: (req, res, next) ->
     counter = 0
-    console.log "create..."
     ids = []
     statements = if req.body[0]? then req.body else [req.body]
     errors = {}
