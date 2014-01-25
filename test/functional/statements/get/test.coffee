@@ -59,19 +59,20 @@ describe 'GET /api/statements', ->
 
   describe 'with an existing, valid statementId', ->
     it 'should return a valid StatementResult', (done) ->
-      factory = new StatementFactory env.dbController
-      factory.create exampleStatements.minimalWithId, (err, statement) ->
+      factory = new StatementFactory env.dbController, (err) =>
         return done err if err?
-        env.request
-          .get('/api/statements')
-          .query(statementId: statement.id)
-          .expect('Content-Type', /json/)
-          .expect('x-experience-api-version', '1.0.0')
-          .expect(200)
-          .end (err, res) ->
-            return done err if err?
-            err ?= new Error 'statements do not match' unless _.isEqual statement, res.body
-            done err
+        factory.create exampleStatements.minimalWithId, (err, statement) ->
+          return done err if err?
+          env.request
+            .get('/api/statements')
+            .query(statementId: statement.id)
+            .expect('Content-Type', /json/)
+            .expect('x-experience-api-version', '1.0.0')
+            .expect(200)
+            .end (err, res) ->
+              return done err if err?
+              err ?= new Error 'statements do not match' unless _.isEqual statement, res.body
+              done err
 
   describe 'with a malformed endpoint URL', ->
     it 'should respond with 400 Bad Request', (done) ->

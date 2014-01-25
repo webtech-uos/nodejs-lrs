@@ -14,8 +14,63 @@ module.exports = class StatementMapper
   # @param dbController
   #  the database-controller to be used by this mapper
   #
-  constructor: (@dbController) ->
+  constructor: (@dbController, callback) ->
     @validator = new Validator 'app/validator/schemas/'
+
+    viewFindBy =
+      db_id:
+        map: (doc)->
+          if doc.type == 'Statement'
+            emit doc._id, doc.value
+          else
+            emit null, null
+      id:
+        map: (doc)->
+          if doc.type == 'Statement'
+            emit doc.value.id, doc.value
+          else
+            emit null, null
+
+    viewList =
+      db_ids:
+        map: (doc)->
+          if doc.type == 'Statement'
+            emit doc._id, null
+          else
+            emit null, null
+
+    viewCounter =
+      all_statements:
+        map: (doc)->
+          if doc.type == 'Statement'
+            emit null, 1
+          else
+            emit null, 0
+        reduce: (key, values, rereduce)->
+          sum values
+
+    views = []
+    views.push '_design/find_statement_by' : viewFindBy
+    views.push '_design/list' : viewList
+    views.push '_design/counter' : viewCounter
+
+    counter = 0
+
+    for view in views
+      viewName = Object.keys(view)[0]
+      viewObject = view[viewName]
+      db = @dbController.db
+      do(viewName, viewObject)->
+        db.save viewName, viewObject, (err, res) =>
+          if err
+            logger.error "error while adding views into the database."
+            logger.error err
+            callback(err)
+          else
+            logger.info "inserted view #{viewName} into the database."
+            counter++
+            if counter == views.length
+              callback()
 
   # Returns all stored statements to the callback.
   #
@@ -27,16 +82,16 @@ module.exports = class StatementMapper
     maxNumberStatements = 100
     numberRequested = maxNumberStatements
 
-    @dbController.db.view 'counter/all_docs', (err, count) =>
+    @dbController.db.view 'counter/all_statements', (err, count) =>
       if err
-        logger.error "getALL: database access failed: #{JSON.stringify err}"
+        logger.error "getALL: database access with view counter/all_statements failed: #{JSON.stringify err}"
         callback err, []
       else if count.length > 0 # TODO
         scount = count[0].value
         if scount > numberRequested
-          @dbController.db.view 'list/ids', descending: true, (err,  ids) =>
+          @dbController.db.view 'list/db_ids', descending: true, (err,  ids) =>
             if err
-              logger.error "getALL: database access failed: #{JSON.stringify err}"
+              logger.error "getALL: database access with list/statement_ids failed: #{JSON.stringify err}"
               callback err, []
             else
               startIndex = 0 unless startIndex
@@ -55,30 +110,25 @@ module.exports = class StatementMapper
                   endkey: ids[endIndex].key
                   descending: true
 
-                @dbController.db.view 'find_by/db_id', filterRange, (err, docs) =>
+                @dbController.db.view 'find_statement_by/db_id', filterRange, (err, docs) =>
                   if err
-                    logger.error "getALL: database access failed: #{JSON.stringify err}"
+                    logger.error "getALL: database access with view find_statement_by/db_id failed: #{JSON.stringify err}"
                     callback err, []
                   else
-                    console.log docs
                     statements = []
                     for doc in docs
-                      delete doc.value._id
-                      delete doc.value._rev
                       statements.push doc.value
 
                     callback undefined, statements
 
         else
-          @dbController.db.view 'find_by/id', (err, docs) =>
+          @dbController.db.view 'find_statement_by/id', (err, docs) =>
             if err
-              logger.error "getALL: database access failed: #{JSON.stringify err}"
+              logger.error "getALL: database access with view find_statement_by/id failed: #{JSON.stringify err}"
               callback err, []
             else
               statements = []
               for doc in docs
-                delete doc.value._id
-                delete doc.value._rev
                 statements.push doc.value
 
               callback undefined, statements
@@ -95,11 +145,11 @@ module.exports = class StatementMapper
       if err
         callback { code: 400, message: 'Invalid UUID supplied!' }
       else
-        logger.info 'find statement: ' + id
-        @dbController.db.view 'find_by/id', key: id, (err, docs) =>
+        @dbController.db.view 'find_statement_by/id', key: id, (err, docs) =>
           if err
-            logger.error "find: database access failed: #{JSON.stringify err}"
-            callbck err, []
+            logger.error 'find statement: ' + id
+            logger.error "find: database access with view find_statement_by/id failed: #{JSON.stringify err}"
+            callback err, []
           else
             switch docs.length
               when 0
@@ -111,8 +161,6 @@ module.exports = class StatementMapper
                 logger.info 'statement found: ' + id
                 # all right, one statement found
                 statement = docs[0].value
-                delete statement._id
-                delete statement._rev
                 callback undefined, statement
               else
                 # should not happen, there are more
@@ -154,7 +202,11 @@ module.exports = class StatementMapper
                 callback {code: 409, message: 'Conflicting statement: Found a statement with the same id but a different content!' }
             else
               # statement does not exist yet, save it
-              @dbController.db.save statement, (err, res) =>
+              document =
+                type: 'Statement'
+                value: statement
+
+              @dbController.db.save document, (err, res) =>
                 callback err, statement
 
   # Checks whether two statements are equal

@@ -5,18 +5,14 @@ version = require('../config').server.xApiVersion
 #
 module.exports = class BaseController
 
-
-  # Creates a new controller.
-  #
-  constructor: (@dbController) ->
-
-
+  constructor: (@dbController, callback = -> ) ->
+    callback()
   # Executed before each controller action.
   #
   before: (req, res, next) ->
     res.header 'Content-Type', 'application/json'
     res.header 'x-experience-api-version', version
-    
+
     # validate version
     reqVersion = req.get('x-experience-api-version')
     if reqVersion and reqVersion isnt '1.0'
