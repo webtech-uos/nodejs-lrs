@@ -1,9 +1,0 @@
-{
-    "_id": "_design/list",
-    "language": "coffeescript",
-    "views": {
-        "ids": {
-            "map": "(doc) ->\n  emit doc._id, null"
-        }
-    }
-}
