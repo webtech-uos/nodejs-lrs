@@ -66,8 +66,8 @@ module.exports = class StatementsController extends BaseController
   #
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
-  show: (req, res, next) ->
-    @_sendStatement req.params.id, res
+  # show: (req, res, next) ->
+    # @_sendStatement req.params.id, res
 
   # Sends a specific statement.
   #

@@ -10,8 +10,10 @@ module.exports =
   server: # REST server (xAPI)
     port: 8080
     name: 'nodejs-lrs'
-    xApiVersion: '1.0.0'
+    xApiVersion: '1.0.1'
+    xApiVersionRange: '1.0.x'
     oauth: false
+    routePrefix: '/api'
   logger:
     file: 'log.txt'
     level: 'error'

@@ -58,10 +58,11 @@ module.exports = class Server
     @express.get '/logout', user.logout
     @express.get '/account', user.account
 
-    @express.get '/OAuth/authorize', oauth.userAuthorization
-    @express.post '/OAuth/authorize', oauth.userDecision
-    @express.post '/OAuth/initiate', oauth.requestToken
-    @express.post '/OAuth/token', oauth.accessToken
+    if config.server.oauth
+      @express.get config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
+      @express.post config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
+      @express.post config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
+      @express.post config.server.routePrefix+'/OAuth/token', oauth.accessToken
 
     @dbController = new DBController config.database, (dbErr) =>
       if dbErr
@@ -84,17 +85,22 @@ module.exports = class Server
               else
                 callback undefined, @
 
+  # Read all routes in the file `routes.coffee` and create all controllers.
+  #
+  # @private
+  #
   _createControllers: (callback) ->
     logger.info "creat controllers:"
     @controllers = {}
 
+    # lookup pathes and endpoints
     for url, route of routes
       for method, methodCallback of route
         [controllerName, methodName] = methodCallback.split '#'
         @controllers[controllerName] ?= {}
         @controllers[controllerName]['route'] ?= []
         routeInfo =
-          url: "/api/#{url}"
+          url: config.server.routePrefix+"/#{url}"
           method: method
           methodName: methodName
         @controllers[controllerName]['route'].push routeInfo
@@ -103,6 +109,7 @@ module.exports = class Server
     size = Object.keys(@controllers).length
     dbCon = @dbController
 
+    # create controllers
     for name, dict of @controllers
       logger.info name
       do(name, dict, dbCon, callback) ->
@@ -116,7 +123,7 @@ module.exports = class Server
             if counter == size
               callback()
 
-  # Used to register all routes contained in the file `routes.coffee`.
+  # Join all the routes to the controllers
   #
   # @private
   #
@@ -135,7 +142,7 @@ module.exports = class Server
         @express[endpoint.method] endpoint.url, controller.before
         @express[endpoint.method] endpoint.url, do (controller, methodName) ->
           methods = controller[methodName]
-          (params...) => controller[methodName].apply(controller, params)
+          (params...) -> controller[methodName].apply(controller, params)
 
     callback()
 

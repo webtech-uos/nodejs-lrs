@@ -14,7 +14,7 @@ describe 'PUT', ->
           .query(
             statementId: '12345678-1234-5678-1234-567812345681')
           .send(data)
-          .expect('x-experience-api-version', '1.0.0')
+          .expect('x-experience-api-version', env.apiVersion)
           .expect(204, done)
 
   describe 'a different statement with same ID', ->
@@ -29,7 +29,7 @@ describe 'PUT', ->
             .type('application/json')
             .query(statementId: statement.id)
             .send(statement)
-            .expect('x-experience-api-version', '1.0.0')
+            .expect('x-experience-api-version', env.apiVersion)
             .expect(409, done)
     it 'SHOULD respond with 409 Conflict', (done) ->
       testCase exampleStatements.minimalWithoutId, done
