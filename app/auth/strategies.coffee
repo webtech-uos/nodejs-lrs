@@ -41,7 +41,7 @@ passport.use 'consumer', new ConsumerStrategy(
   #  validate the request signature, failing authentication if it does not
   #  match.
   (consumerKey, done) ->
-    clients.find consumerKey, (err, client) ->
+    clients.findByConsumerKey consumerKey, (err, client) ->
       if err
         done err
       else
