@@ -28,7 +28,7 @@ server.serializeClient (client, done) ->
 server.deserializeClient (id, done) ->
   clients.find id, done
 
-module.exports = 
+module.exports =
 
 # Token endpoints
 #
@@ -52,16 +52,16 @@ module.exports =
   # to validate the `callbackURL` against a registered value.
   requestToken: [
     passport.authenticate 'consumer', { session: false }
-    
+
     server.requestToken (client, callbackURL, done) ->
       token = utils.uid(8)
-      secret = utils.uid(32)      
-      requestTokens.save token, secret, client.id, callbackURL, (err) ->
+      secret = utils.uid(32)
+      requestTokens.save token, secret, client.id, (err) ->
         if err
           done err
         else
           done null, token, secret
-       
+
     server.errorHandler()
   ]
 
@@ -87,16 +87,16 @@ module.exports =
   # about `requestToken`.
   accessToken: [
     passport.authenticate 'consumer', { session: false }
-    
+
     server.accessToken(
       (requestToken, verifier, info, done) ->
         done null, verifier is info.verifier
-        
+
       (client, requestToken, info, done) ->
         if info.approved and client.id is info.clientID
           token = utils.uid(16)
           secret = utils.uid(64)
-      
+
           accessTokens.save token, secret, info.userID, info.clientID, (err) ->
             if err
               done err
@@ -105,7 +105,7 @@ module.exports =
         else
           done null, false
     )
-    
+
     server.errorHandler()
   ]
 
@@ -129,10 +129,10 @@ module.exports =
   # the application's responsibility to authenticate the user and render a dialog
   # to obtain their approval (displaying details about the client requesting
   # authorization).  We accomplish that here by routing through `ensureLoggedIn()`
-  # first, and rendering the `dialog` view. 
+  # first, and rendering the `dialog` view.
   userAuthorization: [
     login.ensureLoggedIn()
-    
+
     server.userAuthorization (requestToken, done) ->
         requestTokens.find requestToken, (err, token) ->
           if err
@@ -143,7 +143,7 @@ module.exports =
                 done err
               else
                 done null, client, token.callbackURL
-                
+
     (req, res) ->
       res.render 'dialog',
         transactionID: req.oauth.transactionID
@@ -166,7 +166,7 @@ module.exports =
   # issuing the permanent access token.
   userDecision: [
     login.ensureLoggedIn()
-    
+
     server.userDecision (requestToken, user, res, done) ->
       verifier = utils.uid(8)
       requestTokens.approve requestToken, user.id, verifier, (err) ->
