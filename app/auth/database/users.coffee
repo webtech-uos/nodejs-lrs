@@ -3,7 +3,7 @@ users = [
   { id: 1, password: 'cats', name: 'henry' }
 ]
 
-printf = console.log
+logger = require '../../logger'
 
 module.exports =
   find: (id, done) ->
@@ -21,15 +21,15 @@ module.exports =
     @findByName userName, (dummy, user) ->
       if user
         #TODO: add DB remove here
-        printf("Removing user '#{userName}'")
+        logger.info "Removing user '#{userName}'"
       else
-        printf("User not found [#{userName}]")
+        logger.info "User not found [#{userName}]"
       done() if done
     return
 
   add: (userName, password, done) ->
     #TODO: add DB insert here
-    printf("Adding user '#{userName}, #{password}'")
+    logger.info "Adding user '#{userName}, #{password}'"
     done() if done
     return
 
@@ -53,15 +53,15 @@ module.exports =
     if userName && password && !exists
       @add(userName, password)
       return true
-    printf("Failed to add user '#{userName}, #{password}'")
+    logger.warn "Failed to add user '#{userName}, #{password}'"
     return false
 
   getAll: ->
     return users
 
-  list: (printer, done) ->
+  getList: (done) ->
     _users = @getAll()
+    result = []
     for user in _users
-      printer(user) if printer or printf(user)
-    done() if done
-    return
+      result.push { id: user.id, name: user.name }
+    done(result)

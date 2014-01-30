@@ -32,29 +32,29 @@ module.exports = (grunt) ->
     cmd = require 'codo/lib/command'
     cmd.run()
     
-  grunt.registerTask 'list_users', ->
-    users = require './app/auth/database/users'
-    users.list()
+  grunt.registerTask 'users', ['users:list']
 
-  grunt.registerTask 'add_user', ->
+  grunt.registerTask 'users:list', ->
     users = require './app/auth/database/users'
-    users.tryAdd(grunt.option('name'), grunt.option('pw'))
+    users.getList (users) ->
+      for user in users
+        grunt.log.writeln "#{user.id}\t#{user.name}"
 
-  grunt.registerTask 'add_users', ->
+  grunt.registerTask 'users:add', ->
     users = require './app/auth/database/users'
-    users.addFromFile(grunt.option('file'))
+    if grunt.option('name')
+      users.tryAdd(grunt.option('name'), grunt.option('pw'))
+    if grunt.option('file')
+      users.addFromFile(grunt.option('file'))
 
-  grunt.registerTask 'remove_users', ->
+  grunt.registerTask 'users:remove', ->
     users = require './app/auth/database/users'
-    users.removeAll()
+    if grunt.option('name')
+      users.remove(grunt.option('name'))
+    else if grunt.option('all')
+      users.removeAll()
 
-  grunt.registerTask 'remove_user', ->
-    users = require './app/auth/database/users'
-    users.remove(grunt.option('name'))
-
-  grunt.registerTask 'users_man', ->
-    console.log("add_user [-name] [-pw]")
-    console.log("add_users [-file]")
-    console.log("remove_user [-name]")
-    console.log("remove_users")
-    console.log("list_users")
+  grunt.registerTask 'users:help', ->
+    grunt.log.writeln 'users:add [-name] [-pw] [-file]'
+    grunt.log.writeln 'users:remove [-name]'
+    grunt.log.writeln 'users:list'
