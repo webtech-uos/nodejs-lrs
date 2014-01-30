@@ -1,11 +1,13 @@
 module.exports = class DocumentMapper
 
-  constructor: (@dbController) ->
+  constructor: (@dbController, callback) ->
     @dbController.db.save '_design/activities-state',
-      find_by_stateId:
+      (find_by_stateId:
         map: (doc) ->
           if (doc.type == "activity-state")
             emit(doc.value.value.stateId, doc.value)
+      ),
+      callback
 
   save: (document, callback, docType) ->
     object = 
