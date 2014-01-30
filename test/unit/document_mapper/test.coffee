@@ -41,12 +41,12 @@ describe 'DocumentMapper', ->
   it 'should return document not found error', (done) ->
     documentMapper.find 'jahsjd', (err, docs) ->
       if err?
-        if err.http_code == 404
+        if err.httpCode is 404
           done()
         else
           done err
       else
-        if docs.length != 0
+        if docs.length isnt 0
           done new Error "Found document for non-existing stateId"
         else 
           done()

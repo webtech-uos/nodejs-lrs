@@ -30,7 +30,7 @@ module.exports = class StatementsController extends BaseController
           if err
             logger.error err
             errors[statement] = err
-            status = err.code ? 500
+            status = err.httpCode ? 500
             errorOccured = true
           else
             ids.push createdStatement.id
@@ -60,7 +60,7 @@ module.exports = class StatementsController extends BaseController
   #
   update: (req, res, next) ->
     @mapper.save req.body, (err, statement) =>
-      res.json err?.code ? 204, err
+      res.json err?.httpCode ? 204, err
 
   # Called whenever the clients requests to get a specific statement.
   #
@@ -76,7 +76,7 @@ module.exports = class StatementsController extends BaseController
   _sendStatement: (id, res) ->
     @mapper.find id, (err, statement) =>
       if err
-        res.json err.code ? 500, err
+        res.json err.httpCode ? 500, err
       else
         if statement
           res.json 200, statement

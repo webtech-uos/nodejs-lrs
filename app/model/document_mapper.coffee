@@ -23,7 +23,7 @@ module.exports = class DocumentMapper
       else
         if docs.length == 0
           err = new Error "Document not found"
-          err.http_code = 404
+          err.httpCode = 404
           callback err
           return
         else

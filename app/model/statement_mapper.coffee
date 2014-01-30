@@ -97,7 +97,9 @@ module.exports = class StatementMapper
               startIndex = 0 unless startIndex
 
               if startIndex > scount
-                callback {code: 400, message: 'More statements requested as there are'}
+                err = new Error 'More statements requested as there are'
+                err.httpCode = 400
+                callback err
               else
                 if startIndex + numberRequested < scount
                   endIndex = startIndex + numberRequested - 1
@@ -143,7 +145,9 @@ module.exports = class StatementMapper
   find: (id, callback) ->
     @validator.validateWithSchema id, 'UUID', (err) =>
       if err
-        callback { code: 400, message: 'Invalid UUID supplied!' }
+        err = new Error 'Invalid UUID supplied!'
+        err.httpCode = 400
+        callback err
       else
         @dbController.db.view 'find_statement_by/id', key: id, (err, docs) =>
           if err
@@ -177,7 +181,9 @@ module.exports = class StatementMapper
 
     @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
       if validatorErr
-        callback {code: 400, message: 'Statement is invalid.', details: validatorErr }
+        err = new Error "Statement is invalid: #{validatorErr}"
+        err.httpCode = 400
+        callback err
       else
         unless statement.id
           # No id is given, generate one
@@ -199,7 +205,9 @@ module.exports = class StatementMapper
               else
                 # conflict, there is a statement with the
                 # same id but a different content
-                callback {code: 409, message: 'Conflicting statement: Found a statement with the same id but a different content!' }
+                err = new Error 'Conflicting statement: Found a statement with the same id but a different content!'
+                err.httpCode = 409
+                callback err
             else
               # statement does not exist yet, save it
               document =
