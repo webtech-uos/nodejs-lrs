@@ -1,4 +1,3 @@
-
 module.exports = class DocumentMapper
 
   constructor: (@dbController) ->
@@ -8,15 +7,15 @@ module.exports = class DocumentMapper
           if (doc.type == "activity-state")
             emit(doc.value.value.stateId, doc.value)
 
-  save: (document, callback) ->
+  save: (document, callback, docType) ->
     object = 
       value: document
-      type: 'activity-state'
+      type: docType
 
     @dbController.db.save object, (err, result) ->
       callback(err, result)
 
-  find: (stateId, callback) ->
+  findStateById: (stateId, callback) ->
     @dbController.db.view 'activities-state/find_by_stateId', key: stateId, (err, docs) ->
       if err?
         callback err
