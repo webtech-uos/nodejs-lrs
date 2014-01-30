@@ -10,7 +10,9 @@ logger = require './logger'
 #
 module.exports = class Server
 
-  # Should only be called once.
+  # stores all the methods available for the given route
+  methods: {}
+
   # Launches the learning record store.
   #
   # @param config
@@ -39,12 +41,21 @@ module.exports = class Server
     # @express.use express.json()
     @express.use express.bodyParser()
 
+    @express.use (req, res, next) =>
+      if req.method is 'OPTIONS'
+        res.header 'Access-Control-Allow-Origin', '*'
+        res.header 'Access-Control-Allow-Methods', @methods[req.path]
+        res.header 'Access-Control-Allow-Headers',
+          'Authorization, Content-Type, X-Experience-API-Version, X-Experience-API-Consistent-Through'
+        res.header 'X-Experience-API-Version', config.server.xApiVersion
+      next()
+
     # FIXME: Not exactly a secret
     @express.use express.session { secret: 'keyboard cat' }
 
     @express.use passport.initialize()
     @express.use passport.session()
-    @express.use @express.router
+    # @express.use @express.router
     @express.use express.errorHandler
       dumpExceptions: true
       showStack: true
@@ -100,7 +111,7 @@ module.exports = class Server
         @controllers[controllerName] ?= {}
         @controllers[controllerName]['route'] ?= []
         routeInfo =
-          url: config.server.routePrefix+"/#{url}"
+          url: "#{config.server.routePrefix}/#{url}"
           method: method
           methodName: methodName
         @controllers[controllerName]['route'].push routeInfo
@@ -136,6 +147,8 @@ module.exports = class Server
 
       for endpoint in dict['route']
         methodName = endpoint.methodName
+        meth = endpoint.method.toUpperCase()
+        @methods[endpoint.url] = if @methods[endpoint.url] then @methods[endpoint.url] + ", #{meth}" else meth
         logger.info "connect method: '#{endpoint.method}' to url: '#{endpoint.url}' and the method:'#{endpoint.methodName}'."
 
         @express[endpoint.method] endpoint.url, passport.authenticate 'token', { session: false } if config.server.oauth
