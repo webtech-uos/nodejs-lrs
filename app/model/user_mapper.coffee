@@ -138,81 +138,43 @@ module.exports = class UserMapper
       else
         #there are no statements in the db
         callback undefined, []
-  # Returns the statement with the given id to the callback.
+
+  # Returns the user with the given id to the callback.
   #
   # @param id
-  #   id of the statement to look up
+  #   id of the user to look up
   #
   find: (id, callback) ->
-    @validator.validateWithSchema id, 'UUID', (err) =>
+    @dbController.db.view 'find_user_by/id', key: id, (err, docs) =>
       if err
-        callback { code: 400, message: 'Invalid UUID supplied!' }
+        logger.error 'find user: ' + id
+        logger.error "find: database access with view find_user_by/id failed: #{JSON.stringify err}"
+        callback err, []
       else
-        @dbController.db.view 'find_statement_by/id', key: id, (err, docs) =>
-          if err
-            logger.error 'find statement: ' + id
-            logger.error "find: database access with view find_statement_by/id failed: #{JSON.stringify err}"
-            callback err, []
-          else
-            switch docs.length
-              when 0
-                logger.info 'statement does not exist: ' + id
-                # there is no statement with the given id
-                # TODO callback ERROR, null
-                callback undefined
-              when 1
-                logger.info 'statement found: ' + id
-                # all right, one statement found
-                statement = docs[0].value
-                callback undefined, statement
-              else
-              # should not happen, there are more
-              # then one statements with the same id
-              # TODO callback ERROR, null
-                callback 'Multiple Statements for the same id found.'
+        if docs.length == 0
+          logger.info 'user does not exist: ' + id
+          callback undefined
+        else
+          callback undefined, docs[0].value
 
-  # Saves this statement to the database
+  # Saves a user to the database
   #
-  save: (statement, callback) ->
-    # Tries to store this statement and if there
-    # is no id, it generates an id, otherwise
-    # it checks the two statements for equality
+  save: (user, callback) ->
+    unless user.id
+      # No id is given, generate one
+      user.id = utils.generateUUID()
 
-    @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
-      if validatorErr
-        callback {code: 400, message: 'Statement is invalid.', details: validatorErr }
+    @find user.id, (err, foundUser) =>
+      if err
+        logger.error 'find returned error: ' + err
+        callback err
       else
-        unless statement.id
-          # No id is given, generate one
-          statement.id = utils.generateUUID()
-          logger.info 'generated statement id: ' + statement.id
-        # Check if the given id is already in the database
+        if foundUser
+          callback null, foundUser
+        else
+          document =
+            type: 'User'
+            value: user
 
-        @find statement.id, (err, foundStatement) =>
-          if err
-            logger.error 'find returned error: ' + err
-            # There is no statement with the given id,
-            # the given statement will be inserted
-            callback err
-          else
-            if foundStatement
-              if @_isEqual statement, foundStatement
-                # all right statement is already in the database
-                callback undefined, statement
-              else
-                # conflict, there is a statement with the
-                # same id but a different content
-                callback {code: 409, message: 'Conflicting statement: Found a statement with the same id but a different content!' }
-            else
-              # statement does not exist yet, save it
-              document =
-                type: 'Statement'
-                value: statement
-
-              @dbController.db.save document, (err, res) =>
-                callback err, statement
-
-  # Checks whether two statements are equal
-  # Currently by performing a deep comparison. TODO
-  _isEqual: (s1, s2) ->
-    _.isEqual(s1, s2)
+          @dbController.db.save document, (err, res) =>
+            callback err, user
