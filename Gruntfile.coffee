@@ -35,10 +35,13 @@ module.exports = (grunt) ->
   grunt.registerTask 'users', ['users:list']
 
   grunt.registerTask 'users:list', ->
-    users = require './app/auth/database/users'
-    users.getList (users) ->
-      for user in users
-        grunt.log.writeln "#{user.id}\t#{user.name}"
+    done = @async()
+
+    initUserMapper (err, mapper) ->
+      mapper.getAll (err, users) ->
+        for user in users
+          grunt.log.writeln "#{user.value.id}\t#{user.value.username}"
+        done()
 
   grunt.registerTask 'users:add', ->
     done = @async()

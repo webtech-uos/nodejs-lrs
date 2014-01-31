@@ -35,10 +35,10 @@ module.exports = class UserMapper
             emit null, null
 
     viewList =
-      db_ids:
+      all:
         map: (doc)->
           if doc.type == 'User'
-            emit doc._id, null
+            emit doc._id, doc.value
           else
             emit null, null
 
@@ -96,69 +96,11 @@ module.exports = class UserMapper
             if counter == views.length
               addUser()
 
-  # Returns all stored statements to the callback.
-  #
-  # TODO: one should be able to specify the maximum number of returned statements
+  # Returns all stored users to the callback.
   #
   getAll: (callback) ->
-    #TODO
-    startIndex = null
-    maxNumberStatements = 100
-    numberRequested = maxNumberStatements
-
-    @dbController.db.view 'counter/all_statements', (err, count) =>
-      if err
-        logger.error "getALL: database access with view counter/all_statements failed: #{JSON.stringify err}"
-        callback err, []
-      else if count.length > 0 # TODO
-        scount = count[0].value
-        if scount > numberRequested
-          @dbController.db.view 'list/db_ids', descending: true, (err,  ids) =>
-            if err
-              logger.error "getALL: database access with list/statement_ids failed: #{JSON.stringify err}"
-              callback err, []
-            else
-              startIndex = 0 unless startIndex
-
-              if startIndex > scount
-                callback {code: 400, message: 'More statements requested as there are'}
-              else
-                if startIndex + numberRequested < scount
-                  endIndex = startIndex + numberRequested - 1
-                  # TODO generate URI for more statements
-                else
-                  endIndex = scount - 1
-
-                filterRange =
-                  startkey : ids[startIndex].key
-                  endkey: ids[endIndex].key
-                  descending: true
-
-                @dbController.db.view 'find_statement_by/db_id', filterRange, (err, docs) =>
-                  if err
-                    logger.error "getALL: database access with view find_statement_by/db_id failed: #{JSON.stringify err}"
-                    callback err, []
-                  else
-                    statements = []
-                    for doc in docs
-                      statements.push doc.value
-
-                    callback undefined, statements
-
-        else
-          @dbController.db.view 'find_statement_by/id', (err, docs) =>
-            if err
-              logger.error "getALL: database access with view find_statement_by/id failed: #{JSON.stringify err}"
-              callback err, []
-            else
-              statements = []
-              for doc in docs
-                statements.push doc.value
-
-              callback undefined, statements
-      else
-        #there are no statements in the db
-        callback undefined, []
+    @dbController.db.view 'user_list/all', (err, users) ->
+      callback null, users
 
   # Returns the user with the given id to the callback.
   #
