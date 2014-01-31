@@ -57,8 +57,29 @@ module.exports = class UserMapper
     views.push '_design/user_list' : viewList
     views.push '_design/user_counter' : viewCounter
 
-    counter = 0
+    addUser = () =>
+      users = [
+        {
+          username: 'bob'
+          password: 'pizza'
+        }
+        {
+          username: 'henry'
+          password: 'cats'
+        }
+      ]
 
+      counter = 0
+      for user in users
+        @save user, (err) ->
+          if err
+            callback err
+          else
+            counter++
+            if counter == users.length
+              callback()
+
+    counter = 0
     for view in views
       viewName = Object.keys(view)[0]
       viewObject = view[viewName]
@@ -73,7 +94,7 @@ module.exports = class UserMapper
             logger.info "inserted view #{viewName} into the database."
             counter++
             if counter == views.length
-              callback()
+              addUser()
 
   # Returns all stored statements to the callback.
   #
