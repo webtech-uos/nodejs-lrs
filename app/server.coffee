@@ -1,6 +1,5 @@
 express = require 'express'
 passport = require 'passport'
-config = require './config'
 routes = require './routes'
 DBController = require './model/database/db_controller'
 logger = require './logger'
@@ -15,8 +14,8 @@ module.exports = class Server
 
   # Launches the learning record store.
   #
-  # @param config
-  #   the configuration object, for details
+  # @param @config
+  #   the @configuration object, for details
   #   take a look at `config.coffee`
   #
   # @param callback
@@ -25,7 +24,7 @@ module.exports = class Server
   #   If no error occured one can assume a valid database
   #   connection and listening HTTP server.
   #
-  constructor: (config, callback = ->) ->
+  constructor: (@config, callback = ->) ->
     logger.info "Let the magic happen."
 
     @express = express()
@@ -47,7 +46,7 @@ module.exports = class Server
         res.header 'Access-Control-Allow-Methods', @methods[req.path]
         res.header 'Access-Control-Allow-Headers',
           'Authorization, Content-Type, X-Experience-API-Version, X-Experience-API-Consistent-Through'
-        res.header 'X-Experience-API-Version', config.server.xApiVersion
+        res.header 'X-Experience-API-Version', @config.server.xApiVersion
       next()
 
     # FIXME: Not exactly a secret
@@ -69,13 +68,14 @@ module.exports = class Server
     @express.get '/logout', user.logout
     @express.get '/account', user.account
 
-    if config.server.oauth
-      @express.get config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
-      @express.post config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
-      @express.post config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
-      @express.post config.server.routePrefix+'/OAuth/token', oauth.accessToken
+    if @config.server.oauth
+      logger.info 'OAuth protection enabled'
+      @express.get @config.server.routePrefix + '/OAuth/authorize', oauth.userAuthorization
+      @express.post @config.server.routePrefix + '/OAuth/authorize', oauth.userDecision
+      @express.post @config.server.routePrefix + '/OAuth/initiate', oauth.requestToken
+      @express.post @config.server.routePrefix + '/OAuth/token', oauth.accessToken
 
-    @dbController = new DBController config.database, (dbErr) =>
+    @dbController = new DBController @config.database, (dbErr) =>
       if dbErr
         callback dbErr
       else
@@ -86,8 +86,8 @@ module.exports = class Server
             @_registerRoutes @controllers, (registerErr) =>
               if registerErr
                 callback registerErr
-              else if config.server.port
-                @express.listen config.server.port, (listenErr) =>
+              else if @config.server.port
+                @express.listen @config.server.port, (listenErr) =>
                   if listenErr
                     callback listenErr, @
                   else
@@ -111,7 +111,7 @@ module.exports = class Server
         @controllers[controllerName] ?= {}
         @controllers[controllerName]['route'] ?= []
         routeInfo =
-          url: "#{config.server.routePrefix}/#{url}"
+          url: "#{@config.server.routePrefix}/#{url}"
           method: method
           methodName: methodName
         @controllers[controllerName]['route'].push routeInfo
@@ -150,8 +150,7 @@ module.exports = class Server
         meth = endpoint.method.toUpperCase()
         @methods[endpoint.url] = if @methods[endpoint.url] then @methods[endpoint.url] + ", #{meth}" else meth
         logger.info "connect method: '#{endpoint.method}' to url: '#{endpoint.url}' and the method:'#{endpoint.methodName}'."
-
-        @express[endpoint.method] endpoint.url, passport.authenticate 'token', { session: false } if config.server.oauth
+        @express[endpoint.method] endpoint.url, passport.authenticate 'token', { session: false } if @config.server.oauth
         @express[endpoint.method] endpoint.url, controller.before
         @express[endpoint.method] endpoint.url, do (controller, methodName) ->
           methods = controller[methodName]
