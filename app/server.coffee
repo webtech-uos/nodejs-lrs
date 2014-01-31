@@ -178,11 +178,11 @@ module.exports = class Server
     @express.get '/logout', user.logout
     @express.get '/account', user.account
 
-    if config.server.oauth
-      @express.get config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
-      @express.post config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
-      @express.post config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
-      @express.post config.server.routePrefix+'/OAuth/token', oauth.accessToken
+    if @config.server.oauth
+      @express.get @config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
+      @express.post @config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
+      @express.post @config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
+      @express.post @config.server.routePrefix+'/OAuth/token', oauth.accessToken
 
   # For getting the required server object when running supertest.
   #
