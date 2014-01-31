@@ -18,8 +18,7 @@ describe 'DocumentMapper', ->
     config.database.name = 'nodejs-lrs-documentmapper-test'
     config.database.reset = true
     dbController = new DBController config.database, (err) ->
-      documentMapper = new DocumentMapper(dbController)
-      done()
+      documentMapper = new DocumentMapper(dbController, done)
 
   after (done) ->
     dbController.deleteDB done
