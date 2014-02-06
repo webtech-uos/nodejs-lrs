@@ -212,6 +212,16 @@ module.exports = class RequestMapper
               @dbController.db.save document, (err, res) =>
                 callback err, statement
 
+  # Stores a request token in the database
+  #
+  save: (requestToken, callback) ->
+    document =
+      type: 'RequestToken'
+      value: requestToken
+
+    @dbController.db.save document, (err, res) =>
+      callback err, requestToken
+
   # Checks whether two statements are equal
   # Currently by performing a deep comparison. TODO
   _isEqual: (s1, s2) ->

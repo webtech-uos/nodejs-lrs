@@ -54,10 +54,16 @@ module.exports = class OAuth
     [
       passport.authenticate 'consumer', { session: false }
 
-      server.requestToken (client, callbackURL, done) ->
+      server.requestToken (client, callbackURL, done) =>
         token = utils.uid(8)
         secret = utils.uid(32)
-        requestTokens.save token, secret, client.id, (err) ->
+
+        requestToken =
+          clientID: client.id
+          token: token
+          secret: secret
+
+        @requestTokenMapper.save requestToken, (err) ->
           if err
             done err
           else
