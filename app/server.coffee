@@ -60,21 +60,12 @@ module.exports = class Server
       dumpExceptions: true
       showStack: true
 
-    require './auth/strategies'
+    # initialize user routes
     user = require './auth/user'
-    oauth = require './auth/oauth'
-
     @express.get '/login', user.loginForm
     @express.post '/login', user.login
     @express.get '/logout', user.logout
     @express.get '/account', user.account
-
-    if @config.server.oauth
-      logger.info 'OAuth protection enabled'
-      @express.get @config.server.routePrefix + '/OAuth/authorize', oauth.userAuthorization
-      @express.post @config.server.routePrefix + '/OAuth/authorize', oauth.userDecision
-      @express.post @config.server.routePrefix + '/OAuth/initiate', oauth.requestToken
-      @express.post @config.server.routePrefix + '/OAuth/token', oauth.accessToken
 
     @dbController = new DBController @config.database, (dbErr) =>
       if dbErr
@@ -170,13 +161,7 @@ module.exports = class Server
       else
         callback()
 
-    user = require './auth/user'
     oauth = require './auth/oauth'
-
-    @express.get '/login', user.loginForm
-    @express.post '/login', user.login
-    @express.get '/logout', user.logout
-    @express.get '/account', user.account
 
     if @config.server.oauth
       @express.get @config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
