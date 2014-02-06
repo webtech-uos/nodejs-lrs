@@ -175,10 +175,10 @@ module.exports = class Server
 
             # set up the OAuth routes
             oauth = new OAuth @accessTokenMapper, @clientMapper, @requestTokenMapper, @userMapper
-            @express.get @config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
-            @express.post @config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
-            @express.post @config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
-            @express.post @config.server.routePrefix+'/OAuth/token', oauth.accessToken
+            @express.get @config.server.routePrefix+'/OAuth/authorize', oauth.createUserAuthorizationMiddleware()
+            @express.post @config.server.routePrefix+'/OAuth/authorize', oauth.createUserDecisionMiddleware()
+            @express.post @config.server.routePrefix+'/OAuth/initiate', oauth.createRequestTokenMiddleware()
+            @express.post @config.server.routePrefix+'/OAuth/token', oauth.createAccessTokenMiddleware()
 
             callback()
 
