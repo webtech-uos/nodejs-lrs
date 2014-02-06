@@ -57,22 +57,21 @@ describe 'GET /api/statements', ->
             'ISO8061Date',
             done
 
-  describe 'with an existing, valid statementId', ->
+  describe.only 'with an existing, valid statementId', ->
     it 'should return a valid StatementResult', (done) ->
-      factory = new StatementFactory env.dbController, (err) =>
+      factory = new StatementFactory env.dbController
+      console.log exampleStatements.minimalWithId
+      factory.create exampleStatements.minimalWithId, (err, statement) ->
         return done err if err?
-        factory.create exampleStatements.minimalWithId, (err, statement) ->
-          return done err if err?
-          env.request
-            .get('/api/statements')
-            .query(statementId: statement.id)
-            .expect('Content-Type', /json/)
-            .expect('x-experience-api-version', env.apiVersion)
-            .expect(200)
-            .end (err, res) ->
-              return done err if err?
-              err ?= new Error 'statements do not match' unless _.isEqual statement, res.body
-              done err
+        env.request
+          .get('/api/statements')
+          .query(statementId: statement.id)
+          .expect('Content-Type', /json/)
+          .expect('x-experience-api-version', env.apiVersion)
+          .expect(200)
+          .end (err, res) ->
+            err ?= new Error 'statements do not match' unless _.isEqual statement, res.body
+            done err
 
   describe 'with a malformed endpoint URL', ->
     it 'should respond with 400 Bad Request'#, (done) ->
