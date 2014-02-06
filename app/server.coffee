@@ -3,7 +3,12 @@ passport = require 'passport'
 routes = require './routes'
 DBController = require './model/database/db_controller'
 logger = require './logger'
+AccessTokenMapper = require './model/access_token_mapper'
+ClientMapper = require './model/client_mapper'
+RequestTokenMapper = require './model/request_token_mapper'
+UserMapper = require './model/user_mapper'
 OAuthStrategies = require './auth/strategies'
+OAuth = require './auth/oauth'
 
 # Main class for launching the server.
 # Only instanciate me once.
@@ -153,21 +158,35 @@ module.exports = class Server
 
     callback()
 
-  _initOAuth: (callback) ->
-    new OAuthStrategies @dbController, (err) =>
-      if err
-        logger.error err
-        callback(err)
-      else
-        callback()
-
-    oauth = require './auth/oauth'
-
+  # Initializes the OAuth middleware if it's enabled in the configuration.
+  #
+  _initOAuth: (callback) =>
     if @config.server.oauth
-      @express.get @config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
-      @express.post @config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
-      @express.post @config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
-      @express.post @config.server.routePrefix+'/OAuth/token', oauth.accessToken
+      counter = 0
+      mapperCreated = (err) =>
+        counter++
+
+        if counter == 4
+          if err
+            callback err
+          else
+            # initialise the OAuth middlewares for Passport
+            new OAuthStrategies @accessTokenMapper, @clientMapper, @requestTokenMapper, @userMapper
+
+            # set up the OAuth routes
+            oauth = new OAuth @accessTokenMapper, @clientMapper, @requestTokenMapper, @userMapper
+            @express.get @config.server.routePrefix+'/OAuth/authorize', oauth.userAuthorization
+            @express.post @config.server.routePrefix+'/OAuth/authorize', oauth.userDecision
+            @express.post @config.server.routePrefix+'/OAuth/initiate', oauth.requestToken
+            @express.post @config.server.routePrefix+'/OAuth/token', oauth.accessToken
+
+            callback()
+
+      # create the OAuth related mappers
+      @accessTokenMapper = new AccessTokenMapper @dbController, mapperCreated
+      @clientMapper = new ClientMapper @dbController, mapperCreated
+      @requestTokenMapper = new RequestTokenMapper @dbController, mapperCreated
+      @userMapper = new UserMapper @dbController, mapperCreated
 
   # For getting the required server object when running supertest.
   #

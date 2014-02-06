@@ -4,7 +4,6 @@ login = require 'connect-ensure-login'
 requestTokens = require './database/request_tokens'
 utils = require '../utils'
 
-
 # create OAuth server
 server = oauthorize.createServer()
 
@@ -27,13 +26,16 @@ server.serializeClient (client, done) ->
 server.deserializeClient (id, done) ->
   clients.find id, done
 
-module.exports =
+module.exports = class OAuth
 
-# Token endpoints
-#
-# This following endpoints are used by a client to obtain tokens.  First, a
-# temporary request token is used, which will be authorized by the user.  Once
-# authorized, it can be exchanged for a permanent access token.
+  constructor: (@accessTokenMapper, @clientMapper, @requestTokenMapper, @userMapper) ->
+
+
+    # Token endpoints
+    #
+    # This following endpoints are used by a client to obtain tokens.  First, a
+    # temporary request token is used, which will be authorized by the user.  Once
+    # authorized, it can be exchanged for a permanent access token.
 
   # Request token endpoint
   #

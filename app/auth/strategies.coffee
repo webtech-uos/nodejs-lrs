@@ -5,28 +5,9 @@ TokenStrategy = require('passport-http-oauth').TokenStrategy
 users = require './database/users'
 requestTokens = require './database/request_tokens'
 accessTokens = require './database/access_tokens'
-AccessTokenMapper = require '../model/access_token_mapper'
-ClientMapper = require '../model/client_mapper'
-RequestTokenMapper = require '../model/request_token_mapper'
-UserMapper = require '../model/user_mapper'
 
 module.exports = class Strategies
-  constructor: (dbController, callback) ->
-
-    counter = 0
-    mapperCallback = (err) ->
-      counter++
-
-      if counter == 4
-        if err
-          callback err
-        else
-          callback()
-
-    accessTokenMapper = new AccessTokenMapper dbController, mapperCallback
-    clientMapper = new ClientMapper dbController, mapperCallback
-    requestTokenMapper = new RequestTokenMapper dbController, mapperCallback
-    userMapper = new UserMapper dbController, mapperCallback
+  constructor: (accessTokenMapper, clientMapper, requestTokenMapper, userMapper) ->
 
     # This strategy is used to authenticate users based on a username and password.
     # Anytime a request is made to authorize an application, we must ensure that
