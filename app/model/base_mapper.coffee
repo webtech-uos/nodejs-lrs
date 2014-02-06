@@ -16,6 +16,6 @@ module.exports = class BaseMapper
 
       viewNames = Object.keys(@views)
       for view in viewNames
-        do (view) ->
+        do (view) =>
           @[view] = (params...) =>
-            @dbController.db.view '#{@dbPrefix}/#{view}', params...
+            @dbController.db.view "#{@dbPrefix}/#{view}", params...
