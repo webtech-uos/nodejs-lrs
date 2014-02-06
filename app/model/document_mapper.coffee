@@ -8,6 +8,10 @@ module.exports = class DocumentMapper extends BaseMapper
       map: (doc) ->
         if (doc.type == "activities-state")
           emit(doc.value.stateId, doc.value)
+    find_by_content:
+      map: (doc) ->
+        if (doc.type == "activities-state")
+          emit(doc.value.content, doc.value)
     
   constructor: (@dbController, callback) ->
     super callback

@@ -20,9 +20,8 @@ describe 'DocumentMapper', ->
       documentMapper = new DocumentMapper(dbController, done)
   
   after (done) ->
-    #dbController.deleteDB done
-    done()
-  
+    dbController.deleteDB done
+    
   it 'should have method find_by_state_id', (done) ->
     if documentMapper.find_by_state_id?
       done()
@@ -32,7 +31,7 @@ describe 'DocumentMapper', ->
   it 'insert should not fail', (done) ->
     documentMapper.save(testDocument, done)
 
-  it 'should return state document', (done) ->
+  it 'should return state document find by id', (done) ->
     documentMapper.find_by_state_id {key: "testDocument"}, (err, docs) ->
       if err?
         done new Error err.reason
@@ -41,10 +40,21 @@ describe 'DocumentMapper', ->
           assert.deepEqual docs[0].value, testDocument
           done()
         catch err
-          #done err
+          done err
 
-  it.skip 'should return document not found error', (done) ->
-    documentMapper.findById 'jahsjd', (err, docs) ->
+  it 'should return state document find by content', (done) ->
+    documentMapper.find_by_content {key: "test"}, (err, docs) ->
+      if err?
+        done new Error err.reason
+      else
+        try
+          assert.deepEqual docs[0].value, testDocument
+          done()
+        catch err
+          done err
+
+  it 'should return document not found error', (done) ->
+    documentMapper.find_by_state_id {key: 'jahsjd'}, (err, docs) ->
       if err?
         if err.httpCode is 404
           done()

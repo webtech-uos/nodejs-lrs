@@ -9,7 +9,7 @@ module.exports = (grunt) ->
     mochaTest:
       unit:
         options:
-          reporter: "spec"
+          reporter: rep
         src: ['test/unit/**/*.coffee']
       functional:
         options:

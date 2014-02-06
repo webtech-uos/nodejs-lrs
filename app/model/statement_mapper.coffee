@@ -2,11 +2,12 @@ Validator = require '../validator/validator'
 logger = require '../logger'
 _ = require 'underscore'
 utils = require '../utils'
+BaseMapper = require './base_mapper'
 
 # Provides operations for all statements on top
 # of couchDB.
 #
-module.exports = class StatementMapper
+module.exports = class StatementMapper extends BaseMapper
 
   @dbPrefix = "statements"
   @views =
