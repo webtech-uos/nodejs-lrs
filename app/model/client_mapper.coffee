@@ -1,42 +1,34 @@
 logger = require '../logger'
-_ = require 'underscore'
 utils = require '../utils'
+BaseMapper = require './base_mapper'
 
 # Provides operations for all clients on top
 # of CouchDB.
 #
-module.exports = class ClientMapper
+module.exports = class ClientMapper extends BaseMapper
 
+  @TYPE = 'client'
+
+  @VIEWS =
+    find_by_id:
+      map: (doc)->
+        if doc.type == 'client'
+          emit doc.value.id, doc.value
+        else
+          emit null, null
+    find_by_consumer_key:
+      map: (doc)->
+        if doc.type == 'client'
+          emit doc.value.consumerKey, doc.value
+        else
+          emit null, null
 
   # Instanciates a new client mapper.
   #
   # @param dbController
   #  the database-controller to be used by this mapper
   #
-  constructor: (@dbController, callback) ->
-    viewFindBy =
-      id:
-        map: (doc)->
-          if doc.type == 'Client'
-            emit doc.value.id, doc.value
-          else
-            emit null, null
-      consumer_key:
-        map: (doc) ->
-          if doc.type == 'Client'
-            emit doc.value.consumerKey, doc.value
-          else
-            emit null, null
-      name:
-        map: (doc) ->
-          if doc.type == 'Client'
-            emit doc.value.name, doc.value
-          else
-            emit null, null
-
-    views = []
-    views.push '_design/client_find_by' : viewFindBy
-
+  constructor: (dbController, callback) ->
     addClients = () =>
       clients = [
         {
@@ -56,22 +48,7 @@ module.exports = class ClientMapper
             if counter == clients.length
               callback()
 
-    counter = 0
-    for view in views
-      viewName = Object.keys(view)[0]
-      viewObject = view[viewName]
-      db = @dbController.db
-      do(viewName, viewObject)->
-        db.save viewName, viewObject, (err, res) =>
-          if err
-            logger.error "error while adding views into the database."
-            logger.error err
-            callback(err)
-          else
-            logger.info "inserted view #{viewName} into the database."
-            counter++
-            if counter == views.length
-              addClients()
+    super dbController, addClients
 
   # Returns the client with the given id to the callback.
   #
@@ -79,7 +56,7 @@ module.exports = class ClientMapper
   #   id of the client to look up
   #
   find: (id, callback) ->
-    @dbController.db.view 'client_find_by/id', key: id, (err, docs) =>
+    @views.find_by_id key: id, (err, docs) =>
       if err
         logger.error 'find client: ' + id
         logger.error "find: database access with view find_client_by/id failed: #{JSON.stringify err}"
@@ -97,8 +74,7 @@ module.exports = class ClientMapper
   #   consumer key to search for
   #
   findByConsumerKey: (consumerKey, callback) ->
-    console.log 'findByConsumerKey '+consumerKey
-    @dbController.db.view 'client_find_by/consumer_key', key: consumerKey, (err, docs) =>
+    @views.find_by_consumer_key key: consumerKey, (err, docs) =>
       if err
         logger.error 'find client with consumer key: '+consumerKey
         logger.error "find: database access with view client_find_by/consumer_key failed: #{JSON.stringify err}"
@@ -125,9 +101,5 @@ module.exports = class ClientMapper
         if foundClient
           callback null, foundClient
         else
-          document =
-            type: 'Client'
-            value: client
-
-          @dbController.db.save document, (err, res) =>
+          super client, (err, res) =>
             callback err, client

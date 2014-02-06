@@ -16,7 +16,7 @@ util = require 'util'
 module.exports = class BaseMapper
 
   # Creates a new entity-specific mapper.
-  # 
+  #
   # @param callback
   #   called as soon as the mapper is ready to be used
   #
