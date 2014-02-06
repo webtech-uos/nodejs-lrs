@@ -9,33 +9,33 @@ BaseMapper = require './base_mapper'
 #
 module.exports = class StatementMapper extends BaseMapper
 
-  @dbPrefix = "statements"
-  @views =
+  @DB_PREFIX = "statements"
+  @VIEWS =
     find_statement_by_db_id:
-      map: (doc)->
+      map: (doc) ->
         if doc.type == 'Statement'
           emit doc._id, doc.value
         else
           emit null, null
     find_statement_by_id:
-      map: (doc)->
+      map: (doc) ->
         if doc.type == 'Statement'
           emit doc.value.id, doc.value
         else
           emit null, null
     list_by_db_id:
-      map: (doc)->
+      map: (doc) ->
         if doc.type == 'Statement'
           emit doc._id, null
         else
           emit null, null
     counter_all_statements:
-      map: (doc)->
+      map: (doc) ->
         if doc.type == 'Statement'
           emit null, 1
         else
           emit null, 0
-      reduce: (key, values, rereduce)->
+      reduce: (key, values, rereduce) ->
         sum values
 
 
