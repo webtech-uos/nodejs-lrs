@@ -4,7 +4,7 @@ exampleStatements = require 'example_statements.coffee'
 _ = require 'underscore'
 utils = require '../../../../app/utils'
 
-describe.only 'GET /api/statements', ->
+describe 'GET /api/statements', ->
   Validator = require '../../../../app/validator/validator.coffee'
   val = new Validator 'app/validator/schemas/'
 

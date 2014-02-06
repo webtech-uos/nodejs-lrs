@@ -42,8 +42,6 @@ describe 'POST', ->
     it 'SHOULD respond with 409 Conflict', (done) ->
       env.factory.create undefined, (err, statement) ->
         return done err if err?
-        #statement.id = '12345678-1234-5678-1234-567812345681'
-        console.log statement
         statement.actor.account.name = "Smith"
         env.request
           .post('/api/statements')
