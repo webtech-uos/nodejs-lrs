@@ -16,7 +16,7 @@
   "dependencies": {
     "express": "3.4.1",
     "crypto": "~0.0.3",
-    "passport": "~0.1.17",
+    "passport": "~0.2.0",
     "oauthorize": "~0.1",
     "jayschema": "~0.2.0",
     "cradle": "~0.6.6",
@@ -29,14 +29,14 @@
     "semver": "2.2.x"
   },
   "devDependencies": {
-    "coffee-script": "~1.6.3",
+    "coffee-script": "~1.7.1",
     "codo": "~2.0.2",
-    "supertest": "~0.8.2",
-    "mocha": "~1.16.2",
+    "supertest": "~0.9.0",
+    "mocha": "~1.17.1",
     "grunt-cli": "~0.1.11",
     "grunt": "~0.4.2",
-    "grunt-mocha-test": "~0.8.0",
-    "grunt-nodemon": "~0.1.2"
+    "grunt-mocha-test": "~0.9.0",
+    "grunt-nodemon": "~0.2.0"
   },
   "engines": {
     "node": ">=0.10"
