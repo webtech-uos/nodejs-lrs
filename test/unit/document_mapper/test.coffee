@@ -8,7 +8,7 @@ testDocument =
   stateId: 'testDocument'
   content: 'test'
 
-describe 'DocumentMapper', ->
+describe.only 'DocumentMapper', ->
   
   documentMapper = null
   dbController = null
@@ -23,7 +23,7 @@ describe 'DocumentMapper', ->
     dbController.deleteDB done
     
   it 'should have method find_by_state_id', (done) ->
-    if documentMapper.find_by_state_id?
+    if documentMapper.views.find_by_state_id?
       done()
     else
       done(new Error "Method find_by_state_id not found")
@@ -32,7 +32,7 @@ describe 'DocumentMapper', ->
     documentMapper.save(testDocument, done)
 
   it 'should return state document find by id', (done) ->
-    documentMapper.find_by_state_id {key: "testDocument"}, (err, docs) ->
+    documentMapper.views.find_by_state_id {key: "testDocument"}, (err, docs) ->
       if err?
         done new Error err.reason
       else
@@ -43,7 +43,7 @@ describe 'DocumentMapper', ->
           done err
 
   it 'should return state document find by content', (done) ->
-    documentMapper.find_by_content {key: "test"}, (err, docs) ->
+    documentMapper.views.find_by_content {key: "test"}, (err, docs) ->
       if err?
         done new Error err.reason
       else
@@ -54,7 +54,7 @@ describe 'DocumentMapper', ->
           done err
 
   it 'should return document not found error', (done) ->
-    documentMapper.find_by_state_id {key: 'jahsjd'}, (err, docs) ->
+    documentMapper.views.find_by_state_id {key: 'jahsjd'}, (err, docs) ->
       if err?
         if err.httpCode is 404
           done()
