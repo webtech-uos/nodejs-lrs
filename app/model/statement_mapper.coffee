@@ -48,30 +48,6 @@ module.exports = class StatementMapper extends BaseMapper
     super callback
     @validator = new Validator 'app/validator/schemas/'
 
-
-    # views = []
-    # views.push '_design/find_statement_by' : viewFindBy
-    # views.push '_design/list' : viewList
-    # views.push '_design/counter' : viewCounter
-
-    # counter = 0
-
-    # for view in views
-    #   viewName = Object.keys(view)[0]
-    #   viewObject = view[viewName]
-    #   db = @dbController.db
-    #   do(viewName, viewObject)->
-    #     db.save viewName, viewObject, (err, res) =>
-    #       if err
-    #         logger.error "error while adding views into the database."
-    #         logger.error err
-    #         callback(err)
-    #       else
-    #         logger.info "inserted view #{viewName} into the database."
-    #         counter++
-    #         if counter == views.length
-    #           callback()
-
   # Returns all stored statements to the callback.
   #
   # TODO: one should be able to specify the maximum number of returned statements

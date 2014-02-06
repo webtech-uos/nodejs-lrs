@@ -23,16 +23,3 @@ module.exports = class DocumentMapper extends BaseMapper
 
     @dbController.db.save object, (err, result) ->
       callback(err, result)
-
-  # findById: (stateId, callback) ->
-  #   @dbController.db.view '#{@dbPrefix}/find_by_stateId', key: stateId, (err, docs) ->
-  #     if err?
-  #       callback err
-  #     else
-  #       if docs.length == 0
-  #         err = new Error "Document not found"
-  #         err.httpCode = 404
-  #         callback err
-  #         return
-  #       else
-  #         callback null, docs
