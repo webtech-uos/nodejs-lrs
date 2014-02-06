@@ -8,6 +8,35 @@ utils = require '../utils'
 #
 module.exports = class StatementMapper
 
+  @dbPrefix = "statements"
+  @views =
+    find_statement_by_db_id:
+      map: (doc)->
+        if doc.type == 'Statement'
+          emit doc._id, doc.value
+        else
+          emit null, null
+    find_statement_by_id:
+      map: (doc)->
+        if doc.type == 'Statement'
+          emit doc.value.id, doc.value
+        else
+          emit null, null
+    list_by_db_id:
+      map: (doc)->
+        if doc.type == 'Statement'
+          emit doc._id, null
+        else
+          emit null, null
+    counter_all_statements:
+      map: (doc)->
+        if doc.type == 'Statement'
+          emit null, 1
+        else
+          emit null, 0
+      reduce: (key, values, rereduce)->
+        sum values
+
 
   # Instanciates a new statement mapper.
   #
@@ -15,62 +44,32 @@ module.exports = class StatementMapper
   #  the database-controller to be used by this mapper
   #
   constructor: (@dbController, callback) ->
+    super callback
     @validator = new Validator 'app/validator/schemas/'
 
-    viewFindBy =
-      db_id:
-        map: (doc)->
-          if doc.type == 'Statement'
-            emit doc._id, doc.value
-          else
-            emit null, null
-      id:
-        map: (doc)->
-          if doc.type == 'Statement'
-            emit doc.value.id, doc.value
-          else
-            emit null, null
 
-    viewList =
-      db_ids:
-        map: (doc)->
-          if doc.type == 'Statement'
-            emit doc._id, null
-          else
-            emit null, null
+    # views = []
+    # views.push '_design/find_statement_by' : viewFindBy
+    # views.push '_design/list' : viewList
+    # views.push '_design/counter' : viewCounter
 
-    viewCounter =
-      all_statements:
-        map: (doc)->
-          if doc.type == 'Statement'
-            emit null, 1
-          else
-            emit null, 0
-        reduce: (key, values, rereduce)->
-          sum values
+    # counter = 0
 
-    views = []
-    views.push '_design/find_statement_by' : viewFindBy
-    views.push '_design/list' : viewList
-    views.push '_design/counter' : viewCounter
-
-    counter = 0
-
-    for view in views
-      viewName = Object.keys(view)[0]
-      viewObject = view[viewName]
-      db = @dbController.db
-      do(viewName, viewObject)->
-        db.save viewName, viewObject, (err, res) =>
-          if err
-            logger.error "error while adding views into the database."
-            logger.error err
-            callback(err)
-          else
-            logger.info "inserted view #{viewName} into the database."
-            counter++
-            if counter == views.length
-              callback()
+    # for view in views
+    #   viewName = Object.keys(view)[0]
+    #   viewObject = view[viewName]
+    #   db = @dbController.db
+    #   do(viewName, viewObject)->
+    #     db.save viewName, viewObject, (err, res) =>
+    #       if err
+    #         logger.error "error while adding views into the database."
+    #         logger.error err
+    #         callback(err)
+    #       else
+    #         logger.info "inserted view #{viewName} into the database."
+    #         counter++
+    #         if counter == views.length
+    #           callback()
 
   # Returns all stored statements to the callback.
   #
