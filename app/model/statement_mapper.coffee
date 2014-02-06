@@ -82,7 +82,6 @@ module.exports = class StatementMapper
     maxNumberStatements = 100
     numberRequested = maxNumberStatements
 
-    console.log @dbController
     @dbController.db.view 'counter/all_statements', (err, count) =>
       if err
         logger.error "getALL: database access with view counter/all_statements failed: #{JSON.stringify err}"

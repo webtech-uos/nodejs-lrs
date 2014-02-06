@@ -14,7 +14,7 @@ module.exports = (grunt) ->
       functional:
         options:
           reporter: rep
-        src: ['test/functional/statements/get/test.coffee']
+        src: ['test/functional/statements/**/*.coffee']
       integration:
         options:
           reporter: rep

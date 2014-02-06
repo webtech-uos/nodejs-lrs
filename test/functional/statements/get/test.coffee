@@ -1,10 +1,10 @@
 assert = require 'assert'
 env = require 'setup_test_env'
 exampleStatements = require 'example_statements.coffee'
-StatementFactory = require '../../../factories/statement'
 _ = require 'underscore'
+utils = require '../../../../app/utils'
 
-describe 'GET /api/statements', ->
+describe.only 'GET /api/statements', ->
   Validator = require '../../../../app/validator/validator.coffee'
   val = new Validator 'app/validator/schemas/'
 
@@ -57,11 +57,9 @@ describe 'GET /api/statements', ->
             'ISO8061Date',
             done
 
-  describe.only 'with an existing, valid statementId', ->
+  describe 'with an existing, valid statementId', ->
     it 'should return a valid StatementResult', (done) ->
-      factory = new StatementFactory env.dbController
-      console.log exampleStatements.minimalWithId
-      factory.create exampleStatements.minimalWithId, (err, statement) ->
+      env.factory.create exampleStatements.minimalWithId, (err, statement) ->
         return done err if err?
         env.request
           .get('/api/statements')
@@ -70,28 +68,29 @@ describe 'GET /api/statements', ->
           .expect('x-experience-api-version', env.apiVersion)
           .expect(200)
           .end (err, res) ->
+            return done err if err?
             err ?= new Error 'statements do not match' unless _.isEqual statement, res.body
             done err
 
-  describe 'with a malformed endpoint URL', ->
-    it 'should respond with 400 Bad Request'#, (done) ->
-      # env.request
-        # .get('/api/statements/1337')
-        # .expect('x-experience-api-version', env.apiVersion)
-        # .expect(400, done)
-    it 'should respond with 400 Bad Request'#, (done) ->
-      # env.request
-        # .get('/api/statements/1337')
-        # .query(statementId: 'this-is-not-even-a-valid-uuid')
-        # .expect('x-experience-api-version', env.apiVersion)
-        # .expect(400, done)
-
-
   describe 'with a statementId', ->
-    describe 'when also supplied with voidedStatementId', ->
-      it 'MUST reject the request with 400 Bad Request'
+    describe.skip 'when also supplied with voidedStatementId', ->
+      it 'MUST reject the request with 400 Bad Request', ->
+        env.factory.create undefined, (err, statement) ->
+          return done err if err?
+          env.request
+            .get('/api/statements')
+            .query(statementId: statement.id)
+            .query(voidedStatementId: utils.generateUUID())
+            .expect('x-experience-api-version', env.apiVersion)
+            .expect(400, done)
     describe 'when also supplied with parameters other than "attachments" or "format"', ->
-      it 'MUST reject the request with 400 Bad Request'
+      it 'MUST reject the request with 400 Bad Request', (done) ->
+        env.request
+          .get('/api/statements')
+          .query(statementId: '12345678-1234-5678-1234-567812345681')
+          .query(until: 'foobar')
+          .expect('x-experience-api-version', env.apiVersion)
+          .expect(400, done)
     describe 'with a malformed statementId', ->
       it 'should respond with 400 Bad Request', (done) ->
         env.request
@@ -107,14 +106,58 @@ describe 'GET /api/statements', ->
           .expect('x-experience-api-version', env.apiVersion)
           .expect(404, done)
 
-  describe 'with a voidedStatementId parameter', ->
-    describe 'with a valid, but nonexisting voidedStatementId', ->
-      it 'MUST not return any Statement which has been voided, unless that Statement has been requested by voidedStatementId.'
+  describe 'with voided statements', ->
+    # statement modifiers
+    makeVoided = id: '12345678-1234-5678-1234-567812345681'
+    makeVoiding =
+      id: utils.generateUUID()
+      verb:
+        id: 'http://adlnet.gov/expapi/verbs/voided'
+        display:
+          'en-US': 'voided'
+      object:
+        id: '12345678-1234-5678-1234-567812345681'
+        objectType: 'StatementRef'
+
+    it 'MUST not return any Statement which has been voided', (done) ->
+      env.factory.create makeVoided, (err, voided) ->
+        return done err if err?
+        env.factory.create makeVoiding, (err, voiding) ->
+        env.request
+          .get('/api/statements')
+          .query(statementId: '12345678-1234-5678-1234-567812345681')
+          .expect('x-experience-api-version', env.apiVersion)
+          .expect(400, done)
+    it 'unless that Statement has been requested by voidedStatementId.', (done) ->
+      env.factory.create makeVoided, (err, voided) ->
+        return done err if err?
+        env.factory.create makeVoiding, (err, voiding) ->
+        env.request
+          .get('/api/statements')
+          .query(voidedStatementId: '12345678-1234-5678-1234-567812345681')
+          .expect('Content-Type', /json/)
+          .expect('x-experience-api-version', env.apiVersion)
+          .expect(200, done)
     describe 'with a statement targetting a voided statement', ->
       it 'MUST still return any Statements targetting the voided Statement'
-      it 'MUST be able to return the voiding Statement, which cannot be voided'
+      it 'MUST be able to return the voiding Statement, which cannot be voided', (done) ->
+        env.factory.create makeVoided, (err, voided) ->
+          return done err if err?
+          env.factory.create makeVoiding, (err, voiding) ->
+            env.request
+              .get('/api/statements')
+              .query(statementId: voiding.id)
+              .expect('Content-Type', /json/)
+              .expect('x-experience-api-version', env.apiVersion)
+              .expect(200, done)
     describe 'when also supplied with parameters other than "attachments" or "format"', ->
-      it 'MUST reject the request with 400 Bad Request'
+      it 'MUST reject the request with 400 Bad Request', (done) ->
+        env.request
+          .get('/api/statements')
+          .query(voidedStatementId: '12345678-1234-5678-1234-567812345681')
+          .query(until: 'foobar')
+          .expect('x-experience-api-version', env.apiVersion)
+          .expect(400, done)
 
   # most of these parameters only apply for GETting multiple statements at once, see test suites above
   describe 'with agent parameter', ->

@@ -4,10 +4,9 @@ counter = 0
 
 module.exports = class StatementFactory
 
-  constructor: (@dbController) ->
-    @mapper = new StatementMapper @dbController
+  constructor: (@dbController, callback) ->
+    @mapper = new StatementMapper @dbController, callback
 
-  statement = require '../data/1.0.0/valid/statement/minimal-example-variants/minimal-agent-account.json'
 
   # save a (possibly modified) statement to the database, then execute the callback
   #
@@ -16,6 +15,8 @@ module.exports = class StatementFactory
   # - calling the supplied callback with an additional statement counter
   #   the corresponding value and the whole statement
   create: (modifier, callback) ->
+    # create a deep copy to avoid caching by require
+    statement = JSON.parse JSON.stringify require '../data/1.0.0/valid/statement/minimal-example-variants/minimal-agent-account.json'
     for key, value of modifier
       if typeof value == 'function'
         value counter statement[key] statement
