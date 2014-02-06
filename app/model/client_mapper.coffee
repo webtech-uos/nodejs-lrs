@@ -15,16 +15,16 @@ module.exports = class ClientMapper
   #
   constructor: (@dbController, callback) ->
     viewFindBy =
-      db_id:
-        map: (doc)->
-          if doc.type == 'Client'
-            emit doc._id, doc.value
-          else
-            emit null, null
       id:
         map: (doc)->
           if doc.type == 'Client'
             emit doc.value.id, doc.value
+          else
+            emit null, null
+      consumer_key:
+        map: (doc) ->
+          if doc.type == 'Client'
+            emit doc.value.consumerKey, doc.value
           else
             emit null, null
       name:
@@ -34,28 +34,8 @@ module.exports = class ClientMapper
           else
             emit null, null
 
-    viewList =
-      db_ids:
-        map: (doc)->
-          if doc.type == 'Client'
-            emit doc._id, null
-          else
-            emit null, null
-
-    viewCounter =
-      all_clients:
-        map: (doc)->
-          if doc.type == 'Client'
-            emit null, 1
-          else
-            emit null, 0
-        reduce: (key, values, rereduce)->
-          sum values
-
     views = []
-    views.push '_design/find_client_by' : viewFindBy
-    views.push '_design/client_list' : viewList
-    views.push '_design/client_counter' : viewCounter
+    views.push '_design/client_find_by' : viewFindBy
 
     addClients = () =>
       clients = [
@@ -99,7 +79,7 @@ module.exports = class ClientMapper
   #   id of the client to look up
   #
   find: (id, callback) ->
-    @dbController.db.view 'find_client_by/id', key: id, (err, docs) =>
+    @dbController.db.view 'client_find_by/id', key: id, (err, docs) =>
       if err
         logger.error 'find client: ' + id
         logger.error "find: database access with view find_client_by/id failed: #{JSON.stringify err}"
@@ -107,6 +87,25 @@ module.exports = class ClientMapper
       else
         if docs.length == 0
           logger.info 'client does not exist: ' + id
+          callback undefined
+        else
+          callback undefined, docs[0].value
+
+  # Returns the client with the given consumer key to the callback.
+  #
+  # @param consumerKey
+  #   consumer key to search for
+  #
+  findByConsumerKey: (consumerKey, callback) ->
+    console.log 'findByConsumerKey '+consumerKey
+    @dbController.db.view 'client_find_by/consumer_key', key: consumerKey, (err, docs) =>
+      if err
+        logger.error 'find client with consumer key: '+consumerKey
+        logger.error "find: database access with view client_find_by/consumer_key failed: #{JSON.stringify err}"
+        callback err, []
+      else
+        if docs.length == 0
+          logger.info "client for consumer key #{consumerKey} does not exist"
           callback undefined
         else
           callback undefined, docs[0].value

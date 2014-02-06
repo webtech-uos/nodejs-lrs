@@ -1,7 +1,6 @@
 oauthorize = require 'oauthorize'
 passport = require 'passport'
 login = require 'connect-ensure-login'
-clients = require './database/clients'
 requestTokens = require './database/request_tokens'
 utils = require '../utils'
 

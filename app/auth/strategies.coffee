@@ -3,7 +3,6 @@ LocalStrategy = require('passport-local').Strategy
 ConsumerStrategy = require('passport-http-oauth').ConsumerStrategy
 TokenStrategy = require('passport-http-oauth').TokenStrategy
 users = require './database/users'
-clients = require './database/clients'
 requestTokens = require './database/request_tokens'
 accessTokens = require './database/access_tokens'
 AccessTokenMapper = require '../model/access_token_mapper'
@@ -24,10 +23,10 @@ module.exports = class Strategies
         else
           callback()
 
-    @accessTokenMapper = new AccessTokenMapper(dbController, mapperCallback)
-    @clientMapper = new ClientMapper(dbController, mapperCallback)
-    @requestTokenMapper = new RequestTokenMapper(dbController, mapperCallback)
-    @userMapper = new UserMapper(dbController, mapperCallback)
+    accessTokenMapper = new AccessTokenMapper dbController, mapperCallback
+    clientMapper = new ClientMapper dbController, mapperCallback
+    requestTokenMapper = new RequestTokenMapper dbController, mapperCallback
+    userMapper = new UserMapper dbController, mapperCallback
 
     # This strategy is used to authenticate users based on a username and password.
     # Anytime a request is made to authorize an application, we must ensure that
@@ -62,7 +61,7 @@ module.exports = class Strategies
       #  validate the request signature, failing authentication if it does not
       #  match.
       (consumerKey, done) ->
-        clients.find consumerKey, (err, client) ->
+        clientMapper.findByConsumerKey consumerKey, (err, client) ->
           if err
             done err
           else
