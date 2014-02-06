@@ -22,7 +22,7 @@ module.exports = class BaseController
         if semver.satisfies reqVersion, serverConfig.xApiVesionRange
           next()
         else
-        res.send 400, "Currently only #{serverConfig.xApiVesionRange} is supported."
+        res.send 400, "Currently only #{serverConfig.xApiVersionRange} is supported."
       else
         res.send 400, "Invalid API version specified. Please refer to semver versioning."
     else
