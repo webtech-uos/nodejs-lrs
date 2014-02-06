@@ -8,11 +8,14 @@ module.exports = class ActivitiesStateController extends BaseController
 
   # Creates a new controller.
   #
-  constructor: (@dbController, callback = ->) ->
+  constructor: (@dbController, callback) ->
+    logger.warn "no callback supplied for new activities-controller" unless callback
     dbCon = @dbController
     super(dbCon, (err) =>
-      @mapper = new DocumentMapper dbCon, =>
-        callback()
+      if err
+        callback err
+      else
+        @mapper = new DocumentMapper dbCon, callback
     )
 
 

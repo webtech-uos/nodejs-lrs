@@ -5,9 +5,6 @@ logger = require '../logger'
 #
 module.exports = class ActivitiesProfileController extends BaseController
 
-  constrctor: (@dbController, callback = -> ) ->
-    callback()
-
 
   index: (req, res, next) ->
     res.send 200, ""

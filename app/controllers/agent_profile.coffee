@@ -5,11 +5,6 @@ logger = require '../logger'
 #
 module.exports = class AgentProfileController extends BaseController
 
-  # Creates a new controller.
-  #
-  constructor: (@dbController, callback = ->) ->
-    callback()
-
 
   index: (req, res, next) ->
     res.send 200, ""

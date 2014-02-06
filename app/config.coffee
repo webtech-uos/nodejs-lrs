@@ -16,4 +16,4 @@ module.exports =
     routePrefix: '/api'
   logger:
     file: 'log.txt'
-    level: 'error'
+    level: 'warn'

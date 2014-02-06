@@ -6,12 +6,16 @@ logger = require '../logger'
 #
 module.exports = class StatementsController extends BaseController
 
-  constructor: (@dbController, callback = -> ) ->
+  constructor: (@dbController, callback) ->
+    logger.warn "no callback supplied for new statements-controller" unless callback
     dbCon = @dbController
     super(dbCon, (err) =>
-      @mapper = new StatementMapper dbCon, =>
-        callback()
+      if err
+        callback err
+      else
+        @mapper = new StatementMapper dbCon, callback
     )
+    
   # Called whenever the clients requests to add a new statement.
   #
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
