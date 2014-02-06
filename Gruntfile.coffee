@@ -3,7 +3,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mocha-test'
   grunt.loadNpmTasks 'grunt-nodemon'
 
-  rep = if process.env.TRAVIS? then 'spec' else 'nyan'
+  rep = if process.env.TRAVIS? then 'spec' else 'dot'
 
   grunt.initConfig
     mochaTest:
