@@ -10,27 +10,19 @@ BaseMapper = require './base_mapper'
 module.exports = class StatementMapper extends BaseMapper
 
   @TYPE = 'statement'
-  
+
   @VIEWS =
-    find_statement_by_db_id:
-      map: (doc) ->
-        if doc.type == 'statement'
-          emit doc._id, doc.value
-        else
-          emit null, null
-    find_statement_by_id:
+    find:
       map: (doc) ->
         if doc.type == 'statement'
           emit doc.value.id, doc.value
-        else
-          emit null, null
-    list_by_db_id:
+    list_ids:
       map: (doc) ->
         if doc.type == 'statement'
-          emit doc._id, null
+          emit doc.value.id, null
         else
           emit null, null
-    counter_all_statements:
+    count:
       map: (doc) ->
         if doc.type == 'statement'
           emit null, 1
@@ -54,19 +46,18 @@ module.exports = class StatementMapper extends BaseMapper
   # TODO: one should be able to specify the maximum number of returned statements
   #
   getAll: (callback) ->
-    #TODO
     startIndex = null
     maxNumberStatements = 100
     numberRequested = maxNumberStatements
 
-    @dbController.db.view 'counter/all_statements', (err, count) =>
+    @views.count (err, count) =>
       if err
-        logger.error "getALL: database access with view counter/all_statements failed: #{JSON.stringify err}"
+        logger.error "getALL: database access with view count/all_statements failed: #{JSON.stringify err}"
         callback err, []
       else if count.length > 0 # TODO
         scount = count[0].value
         if scount > numberRequested
-          @dbController.db.view 'list/db_ids', descending: true, (err,  ids) =>
+          @views.list_ids descending: true, (err,  ids) =>
             if err
               logger.error "getALL: database access with list/statement_ids failed: #{JSON.stringify err}"
               callback err, []
@@ -89,7 +80,7 @@ module.exports = class StatementMapper extends BaseMapper
                   endkey: ids[endIndex].key
                   descending: true
 
-                @dbController.db.view 'find_statement_by/db_id', filterRange, (err, docs) =>
+                @views.find filterRange, (err, docs) =>
                   if err
                     logger.error "getALL: database access with view find_statement_by/db_id failed: #{JSON.stringify err}"
                     callback err, []
@@ -101,7 +92,7 @@ module.exports = class StatementMapper extends BaseMapper
                     callback undefined, statements
 
         else
-          @dbController.db.view 'find_statement_by/id', (err, docs) =>
+          @views.find (err, docs) =>
             if err
               logger.error "getALL: database access with view find_statement_by/id failed: #{JSON.stringify err}"
               callback err, []
@@ -114,6 +105,7 @@ module.exports = class StatementMapper extends BaseMapper
       else
         #there are no statements in the db
         callback undefined, []
+
   # Returns the statement with the given id to the callback.
   #
   # @param id
@@ -126,7 +118,7 @@ module.exports = class StatementMapper extends BaseMapper
         err.httpCode = 400
         callback err
       else
-        @dbController.db.view 'find_statement_by/id', key: id, (err, docs) =>
+        @views.find key: id, (err, docs) =>
           if err
             logger.error 'find statement: ' + id
             logger.error "find: database access with view find_statement_by/id failed: #{JSON.stringify err}"
@@ -150,12 +142,12 @@ module.exports = class StatementMapper extends BaseMapper
                 callback 'Multiple Statements for the same id found.'
 
   # Saves this statement to the database
+  # Tries to store this statement and if there
+  # is no id, it generates an id, otherwise
+  # it checks the two statements for equality
   #
   save: (statement, callback) ->
-    # Tries to store this statement and if there
-    # is no id, it generates an id, otherwise
-    # it checks the two statements for equality
-
+    
     @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
       if validatorErr
         err = new Error "Statement is invalid: #{validatorErr}"
@@ -176,7 +168,7 @@ module.exports = class StatementMapper extends BaseMapper
             callback err
           else
             if foundStatement
-              if @_isEqual statement, foundStatement
+              if _.isEqual statement, foundStatement
                 # all right statement is already in the database
                 callback undefined, statement
               else
@@ -186,15 +178,5 @@ module.exports = class StatementMapper extends BaseMapper
                 err.httpCode = 409
                 callback err
             else
-              # statement does not exist yet, save it
-              document =
-                type: 'Statement'
-                value: statement
-
-              @dbController.db.save document, (err, res) =>
+              super document, (err, res) =>
                 callback err, statement
-
-  # Checks whether two statements are equal
-  # Currently by performing a deep comparison. TODO
-  _isEqual: (s1, s2) ->
-    _.isEqual(s1, s2)
