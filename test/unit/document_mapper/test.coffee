@@ -9,7 +9,6 @@ testDocument =
   content: 'test'
 
 describe.skip 'DocumentMapper', ->
-
   documentMapper = null
   dbController = null
 
@@ -21,6 +20,12 @@ describe.skip 'DocumentMapper', ->
 
   after (done) ->
     dbController.deleteDB done
+
+  it 'should have method find_by_state_id', (done) ->
+    if documentMapper.views.find_by_state_id?
+      done()
+    else
+      done(new Error "Method find_by_state_id not found")
 
   it 'should have method find_by_state_id', (done) ->
     if documentMapper.views.find_by_state_id?
