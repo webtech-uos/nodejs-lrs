@@ -27,7 +27,7 @@ describe 'DocumentMapper', ->
     documentMapper.save(testDocument, done)
 
   it 'should return state document', (done) ->
-    documentMapper.find 'testDocument', (err, docs) ->
+    documentMapper.findStateById 'testDocument', (err, docs) ->
       if err?
         done err
       else
@@ -38,7 +38,7 @@ describe 'DocumentMapper', ->
           done err
 
   it 'should return document not found error', (done) ->
-    documentMapper.find 'jahsjd', (err, docs) ->
+    documentMapper.findStateById 'jahsjd', (err, docs) ->
       if err?
         if err.httpCode is 404
           done()
