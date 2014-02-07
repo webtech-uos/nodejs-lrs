@@ -8,7 +8,7 @@ module.exports = class BaseController
   constructor: (@dbController, callback) ->
     logger.warn "no callback supplied for new controller" unless callback
     callback()
-    
+
   # Executed before each controller action.
   #
   before: (req, res, next) ->

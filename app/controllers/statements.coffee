@@ -15,7 +15,7 @@ module.exports = class StatementsController extends BaseController
       else
         @mapper = new StatementMapper dbCon, callback
     )
-    
+
   # Called whenever the clients requests to add a new statement.
   #
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
