@@ -178,5 +178,5 @@ module.exports = class StatementMapper extends BaseMapper
                 err.httpCode = 409
                 callback err
             else
-              super document, (err, res) =>
+              super statement, (err, res) =>
                 callback err, statement
