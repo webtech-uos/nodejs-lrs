@@ -8,20 +8,20 @@ testDocument =
   stateId: 'testDocument'
   content: 'test'
 
-describe.only 'DocumentMapper', ->
-  
+describe.skip 'DocumentMapper', ->
+
   documentMapper = null
   dbController = null
-  
+
   before (done) ->
     config.database.name = 'nodejs-lrs-documentmapper-test'
     config.database.reset = true
     dbController = new DBController config.database, (err) ->
       documentMapper = new DocumentMapper(dbController, done)
-  
+
   after (done) ->
     dbController.deleteDB done
-    
+
   it 'should have method find_by_state_id', (done) ->
     if documentMapper.views.find_by_state_id?
       done()

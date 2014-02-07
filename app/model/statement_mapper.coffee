@@ -9,29 +9,30 @@ BaseMapper = require './base_mapper'
 #
 module.exports = class StatementMapper extends BaseMapper
 
-  @DB_PREFIX = "statements"
+  @TYPE = 'statement'
+  
   @VIEWS =
     find_statement_by_db_id:
       map: (doc) ->
-        if doc.type == 'Statement'
+        if doc.type == 'statement'
           emit doc._id, doc.value
         else
           emit null, null
     find_statement_by_id:
       map: (doc) ->
-        if doc.type == 'Statement'
+        if doc.type == 'statement'
           emit doc.value.id, doc.value
         else
           emit null, null
     list_by_db_id:
       map: (doc) ->
-        if doc.type == 'Statement'
+        if doc.type == 'statement'
           emit doc._id, null
         else
           emit null, null
     counter_all_statements:
       map: (doc) ->
-        if doc.type == 'Statement'
+        if doc.type == 'statement'
           emit null, 1
         else
           emit null, 0
@@ -44,8 +45,8 @@ module.exports = class StatementMapper extends BaseMapper
   # @param dbController
   #  the database-controller to be used by this mapper
   #
-  constructor: (@dbController, callback) ->
-    super callback
+  constructor: ->
+    super
     @validator = new Validator 'app/validator/schemas/'
 
   # Returns all stored statements to the callback.
