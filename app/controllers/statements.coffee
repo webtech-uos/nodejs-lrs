@@ -51,12 +51,22 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   index: (req, res, next) ->
-    id = req.query['statementId']
-    if id
-      @_sendStatement id, res
+    badParam = false
+
+    for k of req.query
+      unless k in ['statementId', 'attachments', 'format', 'voidedStatementId']
+        badParam = k
+        break
+
+    if badParam
+      res.json 400, "Query parameter \"#{badParam}\" not allowed here."
     else
-      @mapper.getAll (err, statements) =>
-        res.json 200, statements
+      id = req.query.statementId
+      if id
+        @_sendStatement id, res
+      else
+        @mapper.getAll (err, statements) =>
+          res.json 200, statements
 
   # Called whenever the clients requests to modify a specific statement.
   #
@@ -86,7 +96,6 @@ module.exports = class StatementsController extends BaseController
           res.json 200, statement
         else
           res.json 404, "No statement with id #{id} found!"
-
 
   # Sets the required header fields.
   #
