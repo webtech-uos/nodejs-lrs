@@ -51,12 +51,16 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   index: (req, res, next) ->
+    #TODO implement parameter mapper
     id = req.query['statementId']
+    agent = req.query['agent']
     if id
       @_sendStatement id, res
-    else
-      @mapper.getAll (err, statements) =>
-        res.json 200, statements
+    else if agent
+      @_agent res, agent
+
+    @mapper.getAll (err, statements) =>
+      res.json 200, statements
 
   # Called whenever the clients requests to modify a specific statement.
   #
@@ -87,9 +91,20 @@ module.exports = class StatementsController extends BaseController
         else
           res.json 404, "No statement with id #{id} found!"
 
-
   # Sets the required header fields.
   #
   before: (req, res, next) ->
     res.header 'X-Experience-API-Consistent-Through', new Date(new Date() - 1000*60*60).toISOString()
     super
+    
+  # Gets all statements of an agent
+  #
+  _agent: (res, agent) ->
+    @mapper.findByAgent agent, (err, statements) =>
+      if err
+        res.json err.httpCode ? 500, err
+      else
+        if statements
+          res.json 200, statements
+        else
+          res.json 404, "No agent with name #{agent} found!"

@@ -30,8 +30,13 @@ module.exports = class StatementMapper extends BaseMapper
           emit null, 0
       reduce: (key, values, rereduce) ->
         sum values
-
-
+    find_by_agent:
+      map: (doc) ->
+        if doc.type == 'statement'
+          emit doc.value.actor.mbox, doc.value
+        else
+          emit null, null
+          
   # Instanciates a new statement mapper.
   #
   # @param dbController
@@ -180,3 +185,15 @@ module.exports = class StatementMapper extends BaseMapper
             else
               super statement, (err, res) =>
                 callback err, statement
+
+  findByAgent: (agent, callback) ->
+    @views.find_by_agent key: agent, (err, docs) =>
+      if err
+        logger.info 'findByAgent failed: ' + err
+        callback err
+      else
+        statements = []
+        for doc in docs
+          statements.push doc.value
+          
+        callback undefined, statements
