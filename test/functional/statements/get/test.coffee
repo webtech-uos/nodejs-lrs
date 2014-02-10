@@ -5,9 +5,6 @@ _ = require 'underscore'
 utils = require '../../../../app/utils'
 
 describe 'GET /api/statements', ->
-  Validator = require '../../../../app/validator/validator.coffee'
-  val = new Validator 'app/validator/schemas/'
-
   describe 'with no parameters', ->
     it 'should respond with 200 OK', (done) ->
       env.request
@@ -53,7 +50,7 @@ describe 'GET /api/statements', ->
           catch err
             return done err
 
-          val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
+          env.val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
             'ISO8061Date',
             done
 
