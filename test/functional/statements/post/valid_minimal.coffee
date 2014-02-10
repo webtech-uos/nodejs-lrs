@@ -1,6 +1,7 @@
 fs = require 'fs'
 exampleStatements = require 'example_statements.coffee'
 env = require 'setup_test_env'
+assert = require 'assert'
 
 describe 'POST', ->
 
@@ -13,6 +14,17 @@ describe 'POST', ->
         .send(data)
         .expect('x-experience-api-version', env.apiVersion)
         .expect(200, done)
+    it 'returns a list consisting of a single statement ID', (done) ->
+      data = exampleStatements.minimalWithoutId
+      env.request
+        .post('/api/statements')
+        .set('Content-Type', 'application/json')
+        .send(data)
+        .end (err, res) ->
+          response = res.body
+          assert response instanceof Array
+          assert.equal response.length, 1
+          env.val.validateWithSchema response[0], 'UUID', done
 
   describe 'an identical statement with same ID', ->
     @timeout 20000

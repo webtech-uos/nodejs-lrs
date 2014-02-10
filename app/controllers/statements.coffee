@@ -51,16 +51,25 @@ module.exports = class StatementsController extends BaseController
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   index: (req, res, next) ->
-    #TODO implement parameter mapper
-    id = req.query['statementId']
-    agent = req.query['agent']
-    if id
-      @_sendStatement id, res
-    else if agent
-      @_agent res, agent
+    badParam = false
 
-    @mapper.getAll (err, statements) =>
-      res.json 200, statements
+    for k of req.query
+      unless k in ['statementId', 'attachments', 'format', 'voidedStatementId','agent']
+        badParam = k
+        break
+
+    if badParam
+      res.json 400, "Query parameter \"#{badParam}\" not allowed here."
+    else
+      id = req.query.statementId
+      agent = req.query.agent
+      if id
+        @_sendStatement id, res
+      else if agent
+        @_agent res, agent
+      else
+        @mapper.getAll (err, statements) =>
+          res.json 200, statements
 
   # Called whenever the clients requests to modify a specific statement.
   #

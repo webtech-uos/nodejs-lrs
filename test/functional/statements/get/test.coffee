@@ -6,9 +6,6 @@ utils = require '../../../../app/utils'
 logger = require '../../../../app/logger'
 
 describe 'GET /api/statements', ->
-  Validator = require '../../../../app/validator/validator.coffee'
-  val = new Validator 'app/validator/schemas/'
-
   describe 'with no parameters', ->
     it 'should respond with 200 OK', (done) ->
       env.request
@@ -54,7 +51,7 @@ describe 'GET /api/statements', ->
           catch err
             return done err
 
-          val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
+          env.val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
             'ISO8061Date',
             done
 
@@ -128,7 +125,7 @@ describe 'GET /api/statements', ->
           .get('/api/statements')
           .query(statementId: '12345678-1234-5678-1234-567812345681')
           .expect('x-experience-api-version', env.apiVersion)
-          .expect(400, done)
+          .expect(404, done)
     it 'unless that Statement has been requested by voidedStatementId.', (done) ->
       env.factory.create makeVoided, (err, voided) ->
         return done err if err?

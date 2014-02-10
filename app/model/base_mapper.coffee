@@ -35,8 +35,7 @@ module.exports = class BaseMapper
           logger.info "Successfully created views: #{@constructor.TYPE}"
           callback()
 
-      viewNames = Object.keys(@constructor.VIEWS)
-      for view in viewNames
+      for view of @constructor.VIEWS
         do (view) =>
           @views[view] = (params...) =>
             @dbController.db.view "#{@constructor.TYPE}/#{view}", params...
