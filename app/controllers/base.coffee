@@ -19,10 +19,10 @@ module.exports = class BaseController
     reqVersion = req.get('x-experience-api-version')
     if reqVersion and reqVersion isnt '1.0'
       if semver.valid reqVersion
-        if semver.satisfies reqVersion, serverConfig.xApiVesionRange
+        if semver.satisfies reqVersion, serverConfig.xApiVersionRange
           next()
         else
-        res.send 400, "Currently only #{serverConfig.xApiVersionRange} is supported."
+          res.send 400, "Currently only #{serverConfig.xApiVersionRange} is supported, not #{reqVersion}"
       else
         res.send 400, "Invalid API version specified. Please refer to semver versioning."
     else
