@@ -14,12 +14,13 @@ module.exports = class Validator
   # @param [String] schemaDir Relativ path to the schema directory.
   constructor: (@schemaDir) ->
     @js = new JaySchema (ref, callback) =>
-      if not @js.isRegistered ref+"#"
-        fs.readFile @schemaDir + ref + ".json", "utf8", (err, data) ->
-          if err?
-            callback err
-          else
-            callback null, JSON.parse(data)
+      callback undefined, require '../../' + @schemaDir + ref
+      # if not @js.isRegistered ref+"#"
+        # fs.readFile @schemaDir + ref + ".json", "utf8", (err, data) ->
+          # if err?
+            # callback err
+          # else
+            # callback undefined, JSON.parse(data)
     @schema = "xAPIStatement"
   
   # Validates the given json objects against the default `xAPI#` schema.
@@ -41,9 +42,9 @@ module.exports = class Validator
     if schema?
       unless @js.isRegistered schema
         @loadSchema schema
-      @js.validate json, schema, callback
+      @js.validate JSON.parse(JSON.stringify(json)), schema, callback
     else
-      throw new Error "No schema specified!"
+      callback new Error 'No schema specified!'
     return
 
   # Loads a file and parse the content as JSON.
