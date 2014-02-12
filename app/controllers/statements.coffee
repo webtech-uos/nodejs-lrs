@@ -46,26 +46,38 @@ module.exports = class StatementsController extends BaseController
             # TODO send errors and ids ??
             res.json status, if errorOccured then errors else ids
 
+  # Checks parameters
+  #
+  checkParams: (params) ->
+    count = 0
+    for k of params
+      if k in ['statementId', 'voidedStatementId', 'agent', 'verb', 'activity', 'registration', 'related_activities', 'since', 'until', 'limit', 'format', 'attachments', 'ascending']
+        count++
+    return count
+
   # Called whenever the clients requests to get all statements.
   #
   # @see http://mcavage.me/node-restify/#Routing restify for detailed parameter description
   #
   index: (req, res, next) ->
-    badParam = false
-
-    for k of req.query
-      unless k in ['statementId', 'attachments', 'format', 'voidedStatementId','agent']
-        badParam = k
-        break
-
-    if badParam
-      res.json 400, "Query parameter \"#{badParam}\" not allowed here."
+    if 'statementId' of req.query and 'voidedStatementId' of req.query
+      res.json 400, "statementId and voidedId ar defined. That is not allowed here."
     else
-      id = req.query.statementId
-      agent = req.query.agent
-      if id
-        @_sendStatement id, res
-      else if agent
+      if req.query.statementId
+        id = req.query.statementId
+        if @checkParams(req.query) == 1
+          @_sendStatement id, res
+        else
+          res.json 400, "statementId is defined, then no other filter parameters are allowed."
+
+      else if req.query.voidedSatementId
+        voidedId = req.query.voidesStatementId
+        if @checkParams(req.query) == 1
+          res.json 501, "Not implemented!"
+        else
+          res.json 400, "voidedId is defined, then no other filter parameters are allowed."
+      else if req.query.agent
+        agent = req.query.agent
         @_agent res, agent
       else
         options =
