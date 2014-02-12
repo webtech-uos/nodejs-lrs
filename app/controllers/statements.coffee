@@ -69,7 +69,9 @@ module.exports = class StatementsController extends BaseController
       else if agent
         @_agent res, agent
       else
-        @mapper.getAll (err, statements) =>
+        options =
+          skip: 0
+        @mapper.getAll options, (err, statements, optionsOut) =>
           res.json 200, statements
 
   # Called whenever the clients requests to modify a specific statement.
@@ -106,7 +108,7 @@ module.exports = class StatementsController extends BaseController
   before: (req, res, next) ->
     res.header 'X-Experience-API-Consistent-Through', new Date(new Date() - 1000*60*60).toISOString()
     super
-    
+
   # Gets all statements of an agent
   #
   _agent: (res, agent) ->
