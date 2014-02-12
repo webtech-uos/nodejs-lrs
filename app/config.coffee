@@ -17,3 +17,5 @@ module.exports =
   logger:
     file: 'log.txt'
     level: 'warn'
+  lrs:
+    statementsLimit: 1000

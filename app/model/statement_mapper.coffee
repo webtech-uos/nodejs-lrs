@@ -45,66 +45,61 @@ module.exports = class StatementMapper extends BaseMapper
   #
   # TODO: one should be able to specify the maximum number of returned statements
   #
-  getAll: (callback) ->
-    startIndex = null
-    maxNumberStatements = 100
-    numberRequested = maxNumberStatements
+  getAll: (options, callback) ->
+    #TODO
+    #
+    #
+
+    limit = options.limit ? 0
+    # if limit is set to 0 use the server maximum
+    limit = 1000 if limit == 0
+    # if skip was defined start at skip+1, else start at the beginning
+    skip = options.skip ? 0
+
+    ascending = options.ascending ? false
 
     @views.count (err, count) =>
-      if err
-        logger.error "getALL: database access with view count/all_statements failed: #{JSON.stringify err}"
-        callback err, []
-      else if count.length > 0 # TODO
-        scount = count[0].value
-        if scount > numberRequested
-          @views.list_ids descending: true, (err,  ids) =>
-            if err
-              logger.error "getALL: database access with list/statement_ids failed: #{JSON.stringify err}"
-              callback err, []
-            else
-              startIndex = 0 unless startIndex
-
-              if startIndex > scount
-                err = new Error 'More statements requested as there are'
-                err.httpCode = 400
-                callback err
-              else
-                if startIndex + numberRequested < scount
-                  endIndex = startIndex + numberRequested - 1
-                  # TODO generate URI for more statements
-                else
-                  endIndex = scount - 1
-
-                filterRange =
-                  startkey : ids[startIndex].key
-                  endkey: ids[endIndex].key
-                  descending: true
-
-                @views.find filterRange, (err, docs) =>
-                  if err
-                    logger.error "getALL: database access with view find_statement_by/db_id failed: #{JSON.stringify err}"
-                    callback err, []
-                  else
-                    statements = []
-                    for doc in docs
-                      statements.push doc.value
-
-                    callback undefined, statements
-
-        else
-          @views.find (err, docs) =>
-            if err
-              logger.error "getALL: database access with view find_statement_by/id failed: #{JSON.stringify err}"
-              callback err, []
-            else
-              statements = []
-              for doc in docs
-                statements.push doc.value
-
-              callback undefined, statements
-      else
+      scount = 0
+      if count.length == 0
         #there are no statements in the db
         callback undefined, []
+        return
+      else
+        scount = count[0]
+
+      if skip > scount
+        err = new Error 'More statements requested as there are'
+          err.httpCode = 400
+          callback err
+      else
+        if skip + limit < scount
+          # TODO generate URI for more statements
+
+        filter.options =
+          descending : not ascending
+          skip : skip
+          limit : limit
+
+        filter.keys = []
+        filter.keyNames = []
+
+        if options.since
+          keys.push options.since
+          keyNames.push "since"
+
+        if options.untill
+          keys.push options.untill
+          keyNames.push "untill"
+
+        @views.find filter, (err, docs) =>
+          if err
+            logger.error "getALL: database access failed: #{JSON.stringify err}"
+            callback err, []
+          else
+            statements = []
+            for doc in docs
+              statements.push doc.value
+            callback undefined, statements
 
   # Returns the statement with the given id to the callback.
   #
@@ -147,7 +142,7 @@ module.exports = class StatementMapper extends BaseMapper
   # it checks the two statements for equality
   #
   save: (statement, callback) ->
-    
+
     @validator.validateWithSchema statement, "xAPIStatement", (validatorErr) =>
       if validatorErr
         err = new Error "Statement is invalid: #{validatorErr}"
