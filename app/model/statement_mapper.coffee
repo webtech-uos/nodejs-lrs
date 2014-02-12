@@ -36,7 +36,7 @@ module.exports = class StatementMapper extends BaseMapper
           emit doc.value.actor.mbox, doc.value
         else
           emit null, null
-          
+
   # Instanciates a new statement mapper.
   #
   # @param dbController
@@ -54,12 +54,14 @@ module.exports = class StatementMapper extends BaseMapper
     #TODO
     #
     #
+    filter = {}
 
     limit = options.limit ? 0
     # if limit is set to 0 use the server maximum
     limit = 1000 if limit == 0
     # if skip was defined start at skip+1, else start at the beginning
     skip = options.skip ? 0
+    newSkip = 0
 
     ascending = options.ascending ? false
 
@@ -73,13 +75,14 @@ module.exports = class StatementMapper extends BaseMapper
         scount = count[0]
 
       if skip > scount
-        err = new Error 'More statements requested as there are'
-          err.httpCode = 400
-          callback err
+        err = new Error 'More statements requested as there are! Illegal skip parameter!'
+        err.httpCode = 400
+        callback err
       else
+
         if skip + limit < scount
           # TODO generate URI for more statements
-
+          newSkip = skip + limit
         filter.options =
           descending : not ascending
           skip : skip
@@ -104,7 +107,9 @@ module.exports = class StatementMapper extends BaseMapper
             statements = []
             for doc in docs
               statements.push doc.value
-            callback undefined, statements
+
+            options.skip = newSkip
+            callback undefined, statements, options
 
   # Returns the statement with the given id to the callback.
   #
@@ -190,5 +195,5 @@ module.exports = class StatementMapper extends BaseMapper
         statements = []
         for doc in docs
           statements.push doc.value
-          
+
         callback undefined, statements
