@@ -21,7 +21,6 @@ module.exports = class BaseMapper
   #   called as soon as the mapper is ready to be used
   #
   constructor: (@dbController, callback) ->
-    @dbPrefix = @constructor.name
     @views = {}
     logger.warn 'no callback supplied for Mapper' unless callback
 

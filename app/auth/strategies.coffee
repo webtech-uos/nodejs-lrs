@@ -12,7 +12,6 @@ module.exports = class Strategies
     #
     passport.use new LocalStrategy (username, password, done) ->
       users.findByName username, (err, user) ->
-        console.log user
         if err
           done err
         else
