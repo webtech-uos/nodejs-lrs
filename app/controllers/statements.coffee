@@ -54,7 +54,8 @@ module.exports = class StatementsController extends BaseController
     badParam = false
 
     for k of req.query
-      unless k in ['statementId', 'attachments', 'format', 'voidedStatementId','agent']
+      unless k in ['statementId', 'voidedStatementId', 'agent', 'verb', 'activity', 'registration', 'related_activities', 'since', 'until', 'limit', 'format', 'attachments', 'ascending']      
+      #unless k in ['statementId', 'attachments', 'format', 'voidedStatementId','agent']
         badParam = k
         break
 
