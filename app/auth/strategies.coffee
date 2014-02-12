@@ -3,7 +3,6 @@ LocalStrategy = require('passport-local').Strategy
 ConsumerStrategy = require('passport-http-oauth').ConsumerStrategy
 TokenStrategy = require('passport-http-oauth').TokenStrategy
 users = require './database/users'
-requestTokens = require './database/request_tokens'
 accessTokens = require './database/access_tokens'
 
 module.exports = class Strategies
@@ -63,7 +62,7 @@ module.exports = class Strategies
       # other middleware and request handlers, avoiding the need to do additional
       # unnecessary queries to the database.
       (requestToken, done) ->
-        requestTokens.find requestToken, (err, token) ->
+        requestTokenMapper.findByToken requestToken, (err, token) ->
           if err
             done err
           else
