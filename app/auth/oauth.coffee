@@ -7,28 +7,26 @@ utils = require '../utils'
 # create OAuth server
 server = oauthorize.createServer()
 
-# Register serialialization and deserialization functions.
-#
-# When a client redirects a user to the user authorization endpoint, an
-# authorization transaction is initiated.  To complete the transaction, the
-# user must authenticate and approve the authorization request.  Because this
-# may involve multiple HTTP request/response exchanges, the transaction is
-# stored in the session.
-#
-# An application must supply serialization functions, which determine how the
-# client object is serialized into the session.  Typically this will be a
-# simple matter of serializing the client's ID, and deserializing by finding
-# the client by ID from the database.
-
-server.serializeClient (client, done) ->
-  done null, client.id
-
-server.deserializeClient (id, done) ->
-  clients.find id, done
-
 module.exports = class OAuth
 
   constructor: (@accessTokenMapper, @clientMapper, @requestTokenMapper, @userMapper) ->
+    # Register serialialization and deserialization functions.
+    #
+    # When a client redirects a user to the user authorization endpoint, an
+    # authorization transaction is initiated.  To complete the transaction, the
+    # user must authenticate and approve the authorization request.  Because this
+    # may involve multiple HTTP request/response exchanges, the transaction is
+    # stored in the session.
+    #
+    # An application must supply serialization functions, which determine how the
+    # client object is serialized into the session.  Typically this will be a
+    # simple matter of serializing the client's ID, and deserializing by finding
+    # the client by ID from the database.
+    server.serializeClient (client, done) ->
+      done null, client.id
+
+    server.deserializeClient (id, done) =>
+      @clientMapper.find id, done
 
   # Token endpoints
   #
