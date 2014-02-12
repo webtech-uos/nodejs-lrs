@@ -24,8 +24,8 @@ module.exports = class RequestTokenMapper extends BaseMapper
     addRequestTokens = () =>
       tokens = [
         {
-          token: 'h0HnuCV6MWn0oGFsHeP5YiWLmzqSSyKUBioLFXFJMAPU2sCc5BzQcZTVhqHB34'
-          secret: '14hTIO1aEQPdYtBae7hbl58bcxaecieqfXaaAZZTkstjcROrN3jTAMheilIz9Q'
+          token: '8xme6vEQ'
+          secret: '3D2fAxOFipvrHIBWiZLBR8moAYKRTxp0'
           userID: '0acaf301-f3e0-4a54-ad7a-9f6dbd9f6fdb'
           clientID: '31e9245c-85e8-422b-a85a-8af2c50905ea'
           approved: true
