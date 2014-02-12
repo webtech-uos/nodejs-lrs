@@ -1,3 +1,4 @@
+config = require '../config'
 oauthorize = require 'oauthorize'
 passport = require 'passport'
 login = require 'connect-ensure-login'
@@ -147,12 +148,12 @@ module.exports = class OAuth
     [
       login.ensureLoggedIn()
 
-      server.userAuthorization (requestToken, done) ->
-          requestTokens.find requestToken, (err, token) ->
+      server.userAuthorization (requestToken, done) =>
+          @requestTokenMapper.findByToken requestToken, (err, token) =>
             if err
               done err
             else
-              clients.find token.clientID, (err, client) ->
+              @clientMapper.find token.clientID, (err, client) ->
                 if err
                   done err
                 else
@@ -160,6 +161,7 @@ module.exports = class OAuth
 
       (req, res) ->
         res.render 'dialog',
+          authorizeUrl: config.server.routePrefix+'/OAuth/authorize'
           transactionID: req.oauth.transactionID
           user: req.user
           client: req.oauth.client
