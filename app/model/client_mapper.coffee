@@ -32,6 +32,7 @@ module.exports = class ClientMapper extends BaseMapper
     addClients = () =>
       clients = [
         {
+          id: '31e9245c-85e8-422b-a85a-8af2c50905ea'
           name: 'Samplr'
           consumerKey: 'abc123'
           consumerSecret: 'ssh-secret'

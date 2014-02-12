@@ -36,10 +36,12 @@ module.exports = class UserMapper extends BaseMapper
         {
           username: 'bob'
           password: 'pizza'
+          id: '0acaf301-f3e0-4a54-ad7a-9f6dbd9f6fdb'
         }
         {
           username: 'henry'
           password: 'cats'
+          id: '6894baa7-f7bd-42be-9c98-a3bc68c5640b'
         }
       ]
 
