@@ -2,7 +2,6 @@ passport = require 'passport'
 LocalStrategy = require('passport-local').Strategy
 ConsumerStrategy = require('passport-http-oauth').ConsumerStrategy
 TokenStrategy = require('passport-http-oauth').TokenStrategy
-users = require './database/users'
 
 module.exports = class Strategies
   constructor: (accessTokenMapper, clientMapper, requestTokenMapper, userMapper) ->
