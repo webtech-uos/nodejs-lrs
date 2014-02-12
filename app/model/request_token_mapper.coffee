@@ -57,8 +57,10 @@ module.exports = class RequestTokenMapper extends BaseMapper
         callback err, []
       else
         if docs.length == 0
-          logger.info "request token for token #{token} does not exist"
-          callback undefined
+          logger.error "request token for token #{token} does not exist"
+          err = new Error "Invalid request token: #{token}"
+          err.httpCode = 400
+          callback err
         else
           callback undefined, docs[0].value, docs[0].id
 
