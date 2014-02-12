@@ -99,12 +99,18 @@ module.exports = class OAuth
         (requestToken, verifier, info, done) ->
           done null, verifier is info.verifier
 
-        (client, requestToken, info, done) ->
+        (client, requestToken, info, done) =>
           if info.approved and client.id is info.clientID
             token = utils.uid(16)
             secret = utils.uid(64)
 
-            accessTokens.save token, secret, info.userID, info.clientID, (err) ->
+            accessToken =
+              token: token
+              secret: secret
+              userID: info.userID
+              clientID: info.clientID
+
+            @accessTokenMapper.save accessToken, (err) ->
               if err
                 done err
               else
