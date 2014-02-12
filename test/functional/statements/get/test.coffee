@@ -3,11 +3,9 @@ env = require 'setup_test_env'
 exampleStatements = require 'example_statements.coffee'
 _ = require 'underscore'
 utils = require '../../../../app/utils'
+logger = require '../../../../app/logger'
 
 describe 'GET /api/statements', ->
-  Validator = require '../../../../app/validator/validator.coffee'
-  val = new Validator 'app/validator/schemas/'
-
   describe 'with no parameters', ->
     it 'should respond with 200 OK', (done) ->
       env.request
@@ -53,7 +51,7 @@ describe 'GET /api/statements', ->
           catch err
             return done err
 
-          val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
+          env.val.validateWithSchema res?.headers['x-experience-api-consistent-through'],
             'ISO8061Date',
             done
 
@@ -127,7 +125,7 @@ describe 'GET /api/statements', ->
           .get('/api/statements')
           .query(statementId: '12345678-1234-5678-1234-567812345681')
           .expect('x-experience-api-version', env.apiVersion)
-          .expect(400, done)
+          .expect(404, done)
     it 'unless that Statement has been requested by voidedStatementId.', (done) ->
       env.factory.create makeVoided, (err, voided) ->
         return done err if err?
@@ -161,7 +159,36 @@ describe 'GET /api/statements', ->
 
   # most of these parameters only apply for GETting multiple statements at once, see test suites above
   describe 'with agent parameter', ->
-    it 'should return only "Statements for which the specified Agent or group is the Actor or Object of the Statement"'
+    it 'should return only "Statements for which the specified Agent or group is the Actor or Object of the Statement"', (done) ->
+      env.factory.create {"actor": {"mbox": "mailto:test@uos.de"}}, (err, statement) ->
+        env.request
+          .get('/api/statements')
+          .query(agent: 'mailto:test@uos.de')
+          .expect(200)
+          .end (err, res) ->
+            failed = true
+            for stats in res.body
+              failed = false;
+              if stats.actor.mbox != 'mailto:test@uos.de'
+                failed = true
+                break;
+            if failed
+              done(new Error())
+            else
+              done()
+              
+  describe 'with invalid agent parameter', ->
+    it 'should return only "Statements for which the specified Agent or group is the Actor or Object of the Statement" (no statements)', (done) ->
+      env.factory.create {"actor": {"mbox": "mailto:test@uos.de"}}, (err, statement) ->
+        env.request
+          .get('/api/statements')
+          .query(agent: 'mailto:test1@uos.de')
+          .expect(200)
+          .end (err, res) ->
+            if err or res.body.length == 0
+              done()
+            else
+              done(new Error())
 
   describe 'with verb parameter', ->
     it 'should return only "Statements matching the specified verb id"'
@@ -188,7 +215,7 @@ describe 'GET /api/statements', ->
     it 'should return no more than the specified number of statements'
     it 'should use the server limit of statements if limit is 0'
 
-  describe 'with format parameter', ->
+  describe 'with format paameter', ->
     describe 'equal to "ids"', ->
       it 'should accept the value'
       it 'should "only include minimum information necessary in Agent, Activity, and group Objects to identify them"'
