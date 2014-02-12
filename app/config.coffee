@@ -16,6 +16,6 @@ module.exports =
     routePrefix: '/api'
   logger:
     file: 'log.txt'
-    level: 'warn'
+    level: 'info'
   lrs:
     statementsLimit: 1000

@@ -122,7 +122,6 @@ module.exports = class Server
 
     # create controllers
     for name, dict of @controllers
-      logger.info name
       do(name, dict, dbCon, callback) ->
         dict['object'] = new (require "./controllers/#{name}") dbCon, (err) =>
           if err

@@ -37,19 +37,13 @@ module.exports = class DBController
       else if exists and @config.reset
         logger.warn 'RESETTING DATABASE: ' + @config.name
         database.destroy =>
-          @_prepareDB database, callback
-      else
-        @_prepareDB database, callback
-
-  _prepareDB: (database, callback) ->
-    database.exists (err, exists) =>
-      if err
-        logger.error "Error while connecting to database server: " + err
-        callback err
-        undefined
+          database.create =>
+            @db = database
+            logger.info "The database '#{@config.name}' has been created."
+            callback()
       else if exists
-        logger.info "Found database '#{@config.name}' on the database server."
         @db = database
+        logger.info "Found database '#{@config.name}' on the database server."
         callback()
       else
         database.create =>
