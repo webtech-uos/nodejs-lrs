@@ -1,40 +1,38 @@
+config = require '../config'
 oauthorize = require 'oauthorize'
 passport = require 'passport'
 login = require 'connect-ensure-login'
-clients = require './database/clients'
-requestTokens = require './database/request_tokens'
 utils = require '../utils'
-
 
 # create OAuth server
 server = oauthorize.createServer()
 
-# Register serialialization and deserialization functions.
-#
-# When a client redirects a user to the user authorization endpoint, an
-# authorization transaction is initiated.  To complete the transaction, the
-# user must authenticate and approve the authorization request.  Because this
-# may involve multiple HTTP request/response exchanges, the transaction is
-# stored in the session.
-#
-# An application must supply serialization functions, which determine how the
-# client object is serialized into the session.  Typically this will be a
-# simple matter of serializing the client's ID, and deserializing by finding
-# the client by ID from the database.
+module.exports = class OAuth
 
-server.serializeClient (client, done) ->
-  done null, client.id
+  constructor: (@accessTokenMapper, @clientMapper, @requestTokenMapper, @userMapper) ->
+    # Register serialialization and deserialization functions.
+    #
+    # When a client redirects a user to the user authorization endpoint, an
+    # authorization transaction is initiated.  To complete the transaction, the
+    # user must authenticate and approve the authorization request.  Because this
+    # may involve multiple HTTP request/response exchanges, the transaction is
+    # stored in the session.
+    #
+    # An application must supply serialization functions, which determine how the
+    # client object is serialized into the session.  Typically this will be a
+    # simple matter of serializing the client's ID, and deserializing by finding
+    # the client by ID from the database.
+    server.serializeClient (client, done) ->
+      done null, client.id
 
-server.deserializeClient (id, done) ->
-  clients.find id, done
+    server.deserializeClient (id, done) =>
+      @clientMapper.find id, done
 
-module.exports =
-
-# Token endpoints
-#
-# This following endpoints are used by a client to obtain tokens.  First, a
-# temporary request token is used, which will be authorized by the user.  Once
-# authorized, it can be exchanged for a permanent access token.
+  # Token endpoints
+  #
+  # This following endpoints are used by a client to obtain tokens.  First, a
+  # temporary request token is used, which will be authorized by the user.  Once
+  # authorized, it can be exchanged for a permanent access token.
 
   # Request token endpoint
   #
@@ -50,20 +48,27 @@ module.exports =
   # Furthermore, it may be dificult or impossible to guarantee the
   # confidentiality of client credentials, in which case it is advisable
   # to validate the `callbackURL` against a registered value.
-  requestToken: [
-    passport.authenticate 'consumer', { session: false }
+  createRequestTokenMiddleware: ->
+    [
+      passport.authenticate 'consumer', { session: false }
 
-    server.requestToken (client, callbackURL, done) ->
-      token = utils.uid(8)
-      secret = utils.uid(32)
-      requestTokens.save token, secret, client.id, (err) ->
-        if err
-          done err
-        else
-          done null, token, secret
+      server.requestToken (client, callbackURL, done) =>
+        token = utils.uid(8)
+        secret = utils.uid(32)
 
-    server.errorHandler()
-  ]
+        requestToken =
+          clientID: client.id
+          token: token
+          secret: secret
+
+        @requestTokenMapper.save requestToken, (err) ->
+          if err
+            done err
+          else
+            done null, token, secret
+
+      server.errorHandler()
+    ]
 
   # Access token endpoint
   #
@@ -85,37 +90,44 @@ module.exports =
   # was issued to, and the user who authorized it, and the verifier.  Because of
   # this, it is often unnecessary to query the database for further information
   # about `requestToken`.
-  accessToken: [
-    passport.authenticate 'consumer', { session: false }
+  createAccessTokenMiddleware: ->
+    [
+      passport.authenticate 'consumer', { session: false }
 
-    server.accessToken(
-      (requestToken, verifier, info, done) ->
-        done null, verifier is info.verifier
+      server.accessToken(
+        (requestToken, verifier, info, done) ->
+          done null, verifier is info.verifier
 
-      (client, requestToken, info, done) ->
-        if info.approved and client.id is info.clientID
-          token = utils.uid(16)
-          secret = utils.uid(64)
+        (client, requestToken, info, done) =>
+          if info.approved and client.id is info.clientID
+            token = utils.uid(16)
+            secret = utils.uid(64)
 
-          accessTokens.save token, secret, info.userID, info.clientID, (err) ->
-            if err
-              done err
-            else
-              done null, token, secret
-        else
-          done null, false
-    )
+            accessToken =
+              token: token
+              secret: secret
+              userID: info.userID
+              clientID: info.clientID
 
-    server.errorHandler()
-  ]
+            @accessTokenMapper.save accessToken, (err) ->
+              if err
+                done err
+              else
+                done null, token, secret
+          else
+            done null, false
+      )
 
-# User authorization endpoints
-#
-# This following endpoints are used to interact with the user and obtain their
-# authorization.  After ensuring that a user is logged in, a form will be
-# rendered prompting the user to allow or deny the request.  That form is
-# submitted to a decision endpoint, which process the form and redirects the
-# user back to the client application.
+      server.errorHandler()
+    ]
+
+  # User authorization endpoints
+  #
+  # This following endpoints are used to interact with the user and obtain their
+  # authorization.  After ensuring that a user is logged in, a form will be
+  # rendered prompting the user to allow or deny the request.  That form is
+  # submitted to a decision endpoint, which process the form and redirects the
+  # user back to the client application.
 
   # user authorization endpoint
   #
@@ -130,26 +142,28 @@ module.exports =
   # to obtain their approval (displaying details about the client requesting
   # authorization).  We accomplish that here by routing through `ensureLoggedIn()`
   # first, and rendering the `dialog` view.
-  userAuthorization: [
-    login.ensureLoggedIn()
+  createUserAuthorizationMiddleware: () ->
+    [
+      login.ensureLoggedIn()
 
-    server.userAuthorization (requestToken, done) ->
-        requestTokens.find requestToken, (err, token) ->
-          if err
-            done err
-          else
-            clients.find token.clientID, (err, client) ->
-              if err
-                done err
-              else
-                done null, client, token.callbackURL
+      server.userAuthorization (requestToken, done) =>
+          @requestTokenMapper.findByToken requestToken, (err, token) =>
+            if err
+              done err
+            else
+              @clientMapper.find token.clientID, (err, client) ->
+                if err
+                  done err
+                else
+                  done null, client, token.callbackURL
 
-    (req, res) ->
-      res.render 'dialog',
-        transactionID: req.oauth.transactionID
-        user: req.user
-        client: req.oauth.client
-  ]
+      (req, res) ->
+        res.render 'dialog',
+          authorizeUrl: config.server.routePrefix+'/OAuth/authorize'
+          transactionID: req.oauth.transactionID
+          user: req.user
+          client: req.oauth.client
+    ]
 
   # user decision endpoint
   #
@@ -164,14 +178,15 @@ module.exports =
   # scope of access, duration of access, and any other parameters parsed by the
   # application.  These details are encoded into the token, to be used when
   # issuing the permanent access token.
-  userDecision: [
-    login.ensureLoggedIn()
+  createUserDecisionMiddleware: () ->
+    [
+      login.ensureLoggedIn()
 
-    server.userDecision (requestToken, user, res, done) ->
-      verifier = utils.uid(8)
-      requestTokens.approve requestToken, user.id, verifier, (err) ->
-        if err
-          done err
-        else
-          done null, verifier
-  ]
+      server.userDecision (requestToken, user, res, done) =>
+        verifier = utils.uid(8)
+        @requestTokenMapper.approve requestToken, user.id, verifier, (err) ->
+          if err
+            done err
+          else
+            done null, verifier
+    ]

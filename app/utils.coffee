@@ -10,7 +10,7 @@ module.exports =
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     charlen = chars.length
 
-    for i in [0...charlen]
+    for i in [0...len]
       buf.push chars[getRandomInt(0, charlen - 1)]
 
     return buf.join('')

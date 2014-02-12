@@ -16,12 +16,11 @@ util = require 'util'
 module.exports = class BaseMapper
 
   # Creates a new entity-specific mapper.
-  # 
+  #
   # @param callback
   #   called as soon as the mapper is ready to be used
   #
   constructor: (@dbController, callback) ->
-    @dbPrefix = @constructor.name
     @views = {}
     logger.warn 'no callback supplied for Mapper' unless callback
 
@@ -53,4 +52,21 @@ module.exports = class BaseMapper
     object =
       value: document
       type: @constructor.TYPE
+    @dbController.db.save object, callback
+
+  # Stores a document in the database. Updates its fields if the document already
+  # exists.
+  #
+  # @param id
+  #  the document id
+  # @param document
+  #  the object to persist
+  # @param callback
+  #  called as soon as the document is stored
+  #
+  update: (id, document, callback) ->
+    object =
+      value: document
+      type: @constructor.TYPE
+      _id: id
     @dbController.db.save object, callback
