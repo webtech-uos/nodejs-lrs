@@ -30,3 +30,8 @@ module.exports = class DocumentMapper extends BaseMapper
             callback undefined, state
           else
             callback 'DocumentMapper.find: Multiple States for Id', []
+
+  save: (state, callback) ->
+  	# TODO Check if State is ok
+  	super state, callback
+

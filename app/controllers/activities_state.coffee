@@ -20,6 +20,10 @@ module.exports = class ActivitiesStateController extends BaseController
 
 
   index: (req, res, next) ->
+    # fetches, the document specified by the given stateId that
+    # exists in the context of the specified Activity, 
+    # Agent, and registration (if specified).
+    # TODO: Context
     badParam = false
 
     for k of req.query
@@ -40,6 +44,7 @@ module.exports = class ActivitiesStateController extends BaseController
       # No StateId given
       # GET will return the available ids
       if id is undefined
+        # TODO: Send all avaiable ID's
         res.send 200, 'Alle verfügbaren IDs'
       # StateId is given
       else
@@ -56,7 +61,14 @@ module.exports = class ActivitiesStateController extends BaseController
     res.send 200, ""
 
   create: (req, res, next) ->
-    res.send 200, ""
+    # TODO Check Requirements
+    state = req.body
+    @mapper.save state, (err, createdState) ->
+      if err
+        console.log err
+        res.send 400, err
+      else
+        res.send 200, createdState
 
   delete: (req, res, next) ->
     res.send 200, ""
