@@ -182,9 +182,9 @@ module.exports = class OAuth
     [
       login.ensureLoggedIn()
 
-      server.userDecision (requestToken, user, res, done) ->
+      server.userDecision (requestToken, user, res, done) =>
         verifier = utils.uid(8)
-        requestTokens.approve requestToken, user.id, verifier, (err) ->
+        @requestTokenMapper.approve requestToken, user.id, verifier, (err) ->
           if err
             done err
           else

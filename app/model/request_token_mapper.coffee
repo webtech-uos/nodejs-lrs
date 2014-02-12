@@ -28,7 +28,7 @@ module.exports = class RequestTokenMapper extends BaseMapper
           secret: '3D2fAxOFipvrHIBWiZLBR8moAYKRTxp0'
           userID: '0acaf301-f3e0-4a54-ad7a-9f6dbd9f6fdb'
           clientID: '31e9245c-85e8-422b-a85a-8af2c50905ea'
-          approved: true
+          approved: false
         }
       ]
 
@@ -60,10 +60,42 @@ module.exports = class RequestTokenMapper extends BaseMapper
           logger.info "request token for token #{token} does not exist"
           callback undefined
         else
-          callback undefined, docs[0].value
+          callback undefined, docs[0].value, docs[0].id
+
+  # Approves an existing token.
+  #
+  # @param token
+  #  the token to approve
+  # @param userID
+  #  the id of the user approving the token
+  # @param verifier
+  #  an optional verifier
+  # @param callback
+  #  called as soon as the token is approved
+  #
+  approve: (token, userID, verifier, callback) ->
+    @findByToken token, (err, requestToken, id) =>
+      if err
+        callback err
+      else
+        requestToken.verifier = verifier
+        requestToken.approved = true
+
+        @update id, requestToken, (err) ->
+          if err
+            callback err
+          else
+            callback()
 
   # Stores a request token in the database
   #
   save: (requestToken, callback) ->
     super requestToken, (err, res) =>
+      callback err, requestToken
+
+  # Stores a request token in the database, updates its field if it already
+  # exists.
+  #
+  update: (id, requestToken, callback) ->
+    super id, requestToken, (err, res) =>
       callback err, requestToken

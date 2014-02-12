@@ -53,3 +53,20 @@ module.exports = class BaseMapper
       value: document
       type: @constructor.TYPE
     @dbController.db.save object, callback
+
+  # Stores a document in the database. Updates its fields if the document already
+  # exists.
+  #
+  # @param id
+  #  the document id
+  # @param document
+  #  the object to persist
+  # @param callback
+  #  called as soon as the document is stored
+  #
+  update: (id, document, callback) ->
+    object =
+      value: document
+      type: @constructor.TYPE
+      _id: id
+    @dbController.db.save object, callback
