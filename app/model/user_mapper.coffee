@@ -17,6 +17,12 @@ module.exports = class UserMapper extends BaseMapper
           emit doc.value.id, doc.value
         else
           emit null, null
+    find_by_username:
+      map: (doc)->
+        if doc.type == 'user'
+          emit doc.value.username, doc.value
+        else
+          emit null, null
     list:
       map: (doc)->
         if doc.type == 'user'
@@ -77,6 +83,24 @@ module.exports = class UserMapper extends BaseMapper
       else
         if docs.length == 0
           logger.info 'user does not exist: ' + id
+          callback undefined
+        else
+          callback undefined, docs[0].value
+
+  # Returns the user with the given username to the callback.
+  #
+  # @param username
+  #   username of the user to look up
+  #
+  findByName: (username, callback) ->
+    @views.find_by_username key: username, (err, docs) =>
+      if err
+        logger.error 'find user: '+username
+        logger.error "find: database access with view find_user_by/id failed: #{JSON.stringify err}"
+        callback err, []
+      else
+        if docs.length == 0
+          logger.info 'user does not exist: '+username
           callback undefined
         else
           callback undefined, docs[0].value

@@ -10,8 +10,8 @@ module.exports = class Strategies
     # Anytime a request is made to authorize an application, we must ensure that
     # a user is logged in before asking them to approve the request.
     #
-    passport.use new LocalStrategy (username, password, done) ->
-      users.findByName username, (err, user) ->
+    passport.use new LocalStrategy (username, password, done) =>
+      userMapper.findByName username, (err, user) ->
         if err
           done err
         else
@@ -21,7 +21,7 @@ module.exports = class Strategies
       done null, user.id
 
     passport.deserializeUser (id, done) ->
-      users.find id, done
+      userMapper.find id, done
 
 
     # This strategy is used to authenticate registered OAuth consumers (aka
