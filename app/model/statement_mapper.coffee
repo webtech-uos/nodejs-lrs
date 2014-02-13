@@ -44,7 +44,7 @@ module.exports = class StatementMapper extends BaseMapper
     findByVerb:
       map: (doc) ->
         if doc.type == 'statement'
-          emit doc.value.verb, doc.value
+          emit doc.value.verb.id, doc.value
     findByActivity:
       map: (doc)->
         if doc.type == 'statement'
@@ -56,99 +56,92 @@ module.exports = class StatementMapper extends BaseMapper
     findByAgentVerbActivity:
       map: (doc) ->
         if doc.type == 'statement'
-          keys = [doc.value.verb, doc.value.object.id]
           if doc.value.actor.openID
-            emit [doc.value.actor.openID].concat keys, doc.value
+            emit [doc.value.actor.openID, doc.value.verb.id, doc.value.object.id], doc.value
           if doc.value.actor.mbox
-            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+            emit [doc.value.actor.mbox.toString(), doc.value.verb.id, doc.value.object.id], doc.value
           if doc.value.actor.mbox_sha1sum
-            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+            emit [doc.value.actor.mbox_sha1sum, doc.value.verb.id, doc.value.object.id], doc.value
           if doc.value.actor.account
-            emit [doc.value.actor.account.homePage].concat keys, doc.value
+            emit [doc.value.actor.account.homePage, doc.value.verb.id, doc.value.object.id], doc.value
     findByAgentVerbActivityStored:
       map: (doc) ->
         if doc.type == 'statement'
-          keys = [doc.value.verb, doc.value.object.id, doc.value.stored]
           if doc.value.actor.openID
-            emit [doc.value.actor.openID].concat keys, doc.value
+            emit [doc.value.actor.openID, doc.value.verb.id, doc.value.object.id, doc.value.stored], doc.value
           if doc.value.actor.mbox
-            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+            emit [doc.value.actor.mbox.toString(), doc.value.verb.id, doc.value.object.id, doc.value.stored], doc.value
           if doc.value.actor.mbox_sha1sum
-            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+            emit [doc.value.actor.mbox_sha1sum, doc.value.verb.id, doc.value.object.id, doc.value.stored], doc.value
           if doc.value.actor.account
-            emit [doc.value.actor.account.homePage].concat keys, doc.value
+            emit [doc.value.actor.account.homePage, doc.value.verb.id, doc.value.object.id, doc.value.stored], doc.value
     findByAgentActivity:
       map: (doc) ->
         if doc.type == 'statement'
-          keys = [doc.value.object.id]
           if doc.value.actor.openID
-            emit [doc.value.actor.openID].concat keys, doc.value
+            emit [doc.value.actor.openID, doc.value.object.id], doc.value
           if doc.value.actor.mbox
-            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+            emit [doc.value.actor.mbox.toString(), doc.value.object.id], doc.value
           if doc.value.actor.mbox_sha1sum
-            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+            emit [doc.value.actor.mbox_sha1sum, doc.value.object.id], doc.value
           if doc.value.actor.account
-            emit [doc.value.actor.account.homePage].concat keys, doc.value
+            emit [doc.value.actor.account.homePage, doc.value.object.id], doc.value
     findByAgentActivityStored:
       map: (doc) ->
         if doc.type == 'statement'
-          keys = [doc.value.object.id, doc.value.stored]
           if doc.value.actor.openID
-            emit [doc.value.actor.openID].concat keys, doc.value
+            emit [doc.value.actor.openID, doc.value.object.id, doc.value.stored, doc.value.object.id, doc.value.stored], doc.value
           if doc.value.actor.mbox
-            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+            emit [doc.value.actor.mbox.toString(), doc.value.object.id, doc.value.stored], doc.value
           if doc.value.actor.mbox_sha1sum
-            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+            emit [doc.value.actor.mbox_sha1sum, doc.value.object.id, doc.value.stored], doc.value
           if doc.value.actor.account
-            emit [doc.value.actor.account.homePage].concat keys, doc.value
+            emit [doc.value.actor.account.homePage, doc.value.object.id, doc.value.stored], doc.value
     findByAgentVerb:
       map: (doc) ->
         if doc.type == 'statement'
-          keys = [doc.value.verb]
           if doc.value.actor.openID
-            emit [doc.value.actor.openID].concat keys, doc.value
+            emit [doc.value.actor.openID, doc.value.verb.id], doc.value
           if doc.value.actor.mbox
-            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+            emit [doc.value.actor.mbox.toString(), doc.value.verb.id], doc.value
           if doc.value.actor.mbox_sha1sum
-            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+            emit [doc.value.actor.mbox_sha1sum, doc.value.verb.id], doc.value
           if doc.value.actor.account
-            emit [doc.value.actor.account.homePage].concat keys, doc.value
+            emit [doc.value.actor.account.homePage, doc.value.verb.id], doc.value
     findByAgentVerbStored:
       map: (doc) ->
         if doc.type == 'statement'
-          keys = [doc.value.verb, doc.value.stored]
           if doc.value.actor.openID
-            emit [doc.value.actor.openID].concat keys, doc.value
+            emit [doc.value.actor.openID, doc.value.verb.id, doc.value.stored], doc.value
           if doc.value.actor.mbox
-            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+            emit [doc.value.actor.mbox.toString(), doc.value.verb.id, doc.value.stored], doc.value
           if doc.value.actor.mbox_sha1sum
-            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+            emit [doc.value.actor.mbox_sha1sum, doc.value.verb.id, doc.value.stored], doc.value
           if doc.value.actor.account
-            emit [doc.value.actor.account.homePage].concat keys, doc.value
+            emit [doc.value.actor.account.homePage, doc.value.verb.id, doc.value.stored], doc.value
     findByAgentStored:
       map: (doc) ->
         if doc.type == 'statement'
-          keys = [doc.value.stored]
           if doc.value.actor.openID
-            emit [doc.value.actor.openID].concat keys, doc.value
+            emit [doc.value.actor.openID, doc.value.stored], doc.value
           if doc.value.actor.mbox
-            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+            emit [doc.value.actor.mbox.toString(), doc.value.stored], doc.value
           if doc.value.actor.mbox_sha1sum
-            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+            emit [doc.value.actor.mbox_sha1sum, doc.value.stored], doc.value
           if doc.value.actor.account
-            emit [doc.value.actor.account.homePage].concat keys, doc.value
+            emit [doc.value.actor.account.homePage, doc.value.stored], doc.value
     findByVerbActivity:
       map: (doc) ->
         if doc.type == 'statement'
-          emit [doc.value.verb, doc.value.object.id], doc.value
+          emit [doc.value.verb.id, doc.value.object.id], doc.value
     findByVerbActivityStored:
       map: (doc) ->
         if doc.type == 'statement'
-          emit [doc.value.verb, doc.value.object.id, doc.value.stored], doc.value
+          emit [doc.value.verb.id, doc.value.object.id, doc.value.stored], doc.value
     findByVerbStored:
       map: (doc) ->
         if doc.type == 'statement'
-          emit [doc.value.verb, doc.value.stored], doc.value
+          emit [doc.value.verb.id, doc.value.stored], doc.value
     findByActivityStored:
       map: (doc) ->
         if doc.type == 'statement'
@@ -220,8 +213,8 @@ module.exports = class StatementMapper extends BaseMapper
     #console.log "Options"
     #console.log options
     #if viewMasterKey
-    #  console.log "viewMasterKey"
-    #  console.log viewMasterKey
+    #console.log "viewMasterKey"
+    #console.log viewMasterKey
 
     viewsSelection=
       'agent|verb|activity|stored|' : @views.findByAgentVerbActivityStored

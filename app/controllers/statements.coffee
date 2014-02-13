@@ -114,6 +114,8 @@ module.exports = class StatementsController extends BaseController
         if req.query.skip?
           options.skip = req.query.skip
 
+        #console.log options
+
         @mapper.getAll options, (err, statements, paramsOut) =>
           res.json 200, statements
 

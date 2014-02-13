@@ -6,7 +6,7 @@ module.exports =
     host: 'localhost'
     port: 5984
     name: 'nodejs-lrs'
-    reset: true
+    reset: false
   server: # REST server (xAPI)
     port: 8080
     name: 'nodejs-lrs'
