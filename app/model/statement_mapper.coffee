@@ -37,6 +37,9 @@ module.exports = class StatementMapper extends BaseMapper
         else
           emit null, null
 
+
+
+
   # Instanciates a new statement mapper.
   #
   # @param dbController
@@ -51,6 +54,7 @@ module.exports = class StatementMapper extends BaseMapper
   # TODO: one should be able to specify the maximum number of returned statements
   #
   getAll: (options, callback) ->
+    logger.info "getAll statement mapper"
     #TODO
     #
     #
@@ -59,9 +63,13 @@ module.exports = class StatementMapper extends BaseMapper
     limit = options.limit ? 0
     # if limit is set to 0 use the server maximum
     limit = 1000 if limit == 0
+
+    logger.info "limit is set to #{limit}."
     # if skip was defined start at skip+1, else start at the beginning
     skip = options.skip ? 0
     newSkip = 0
+
+    logger.info "skip is set to #{skip}."
 
     ascending = options.ascending ? false
 
@@ -72,8 +80,9 @@ module.exports = class StatementMapper extends BaseMapper
         callback undefined, []
         return
       else
-        scount = count[0]
+        scount = count[0].value
 
+      logger.info "#{scount} statements in the database."
       if skip > scount
         err = new Error 'More statements requested as there are! Illegal skip parameter!'
         err.httpCode = 400
@@ -88,22 +97,12 @@ module.exports = class StatementMapper extends BaseMapper
           skip : skip
           limit : limit
 
-        filter.keys = []
-        filter.keyNames = []
-
-        if options.since
-          keys.push options.since
-          keyNames.push "since"
-
-        if options.untill
-          keys.push options.untill
-          keyNames.push "untill"
-
-        @views.find filter, (err, docs) =>
+        @views.find filter.options, (err, docs) =>
           if err
             logger.error "getALL: database access failed: #{JSON.stringify err}"
             callback err, []
           else
+            console.log docs
             statements = []
             for doc in docs
               statements.push doc.value
