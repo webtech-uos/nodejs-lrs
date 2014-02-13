@@ -13,31 +13,234 @@ module.exports = class StatementMapper extends BaseMapper
 
   @VIEWS =
     find:
+      map: (dox) ->
+        if doc.type == 'statement'
+          emit doc.value.id, doc.value
+    findById:
       map: (doc) ->
         if doc.type == 'statement'
           emit doc.value.id, doc.value
-    list_ids:
+    listIds:
       map: (doc) ->
         if doc.type == 'statement'
           emit doc.value.id, null
-        else
-          emit null, null
     count:
       map: (doc) ->
         if doc.type == 'statement'
           emit null, 1
-        else
-          emit null, 0
       reduce: (key, values, rereduce) ->
         sum values
-    find_by_agent:
+    findByAgent:
       map: (doc) ->
         if doc.type == 'statement'
-          emit doc.value.actor.mbox, doc.value
+          if doc.value.actor.openID
+            emit doc.value.actor.openID, doc.value
+          if doc.value.actor.mbox
+            emit doc.value.actor.mbox.toString(), doc.value
+          if doc.value.actor.mbox_sha1sum
+            emit doc.value.actor.mbox_sha1sum, doc.value
+          if doc.value.actor.account
+            emit doc.value.actor.account.homePage, doc.value
+    findByVerb:
+      map: (doc) ->
+        if doc.type == 'statement'
+          emit doc.value.verb, doc.value
+    findByActivity:
+      map: (doc)->
+        if doc.type == 'statement'
+          emit doc.value.object.id, doc.value
+    findByStored:
+      map: (doc)->
+        if doc.type == 'statement'
+          emit doc.value.stored, doc.value
+    findByAgentVerbActivity:
+      map: (doc) ->
+        if doc.type == 'statement'
+          keys = [doc.value.verb, doc.value.object.id]
+          if doc.value.actor.openID
+            emit [doc.value.actor.openID].concat keys, doc.value
+          if doc.value.actor.mbox
+            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+          if doc.value.actor.mbox_sha1sum
+            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+          if doc.value.actor.account
+            emit [doc.value.actor.account.homePage].concat keys, doc.value
+    findByAgentVerbActivityStored:
+      map: (doc) ->
+        if doc.type == 'statement'
+          keys = [doc.value.verb, doc.value.object.id, doc.value.stored]
+          if doc.value.actor.openID
+            emit [doc.value.actor.openID].concat keys, doc.value
+          if doc.value.actor.mbox
+            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+          if doc.value.actor.mbox_sha1sum
+            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+          if doc.value.actor.account
+            emit [doc.value.actor.account.homePage].concat keys, doc.value
+    findByAgentActivity:
+      map: (doc) ->
+        if doc.type == 'statement'
+          keys = [doc.value.object.id]
+          if doc.value.actor.openID
+            emit [doc.value.actor.openID].concat keys, doc.value
+          if doc.value.actor.mbox
+            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+          if doc.value.actor.mbox_sha1sum
+            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+          if doc.value.actor.account
+            emit [doc.value.actor.account.homePage].concat keys, doc.value
+    findByAgentActivityStored:
+      map: (doc) ->
+        if doc.type == 'statement'
+          keys = [doc.value.object.id, doc.value.stored]
+          if doc.value.actor.openID
+            emit [doc.value.actor.openID].concat keys, doc.value
+          if doc.value.actor.mbox
+            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+          if doc.value.actor.mbox_sha1sum
+            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+          if doc.value.actor.account
+            emit [doc.value.actor.account.homePage].concat keys, doc.value
+    findByAgentVerb:
+      map: (doc) ->
+        if doc.type == 'statement'
+          keys = [doc.value.verb]
+          if doc.value.actor.openID
+            emit [doc.value.actor.openID].concat keys, doc.value
+          if doc.value.actor.mbox
+            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+          if doc.value.actor.mbox_sha1sum
+            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+          if doc.value.actor.account
+            emit [doc.value.actor.account.homePage].concat keys, doc.value
+    findByAgentVerbStored:
+      map: (doc) ->
+        if doc.type == 'statement'
+          keys = [doc.value.verb, doc.value.stored]
+          if doc.value.actor.openID
+            emit [doc.value.actor.openID].concat keys, doc.value
+          if doc.value.actor.mbox
+            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+          if doc.value.actor.mbox_sha1sum
+            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+          if doc.value.actor.account
+            emit [doc.value.actor.account.homePage].concat keys, doc.value
+    findByAgentStored:
+      map: (doc) ->
+        if doc.type == 'statement'
+          keys = [doc.value.stored]
+          if doc.value.actor.openID
+            emit [doc.value.actor.openID].concat keys, doc.value
+          if doc.value.actor.mbox
+            emit [doc.value.actor.mbox.toString()].concat keys, doc.value
+          if doc.value.actor.mbox_sha1sum
+            emit [doc.value.actor.mbox_sha1sum].concat keys, doc.value
+          if doc.value.actor.account
+            emit [doc.value.actor.account.homePage].concat keys, doc.value
+    findByVerbActivity:
+      map: (doc) ->
+        if doc.type == 'statement'
+          emit [doc.value.verb, doc.value.object.id], doc.value
+    findByVerbActivityStored:
+      map: (doc) ->
+        if doc.type == 'statement'
+          emit [doc.value.verb, doc.value.object.id, doc.value.stored], doc.value
+    findByVerbStored:
+      map: (doc) ->
+        if doc.type == 'statement'
+          emit [doc.value.verb, doc.value.stored], doc.value
+    findByActivityStored:
+      map: (doc) ->
+        if doc.type == 'statement'
+          emit [doc.value.object.id, doc.value.stored], doc.value
+
+
+
+  filterStatements: (filter, callback) ->
+    startkey = []
+    endkey = []
+    viewMasterKey = ""
+
+    if filter.agent
+      startkey.push filter.agent
+      endkey.push filter.agent
+      viewMasterKey += 'agent|'
+
+    if filter.verb
+      viewMasterKey += 'verb|'
+      startkey.push filter.verb
+      endkey.push filter.verb
+
+    if filter.activity
+      viewMasterKey += 'activity|'
+      startkey.push filter.object.id
+      endkey.push filter.object.id
+
+    if filter.since or filter.until
+      viewMasterKey += 'stored|'
+      if filter.since
+        startkey.push filter.since
+      if filter.until
+        endkey.push filter.until
+
+    descending = false
+    if not filter.ascending
+      #toggle start end endkey
+      tmp = startkey
+      startkey = endkey
+      endkey = tmp
+      descending = true
+
+    options =
+      limit:filter.limit
+      skip:filter.skip
+      descending: descending
+
+    arrayEqual = (a, b) ->
+      a.length is b.length and a.every (elem, i) -> elem is b[i]
+
+    if arrayEqual startkey, endkey
+      switch startkey.length
+        when 0
+          break
+          # do nothing
+        when 1
+          options.key = startkey[0]
+          break
         else
-          emit null, null
+          options.key = startkey
+          break
+    else
+      if startkey.length != 0
+        options.startkey = startkey
 
+      if endkey.length != 0
+        options.endkey = endkey
 
+    #console.log "Options"
+    #console.log options
+    #if viewMasterKey
+    #  console.log "viewMasterKey"
+    #  console.log viewMasterKey
+
+    viewsSelection=
+      'agent|verb|activity|stored|' : @views.findByAgentVerbActivityStored
+      'agent|verb|activity|'        : @views.findByAgentVerbActivity
+      'agent|verb|stored|'          : @views.findByAgentVerbStored
+      'agent|verb|'                 : @views.findByAgentVerb
+      'agent|activity|stored|'      : @views.findByAgentActivityStored
+      'agent|activity|'             : @views.findByAgentActivity
+      'agent|stored|'               : @views.findByAgentStored
+      'agent|'                      : @views.findByAgent
+      'verb|activity|stored|'       : @views.findByVerbActivityStored
+      'verb|activity|'              : @views.findByVerbActivity
+      'verb|stored|'                : @views.findByVerbStored
+      'verb|'                       : @views.findByVerb
+      'activity|stored|'            : @views.findByActivityStored
+      'activity|'                   : @views.findByActivity
+      'stored|'                     : @views.findByStored
+      ''                            : @views.findByStored
+    viewsSelection[viewMasterKey] options, callback
 
 
   # Instanciates a new statement mapper.
@@ -54,24 +257,18 @@ module.exports = class StatementMapper extends BaseMapper
   # TODO: one should be able to specify the maximum number of returned statements
   #
   getAll: (options, callback) ->
-    logger.info "getAll statement mapper"
-    #TODO
-    #
-    #
     filter = {}
-
-    limit = options.limit ? 0
+    options.limit = options.limit ? 0
     # if limit is set to 0 use the server maximum
-    limit = 1000 if limit == 0
+    options.limit = 1000 if options.limit == 0
 
-    logger.info "limit is set to #{limit}."
+
+    logger.info "limit is set to #{options.limit}."
     # if skip was defined start at skip+1, else start at the beginning
-    skip = options.skip ? 0
+    options.skip = options.skip ? 0
     newSkip = 0
 
-    logger.info "skip is set to #{skip}."
-
-    ascending = options.ascending ? false
+    logger.info "skip is set to #{options.skip}."
 
     @views.count (err, count) =>
       scount = 0
@@ -83,26 +280,22 @@ module.exports = class StatementMapper extends BaseMapper
         scount = count[0].value
 
       logger.info "#{scount} statements in the database."
-      if skip > scount
+      if options.skip > scount
         err = new Error 'More statements requested as there are! Illegal skip parameter!'
         err.httpCode = 400
         callback err
       else
 
-        if skip + limit < scount
-          # TODO generate URI for more statements
-          newSkip = skip + limit
-        filter.options =
-          descending : not ascending
-          skip : skip
-          limit : limit
+        if options.skip + options.limit < scount
+          newSkip = options.skip + options.limit
 
-        @views.find filter.options, (err, docs) =>
+        @filterStatements options, (err, docs) =>
           if err
             logger.error "getALL: database access failed: #{JSON.stringify err}"
             callback err, []
           else
-            console.log docs
+            #console.log "filterStatements done!"
+            #console.log docs
             statements = []
             for doc in docs
               statements.push doc.value
@@ -122,7 +315,7 @@ module.exports = class StatementMapper extends BaseMapper
         err.httpCode = 400
         callback err
       else
-        @views.find key: id, (err, docs) =>
+        @views.findById key: id, (err, docs) =>
           if err
             logger.error 'find statement: ' + id
             logger.error "find: database access with view find_statement_by/id failed: #{JSON.stringify err}"
@@ -134,17 +327,19 @@ module.exports = class StatementMapper extends BaseMapper
                 # there is no statement with the given id
                 # TODO callback ERROR, null
                 callback undefined
+                break
               when 1
                 logger.info 'statement found: ' + id
                 # all right, one statement found
                 statement = docs[0].value
                 callback undefined, statement
+                break
               else
                 # should not happen, there are more
                 # then one statements with the same id
                 # TODO callback ERROR, null
                 callback 'Multiple Statements for the same id found.'
-
+                break
   # Saves this statement to the database
   # Tries to store this statement and if there
   # is no id, it generates an id, otherwise
@@ -158,7 +353,7 @@ module.exports = class StatementMapper extends BaseMapper
         err.httpCode = 400
         callback err
       else
-        unless statement.id
+        unless statement.id?
           # No id is given, generate one
           statement.id = utils.generateUUID()
           logger.info 'generated statement id: ' + statement.id
@@ -185,14 +380,3 @@ module.exports = class StatementMapper extends BaseMapper
               super statement, (err, res) =>
                 callback err, statement
 
-  findByAgent: (agent, callback) ->
-    @views.find_by_agent key: agent, (err, docs) =>
-      if err
-        logger.info 'findByAgent failed: ' + err
-        callback err
-      else
-        statements = []
-        for doc in docs
-          statements.push doc.value
-
-        callback undefined, statements

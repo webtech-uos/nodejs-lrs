@@ -168,15 +168,15 @@ describe 'GET /api/statements', ->
           .end (err, res) ->
             failed = true
             for stats in res.body
-              failed = false;
+              failed = false
               if stats.actor.mbox != 'mailto:test@uos.de'
                 failed = true
-                break;
+                break
             if failed
               done(new Error())
             else
               done()
-              
+
   describe 'with invalid agent parameter', ->
     it 'should return only "Statements for which the specified Agent or group is the Actor or Object of the Statement" (no statements)', (done) ->
       env.factory.create {"actor": {"mbox": "mailto:test@uos.de"}}, (err, statement) ->

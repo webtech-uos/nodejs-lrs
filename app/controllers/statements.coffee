@@ -7,6 +7,23 @@ logger = require '../logger'
 module.exports = class StatementsController extends BaseController
 
   constructor: (@dbController, callback) ->
+    @registeredParams = [
+      'skip'
+      'statementId'
+      'voidedStatementId'
+      'agent'
+      'verb'
+      'activity'
+      'registration'
+      'related_activities'
+      'since'
+      'until'
+      'limit'
+      'format'
+      'attachments'
+      'ascending'
+    ]
+
     logger.warn "no callback supplied for new statements-controller" unless callback
     dbCon = @dbController
     super(dbCon, (err) =>
@@ -49,9 +66,10 @@ module.exports = class StatementsController extends BaseController
   # Checks parameters
   #
   checkParams: (params) ->
+
     count = 0
     for k of params
-      if k in ['statementId', 'voidedStatementId', 'agent', 'verb', 'activity', 'registration', 'related_activities', 'since', 'until', 'limit', 'format', 'attachments', 'ascending']
+      if k in @registeredParams
         count++
     return count
 
@@ -76,13 +94,27 @@ module.exports = class StatementsController extends BaseController
           res.json 501, "Not implemented!"
         else
           res.json 400, "voidedId is defined, then no other filter parameters are allowed."
-      else if req.query.agent
-        agent = req.query.agent
-        @_agent res, agent
       else
-        options =
-          skip: 0
-        @mapper.getAll options, (err, statements, optionsOut) =>
+        #TODO validate parameter
+        options = {}
+        if req.query.agent?
+          options.agent = req.query.agent
+        if req.query.verb?
+          options.verb = req.query.verb
+        if req.query.activity?
+          options.activity = req.qurey.activity
+        if req.query.since?
+          options.since = req.query.since
+        if req.query.until?
+          options.until = req.query.until
+        if req.query.limit?
+          options.limit = req.query.limit
+        if req.query.ascending?
+          options.ascending = req.query.ascending
+        if req.query.skip?
+          options.skip = req.query.skip
+
+        @mapper.getAll options, (err, statements, paramsOut) =>
           res.json 200, statements
 
   # Called whenever the clients requests to modify a specific statement.
@@ -120,14 +152,3 @@ module.exports = class StatementsController extends BaseController
     res.header 'X-Experience-API-Consistent-Through', new Date(new Date() - 1000*60*60).toISOString()
     super
 
-  # Gets all statements of an agent
-  #
-  _agent: (res, agent) ->
-    @mapper.findByAgent agent, (err, statements) =>
-      if err
-        res.json err.httpCode ? 500, err
-      else
-        if statements
-          res.json 200, statements
-        else
-          res.json 404, "No agent with name #{agent} found!"
